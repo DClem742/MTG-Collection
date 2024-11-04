@@ -1,3 +1,9 @@
+.inline-select {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -38,3 +44,50 @@ table {
     margin-top: 30px;
   }
   
+  .table-container {
+      position: relative;
+  }
+
+  .select-wrapper {
+      position: relative;
+      display: inline-block;
+      z-index: 1000;
+  }
+
+  .select-wrapper select {
+      position: relative;
+      z-index: 1000;
+  }
+
+  table {
+      position: relative;
+  }
+
+  td {
+      position: relative;
+      z-index: auto;
+  }
+
+  .select-wrapper:hover,
+  .select-wrapper:focus-within {
+      z-index: 1001;
+  }
+  .custom-select {
+      display: inline-block;
+      position: relative;
+  }
+
+  .custom-select select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: transparent;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  }
+
+  .select-wrapper {
+      position: relative;
+      display: inline-block;
+  }

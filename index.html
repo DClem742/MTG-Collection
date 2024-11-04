@@ -9,20 +9,22 @@
 <body>
   <h1>Magic: The Gathering Card Search</h1>
   <form id="searchForm">
-    <div class="single-search"><!-- Your existing single card search -->
-    <input type="text" id="cardName" placeholder="Enter card name">
-    <button type="submit">Search Single Card</button>
-    
-  </div>
-  <div id="result"></div>
- 
-    <div class="bulk-search"><!-- New bulk search form -->
-    <textarea id="cardList" placeholder="Enter multiple cards (one per line)"></textarea>
+    <div class="single-search">
+      <input type="text" id="cardName" placeholder="Enter card name">
+      <button type="submit">Search Single Card</button>
     </div>
-    <button type="submit">Search Multiple Cards</button>
-</form>
+    
+    <div class="bulk-search">
+      <textarea id="cardList" placeholder="Enter multiple cards (one per line)"></textarea>
+      <button type="submit">Search Multiple Cards</button>
+    </div>
+  </form>
 
-<button id="addToCollection" style="display: none;">Add to Collection</button>
-<a href="collection.html">View Collection</a>
+  <div id="result"></div>
+  <button id="addAllToCollection">Add All Cards to Collection</button>
+  <button id="addToCollection">Add to Collection</button>
+  <a href="collection.html">View Collection</a>
+  
   <script src="script.jsx"></script>
-</body></html>
+</body>
+</html>
