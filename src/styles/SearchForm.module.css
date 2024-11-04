@@ -1,0 +1,38 @@
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.singleSearch, .bulkSearch {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.singleSearch input, .bulkSearch textarea {
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+}
+
+.bulkSearch textarea {
+  min-height: 150px;
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #34495e;
+}

@@ -1,30 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MTG Card Search</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <h1>Magic: The Gathering Card Search</h1>
-  <form id="searchForm">
-    <div class="single-search">
-      <input type="text" id="cardName" placeholder="Enter card name">
-      <button type="submit">Search Single Card</button>
-    </div>
-    
-    <div class="bulk-search">
-      <textarea id="cardList" placeholder="Enter multiple cards (one per line)"></textarea>
-      <button type="submit">Search Multiple Cards</button>
-    </div>
-  </form>
-
-  <div id="result"></div>
-  <button id="addAllToCollection">Add All Cards to Collection</button>
-  <button id="addToCollection">Add to Collection</button>
-  <a href="collection.html">View Collection</a>
-  
-  <script src="script.jsx"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MTG Card Search</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
