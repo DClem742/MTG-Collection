@@ -1,13 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTG Card Search</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Magic: The Gathering Card Search</h1>
+  <form id="searchForm">
+    <div class="single-search"><!-- Your existing single card search -->
+    <input type="text" id="cardName" placeholder="Enter card name">
+    <button type="submit">Search Single Card</button>
+    
+  </div>
+  <div id="result"></div>
+ 
+    <div class="bulk-search"><!-- New bulk search form -->
+    <textarea id="cardList" placeholder="Enter multiple cards (one per line)"></textarea>
+    </div>
+    <button type="submit">Search Multiple Cards</button>
+</form>
+
+<button id="addToCollection" style="display: none;">Add to Collection</button>
+<a href="collection.html">View Collection</a>
+  <script src="script.jsx"></script>
+</body></html>
