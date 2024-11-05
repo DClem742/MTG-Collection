@@ -14,7 +14,6 @@ function CollectionPage() {
             <th>Name</th>
             <th>Set</th>
             <th>Collector Number</th>
-
             <th>Current Quantity</th>
             <th>Adjust Quantity</th>
             <th>Actions</th>
@@ -36,7 +35,6 @@ function CollectionPage() {
               <td className={styles.currentQuantity}>{card.quantity || 1}</td>
               <td className={styles.quantityControls}>
                 <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
-
                 <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
               </td>
               <td>

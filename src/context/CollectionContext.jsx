@@ -1,9 +1,12 @@
-import { createContext, useState, useContext } from 'react'
+import { createContext, useState, useContext, useEffect } from 'react'
 
 const CollectionContext = createContext()
 
 export function CollectionProvider({ children }) {
-  const [collection, setCollection] = useState([])
+  const [collection, setCollection] = useState(() => {
+    const savedCollection = localStorage.getItem('mtgCollection')
+    return savedCollection ? JSON.parse(savedCollection) : []
+  })
 
   const addToCollection = (card) => {
     setCollection(prev => {
@@ -28,6 +31,10 @@ export function CollectionProvider({ children }) {
       ).filter(card => card.quantity > 0)
     )
   }
+
+  useEffect(() => {
+    localStorage.setItem('mtgCollection', JSON.stringify(collection))
+  }, [collection])
 
   return (
     <CollectionContext.Provider value={{ collection, addToCollection, updateQuantity }}>
