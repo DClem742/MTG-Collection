@@ -13,6 +13,21 @@ function CollectionPage() {
     rarity: '',
     condition: ''
   })
+  
+  // Add sorting state
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: 'ascending'
+  })
+
+  // Add sorting handler
+  const handleSort = (key) => {
+    let direction = 'ascending'
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending'
+    }
+    setSortConfig({ key, direction })
+  }
 
   const conditions = ['NM', 'LP', 'MP', 'HP']
   const conditionMultipliers = {
@@ -62,6 +77,7 @@ function CollectionPage() {
     return cleanStr.includes(cleanPattern)
   }
 
+  // Update your filteredCollection to include sorting
   const filteredCollection = collection.filter(card => {
     const matchesSearch = !searchTerm || 
       fuzzyMatch(card.name, searchTerm) || 
@@ -81,6 +97,27 @@ function CollectionPage() {
            matchesColor &&
            matchesType &&
            (!filters.rarity || card.rarity === filters.rarity)
+  }).sort((a, b) => {
+    if (!sortConfig.key) return 0
+    
+    if (sortConfig.key === 'name') {
+      return sortConfig.direction === 'ascending' 
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
+    }
+    if (sortConfig.key === 'set') {
+      return sortConfig.direction === 'ascending'
+        ? a.set_name.localeCompare(b.set_name)
+        : b.set_name.localeCompare(a.set_name)
+    }
+    if (sortConfig.key === 'price') {
+      const priceA = parseFloat(a.prices?.usd) || 0
+      const priceB = parseFloat(b.prices?.usd) || 0
+      return sortConfig.direction === 'ascending' 
+        ? priceA - priceB 
+        : priceB - priceA
+    }
+    return 0
   })
 
   const totalValue = filteredCollection.reduce((sum, card) => {
@@ -160,10 +197,16 @@ function CollectionPage() {
         <thead>
           <tr>
             <th>Card Image</th>
-            <th>Name</th>
-            <th>Set</th>
+            <th className={styles.sortableHeader} onClick={() => handleSort('name')}>
+              Name {sortConfig.key === 'name' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
+            <th className={styles.sortableHeader} onClick={() => handleSort('set')}>
+              Set {sortConfig.key === 'set' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
             <th>Condition</th>
-            <th>Price</th>
+            <th className={styles.sortableHeader} onClick={() => handleSort('price')}>
+              Price {sortConfig.key === 'price' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
             <th>Quantity</th>
             <th>Total Value</th>
             <th>Actions</th>
