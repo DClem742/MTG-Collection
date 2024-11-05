@@ -60,9 +60,16 @@ function CollectionPage() {
            (!filters.rarity || card.rarity === filters.rarity)
   })
 
+  // Add this calculation for total value
+  const totalValue = filteredCollection.reduce((sum, card) => {
+    const cardPrice = parseFloat(card.prices?.usd) || 0
+    return sum + (cardPrice * (card.quantity || 1))
+  }, 0)
+
   return (
     <div className={styles.collectionPage}>
       <h1>My Collection</h1>
+      <h2>Total Collection Value: ${totalValue.toFixed(2)}</h2>
       
       <div className={styles.filterControls}>
         <select 
@@ -113,7 +120,9 @@ function CollectionPage() {
             <th>Name</th>
             <th>Set</th>
             <th>Collector Number</th>
+            <th>Price</th>
             <th>Current Quantity</th>
+            <th>Total Value</th>
             <th>Adjust Quantity</th>
             <th>Actions</th>
           </tr>
@@ -121,18 +130,19 @@ function CollectionPage() {
         <tbody>
           {filteredCollection.map((card) => (
             <tr key={card.id}>
-              <td onClick={() => setSelectedCard(card)}>
+              <td>
                 <img 
                   src={card.image_uris?.small} 
                   alt={card.name} 
                   className={styles.cardThumbnail}
-                  style={{ cursor: 'pointer' }}
                 />
               </td>
               <td>{card.name}</td>
               <td>{card.set_name}</td>
               <td>{card.collector_number}</td>
+              <td>${card.prices?.usd || '0.00'}</td>
               <td className={styles.currentQuantity}>{card.quantity || 1}</td>
+              <td>${((parseFloat(card.prices?.usd) || 0) * (card.quantity || 1)).toFixed(2)}</td>
               <td className={styles.quantityControls}>
                 <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
                 <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
