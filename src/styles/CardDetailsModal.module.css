@@ -11,22 +11,71 @@
   z-index: 1000;
 }
 
+.cardContainer {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardBack {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    backface-visibility: hidden;
+  }
+/* Base styles (mobile first) */
 .modalContent {
   background: #1a1a1a;
   color: #e0e0e0;
-  padding: 20px;
   border-radius: 8px;
-  max-width: 800px; /* Reduced from 90% */
-  max-height: 80vh; /* Reduced from 90vh */
+  height: auto;
+  max-height: 80vh;
   overflow-y: auto;
   position: relative;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  width: 95%;
+  padding: 15px;
 }
 
 .cardInfo {
   display: flex;
-  gap: 20px;
-  align-items: flex-start; /* Keeps card at natural height */
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .modalContent {
+    width: 90%;
+    padding: 20px;
+  }
+  
+  .cardInfo {
+    flex-direction: row;
+    gap: 20px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .modalContent {
+    width: 1000px;
+    padding: 30px;
+  }
+}
+.details {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 600px;
+  padding-right: 15px;
 }
 
 .cardInfo img {
@@ -98,4 +147,14 @@
 
 .relatedCard:hover {
   transform: scale(1.05);
+}
+.cardFace {
+  position: absolute;
+  width: 400px;  /* Standard MTG card width scaled up */
+  height: 560px; /* Standard MTG card height scaled up */
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 16px;
+  backface-visibility: hidden;
 }

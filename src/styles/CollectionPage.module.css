@@ -44,16 +44,44 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
 .quantityControls span {
   min-width: 2rem;
   text-align: center;
+}
+
+/* Base styles (mobile first) */
+.collectionPage {
+  padding: 10px;
 }
 
 .filterControls {
   margin: 20px 0;
   display: flex;
   gap: 10px;
+}
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .collectionPage {
+    padding: 20px;
+  }
+  
+  .filterControls {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .collectionPage {
+    padding: 30px;
+  }
+  
+  .filterControls {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .filterControls select {

@@ -1,11 +1,12 @@
+/* Base styles (mobile first) */
 .searchPage {
-  padding: 20px;
-  max-width: 1200px;
+  padding: 10px;
   margin: 0 auto;
 }
 
 .addAllButton {
-  margin: 1rem 0;
+  width: 100%;
+  margin: 0.5rem 0;
   padding: 0.8rem 1.5rem;
   background-color: #27ae60;
   color: white;
@@ -17,4 +18,24 @@
 
 .addAllButton:hover {
   background-color: #219a52;
+}
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .searchPage {
+    padding: 20px;
+    max-width: 800px;
+  }
+
+  .addAllButton {
+    width: auto;
+    margin: 1rem 0;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .searchPage {
+    max-width: 1200px;
+  }
 }
