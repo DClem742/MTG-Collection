@@ -8,25 +8,25 @@ export function CollectionProvider({ children }) {
     return savedCollection ? JSON.parse(savedCollection) : []
   })
 
-  const addToCollection = (card) => {
+  const addToCollection = (card, condition = 'NM') => {
     setCollection(prev => {
       const existingCard = prev.find(c => c.id === card.id)
       if (existingCard) {
         return prev.map(c => 
           c.id === card.id 
-            ? { ...c, quantity: (c.quantity || 1) + 1 }
+            ? { ...c, quantity: (c.quantity || 1) + 1, condition }
             : c
         )
       }
-      return [...prev, { ...card, quantity: 1 }]
+      return [...prev, { ...card, quantity: 1, condition }]
     })
   }
 
-  const updateQuantity = (cardId, newQuantity) => {
+  const updateQuantity = (cardId, newQuantity, condition) => {
     setCollection(prev => 
       prev.map(card => 
         card.id === cardId 
-          ? { ...card, quantity: Math.max(0, newQuantity) }
+          ? { ...card, quantity: Math.max(0, newQuantity), condition: condition || card.condition }
           : card
       ).filter(card => card.quantity > 0)
     )

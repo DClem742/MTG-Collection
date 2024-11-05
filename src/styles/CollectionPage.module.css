@@ -29,26 +29,29 @@
 .collectionTable tr:hover {
   background-color: #f5f5f5;
 }
-
 .quantityControls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 5px;
 }
 
 .quantityControls button {
-  padding: 0.25rem 0.5rem;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #2c3e50;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
-.quantityControls span {
-  min-width: 2rem;
-  text-align: center;
-}
 
+.currentQuantity {
+  margin: 0 5px;
+}
 /* Base styles (mobile first) */
 .collectionPage {
   padding: 10px;
@@ -83,9 +86,39 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
-
-.filterControls select {
+.conditionSelect {
   padding: 8px;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
+  background-color: white;
+}
+
+.conditionNM { color: #4CAF50; }
+.conditionLP { color: #2196F3; }
+.conditionMP { color: #FF9800; }
+.conditionHP { color: #f44336; }
+
+.searchBar {
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Mobile first */
+@media (min-width: 768px) {
+  .filterControls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .searchInput {
+    width: 300px;
+  }
 }
