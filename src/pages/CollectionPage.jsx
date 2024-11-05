@@ -2,7 +2,7 @@ import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/CollectionPage.module.css'
 
 function CollectionPage() {
-  const { collection, removeFromCollection } = useCollection()
+  const { collection, updateQuantity } = useCollection()
 
   return (
     <div className={styles.collectionPage}>
@@ -14,6 +14,9 @@ function CollectionPage() {
             <th>Name</th>
             <th>Set</th>
             <th>Collector Number</th>
+
+            <th>Current Quantity</th>
+            <th>Adjust Quantity</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -30,8 +33,14 @@ function CollectionPage() {
               <td>{card.name}</td>
               <td>{card.set_name}</td>
               <td>{card.collector_number}</td>
+              <td className={styles.currentQuantity}>{card.quantity || 1}</td>
+              <td className={styles.quantityControls}>
+                <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
+
+                <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
+              </td>
               <td>
-                <button onClick={() => removeFromCollection(card.id)}>Remove</button>
+                <button onClick={() => updateQuantity(card.id, 0)}>Remove</button>
               </td>
             </tr>
           ))}
