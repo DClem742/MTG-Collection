@@ -120,10 +120,45 @@ function CollectionPage() {
     return 0
   })
 
-  const totalValue = filteredCollection.reduce((sum, card) => {
+  const totalValue = collection.reduce((sum, card) => {
     const cardPrice = parseFloat(card.prices?.usd) || 0
-    return sum + (cardPrice * conditionMultipliers[card.condition || 'NM'] * (card.quantity || 1))
+    return sum + (cardPrice * (card.quantity || 1))
   }, 0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className={styles.collectionPage}>
