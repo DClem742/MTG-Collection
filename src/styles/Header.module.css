@@ -17,13 +17,24 @@
   gap: 1.5rem;
   align-items: center;
 }
-
-.nav a {
+.navLink {
   color: white;
   text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 
-.nav button {
+.navLink:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.userEmail {
+  margin: 0 1rem;
+  opacity: 0.8;
+}
+
+.logoutButton {
   padding: 0.5rem 1rem;
   background-color: #e74c3c;
   border: none;
@@ -32,6 +43,6 @@
   cursor: pointer;
 }
 
-.nav button:hover {
+.logoutButton:hover {
   background-color: #c0392b;
 }

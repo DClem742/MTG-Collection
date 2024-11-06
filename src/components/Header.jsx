@@ -19,8 +19,11 @@ function Header() {
       <nav className={styles.nav}>
         {user ? (
           <>
-            <span>Welcome, {user.email}</span>
-            <button onClick={handleLogout}>Logout</button>
+            <Link to="/" className={styles.navLink}>Home</Link>
+            <Link to="/search" className={styles.navLink}>Search</Link>
+            <Link to="/collection" className={styles.navLink}>Collection</Link>
+            <span className={styles.userEmail}>{user.email}</span>
+            <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
           </>
         ) : (
           <>
