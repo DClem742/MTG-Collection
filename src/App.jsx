@@ -1,22 +1,35 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
+import { CollectionProvider } from './context/CollectionContext'
+import Header from './components/Header'
+import Login from './components/Login'
+import Register from './components/Register'
+import HomePage from './pages/HomePage'
 import SearchPage from './pages/SearchPage'
 import CollectionPage from './pages/CollectionPage'
-import Navbar from './components/Navbar'
-import { CollectionProvider } from './context/CollectionContext'
+import { useAuth } from './context/AuthContext'
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth()
+  return user ? children : <Navigate to="/login" />
+}
 
 function App() {
   return (
-    <CollectionProvider>
-      <Router>
-        <div className="app">
-          <Navbar />
+    <Router>
+      <AuthProvider>
+        <CollectionProvider>
+          <Header />
           <Routes>
-            <Route path="/" element={<SearchPage />} />
-            <Route path="/collection" element={<CollectionPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+            <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
+            <Route path="/collection" element={<ProtectedRoute><CollectionPage /></ProtectedRoute>} />
           </Routes>
-        </div>
-      </Router>
-    </CollectionProvider>
+        </CollectionProvider>
+      </AuthProvider>
+    </Router>
   )
 }
 
