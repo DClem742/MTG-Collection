@@ -19,6 +19,19 @@ export function TradeProvider({ children }) {
     if (data) setTradeListings(data)
   }
 
+  const fetchTradeRequests = async () => {
+    const { data } = await supabase
+      .from('trade_requests')
+      .select(`
+        *,
+        listing:listing_id (*)
+      `)
+      .or(`requester_id.eq.${user.id},owner_id.eq.${user.id}`)
+      .eq('status', 'pending')
+    
+    if (data) setTradeRequests(data)
+  }
+
   const listCardForTrade = async (card) => {
     const listing = {
       card_id: card.id,
@@ -36,9 +49,6 @@ export function TradeProvider({ children }) {
     if (!error) {
       setTradeListings(current => [...current, data[0]])
       toast.success('Card listed for trade')
-      await fetchTradeListings()
-    } else {
-      console.error('Error listing card:', error)
     }
   }
 
@@ -56,54 +66,65 @@ export function TradeProvider({ children }) {
     const { data, error } = await supabase
       .from('trade_requests')
       .insert([request])
+      .select()
 
     if (!error) {
-      setTradeRequests([...tradeRequests, request])
+      setTradeRequests(current => [...current, data[0]])
     }
   }
 
-  const fetchTradeRequests = async () => {
-    const { data } = await supabase
-      .from('trade_requests')
-      .select(`
-        *,
-        listing:listing_id (*)
-      `)
-      .eq('status', 'pending')
-  
-    if (data) setTradeRequests(data)
-  }  
-
-   const respondToTradeRequest = async (requestId, status) => {
+  const respondToTradeRequest = async (requestId, status) => {
     try {
-
       const { error } = await supabase
         .from('trade_requests')
         .update({ status })
         .eq('id', requestId)
 
       if (!error) {
-
-
-        // Immediately remove the rejected trade from state for both users
-        setTradeRequests(current => 
-          current.filter(request => request.id !== requestId)
-        )
-        
         if (status === 'rejected') {
+          setTradeRequests(current => 
+            current.filter(request => request.id !== requestId)
+          )
           toast.error('Trade request rejected')
         } else {
+          setTradeRequests(current => 
+            current.map(request => 
+              request.id === requestId ? { ...request, status } : request
+            )
+          )
           toast.success('Trade request accepted')
         }
       }
     } catch (error) {
       console.error('Error updating trade request:', error)
     }
-
   }
+
   useEffect(() => {
+    if (!user) return
+
+    const channel = supabase
+      .channel('db_changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'trade_listings' },
+        () => {
+          fetchTradeListings()
+        }
+      )
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'trade_requests' },
+        () => {
+          fetchTradeRequests()
+        }
+      )
+      .subscribe()
+
     fetchTradeListings()
     fetchTradeRequests()
+
+    return () => {
+      channel.unsubscribe()
+    }
   }, [user])
 
   return (
