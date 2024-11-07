@@ -10,23 +10,35 @@ export function TradeProvider({ children }) {
   const [tradeRequests, setTradeRequests] = useState([])
   const { user } = useAuth()
 
-  const listCardForTrade = async (card) => {
-    if (!user) return
+  const fetchTradeListings = async () => {
+    const { data } = await supabase
+      .from('trade_listings')
+      .select('*')
+      .eq('status', 'available')
+    
+    if (data) setTradeListings(data)
+  }
 
+  const listCardForTrade = async (card) => {
     const listing = {
       card_id: card.id,
       card_data: card,
       user_id: user.id,
       user_email: user.email,
-      created_at: new Date().toISOString()
+      status: 'available'
     }
 
     const { data, error } = await supabase
       .from('trade_listings')
       .insert([listing])
+      .select()
 
     if (!error) {
-      setTradeListings([...tradeListings, listing])
+      setTradeListings(current => [...current, data[0]])
+      toast.success('Card listed for trade')
+      await fetchTradeListings()
+    } else {
+      console.error('Error listing card:', error)
     }
   }
 
@@ -53,21 +65,30 @@ export function TradeProvider({ children }) {
   const fetchTradeRequests = async () => {
     const { data } = await supabase
       .from('trade_requests')
-      .select('*')
-      .not('status', 'eq', 'rejected')
-    
+      .select(`
+        *,
+        listing:listing_id (*)
+      `)
+      .eq('status', 'pending')
+  
     if (data) setTradeRequests(data)
-  }
+  }  
 
-  const respondToTradeRequest = async (requestId, status) => {
+   const respondToTradeRequest = async (requestId, status) => {
     try {
+
       const { error } = await supabase
         .from('trade_requests')
         .update({ status })
         .eq('id', requestId)
 
       if (!error) {
-        await fetchTradeRequests()
+
+
+        // Immediately remove the rejected trade from state for both users
+        setTradeRequests(current => 
+          current.filter(request => request.id !== requestId)
+        )
         
         if (status === 'rejected') {
           toast.error('Trade request rejected')
@@ -78,9 +99,10 @@ export function TradeProvider({ children }) {
     } catch (error) {
       console.error('Error updating trade request:', error)
     }
-  }
 
+  }
   useEffect(() => {
+    fetchTradeListings()
     fetchTradeRequests()
   }, [user])
 
@@ -96,4 +118,5 @@ export function TradeProvider({ children }) {
     </TradeContext.Provider>
   )
 }
+
 export const useTrade = () => useContext(TradeContext)
