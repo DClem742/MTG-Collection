@@ -1,58 +1,31 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { CollectionProvider } from './context/CollectionContext'
-import { TradeProvider } from './context/TradeContext'
-import Header from './components/Header'
+import Navbar from './components/Navbar'
+import Home from './pages/HomePage'
 import Login from './components/Login'
 import Register from './components/Register'
-import HomePage from './pages/HomePage'
 import SearchPage from './pages/SearchPage'
 import CollectionPage from './pages/CollectionPage'
-import TradePage from './pages/TradePage'
-import TradeRequestsPage from './pages/TradeRequestsPage'
-import { useAuth } from './context/AuthContext'
-import { Toaster } from 'react-hot-toast'
-
-function ProtectedRoute({ children }) {
-  const { user } = useAuth()
-  return user ? children : <Navigate to="/login" />
-}
+import toast, { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <AuthProvider>
         <CollectionProvider>
-          <TradeProvider>
-            <Toaster position="top-right" />
-            <Header />
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-              <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
-              <Route path="/collection" element={<ProtectedRoute><CollectionPage /></ProtectedRoute>} />
-              <Route 
-                path="/trade" 
-                element={
-                  <ProtectedRoute>
-                    <TradePage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/trade-requests" 
-                element={
-                  <ProtectedRoute>
-                    <TradeRequestsPage />
-                  </ProtectedRoute>
-                } 
-              />
-            </Routes>
-          </TradeProvider>
+          <Navbar />
+          <Toaster position="top-center" />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/collection" element={<CollectionPage />} />
+          </Routes>
         </CollectionProvider>
       </AuthProvider>
-    </Router>
+    </BrowserRouter>
   )
 }
 
