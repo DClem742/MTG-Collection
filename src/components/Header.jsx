@@ -22,6 +22,8 @@ function Header() {
             <Link to="/" className={styles.navLink}>Home</Link>
             <Link to="/search" className={styles.navLink}>Search</Link>
             <Link to="/collection" className={styles.navLink}>Collection</Link>
+            <Link to="/trade" className={styles.navLink}>Trade</Link>
+            <Link to="/trade-requests" className={styles.navLink}>Trade Requests</Link>
             <span className={styles.userEmail}>{user.email}</span>
             <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
           </>

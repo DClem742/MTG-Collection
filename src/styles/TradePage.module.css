@@ -1,0 +1,72 @@
+.tradePage {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #121212;
+  min-height: 100vh;
+}
+
+.searchContainer {
+  margin: 2rem 0;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 2px solid #2d2d2d;
+  border-radius: 4px;
+  background: #1e1e1e;
+  color: white;
+}
+
+.tradeListings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.tradeCard {
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+.cardInfo {
+  margin-top: 1rem;
+}
+
+.cardDetails {
+  margin: 1rem 0;
+  padding: 0.8rem;
+  background: #2d2d2d;
+  border-radius: 4px;
+}
+
+.cardDetails p {
+  margin: 0.5rem 0;
+  color: #e0e0e0;
+}
+
+.listedBy {
+  color: #a0a0a0;
+  font-style: italic;
+  margin: 0.5rem 0;
+}
+
+.initiateTradeButton {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.initiateTradeButton:hover {
+  background-color: #27ae60;
+}

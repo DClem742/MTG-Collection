@@ -1,10 +1,12 @@
 import { useCollection } from '../context/CollectionContext'
+import { useTrade } from '../context/TradeContext'
 import { useState } from 'react'
 import styles from '../styles/CollectionPage.module.css'
 import CardDetailsModal from '../components/CardDetailsModal'
 
 function CollectionPage() {
   const { collection, updateQuantity } = useCollection()
+  const { listCardForTrade } = useTrade()
   const [selectedCard, setSelectedCard] = useState(null)
   const [filters, setFilters] = useState({
     set: '',
@@ -125,41 +127,6 @@ function CollectionPage() {
     return sum + (cardPrice * (card.quantity || 1))
   }, 0)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <div className={styles.collectionPage}>
       <h1>My Collection</h1>
@@ -270,16 +237,23 @@ function CollectionPage() {
                   ))}
                 </select>
               </td>
-                          <td>${card.prices?.usd || '0.00'}</td>
-                          <td className={styles.quantityControls}>
-                            <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
-                            <span className={styles.currentQuantity}>{card.quantity || 1}</span>
-                            <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
-                          </td>
-                          <td>${((parseFloat(card.prices?.usd) || 0) * (card.quantity || 1)).toFixed(2)}</td>
-                          <td>
-                            <button onClick={() => updateQuantity(card.id, 0)}>Remove</button>
-                          </td>            </tr>
+              <td>${card.prices?.usd || '0.00'}</td>
+              <td className={styles.quantityControls}>
+                <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
+                <span className={styles.currentQuantity}>{card.quantity || 1}</span>
+                <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
+              </td>
+              <td>${((parseFloat(card.prices?.usd) || 0) * (card.quantity || 1)).toFixed(2)}</td>
+              <td>
+                <button onClick={() => updateQuantity(card.id, 0)}>Remove</button>
+                <button 
+                  onClick={() => listCardForTrade(card)}
+                  className={styles.tradeButton}
+                >
+                  List for Trade
+                </button>
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>

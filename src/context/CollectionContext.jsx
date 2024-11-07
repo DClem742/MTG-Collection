@@ -4,46 +4,53 @@ import { useAuth } from './AuthContext'
 const CollectionContext = createContext()
 
 export function CollectionProvider({ children }) {
-  const [collection, setCollection] = useState([])
   const { user } = useAuth()
-
-  useEffect(() => {
-    if (user) {
-      const savedCollection = localStorage.getItem(`mtgCollection_${user.id}`)
-      setCollection(savedCollection ? JSON.parse(savedCollection) : [])
-    } else {
-      setCollection([])
+  const [collections, setCollections] = useState(() => {
+    // Load all collections from localStorage
+    const allCollections = {}
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key.startsWith('mtgCollection_')) {
+        const userId = key.replace('mtgCollection_', '')
+        allCollections[userId] = JSON.parse(localStorage.getItem(key))
+      }
     }
-  }, [user])
+    return allCollections
+  })
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem(`mtgCollection_${user.id}`, JSON.stringify(collection))
-    }
-  }, [collection, user])
+  // Current user's collection
+  const collection = user?.id ? (collections[user.id] || []) : []
 
   const addToCollection = (card) => {
-    setCollection(prev => {
-      const existingCard = prev.find(c => c.id === card.id)
-      if (existingCard) {
-        return prev.map(c => 
-          c.id === card.id 
-            ? { ...c, quantity: (c.quantity || 1) + 1 }
-            : c
-        )
-      }
-      return [...prev, { ...card, quantity: 1 }]
+    if (!user?.id) return
+    
+    setCollections(prev => {
+      const userCollection = prev[user.id] || []
+      const existingCard = userCollection.find(c => c.id === card.id)
+      
+      const updatedCollection = existingCard
+        ? userCollection.map(c => c.id === card.id ? { ...c, quantity: (c.quantity || 1) + 1 } : c)
+        : [...userCollection, { ...card, quantity: 1 }]
+
+      const newCollections = { ...prev, [user.id]: updatedCollection }
+      localStorage.setItem(`mtgCollection_${user.id}`, JSON.stringify(updatedCollection))
+      return newCollections
     })
   }
 
   const updateQuantity = (cardId, newQuantity) => {
-    setCollection(prev => 
-      prev.map(card => 
-        card.id === cardId 
-          ? { ...card, quantity: Math.max(0, newQuantity) }
-          : card
-      ).filter(card => card.quantity > 0)
-    )
+    if (!user?.id) return
+
+    setCollections(prev => {
+      const userCollection = prev[user.id] || []
+      const updatedCollection = userCollection
+        .map(card => card.id === cardId ? { ...card, quantity: Math.max(0, newQuantity) } : card)
+        .filter(card => card.quantity > 0)
+
+      const newCollections = { ...prev, [user.id]: updatedCollection }
+      localStorage.setItem(`mtgCollection_${user.id}`, JSON.stringify(updatedCollection))
+      return newCollections
+    })
   }
 
   return (
