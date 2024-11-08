@@ -4,13 +4,21 @@ import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
 
 function DeckBuilder() {
-  const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck } = useDeck()
+  const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck } = useDeck()
   const { collection } = useCollection()
   const [deckName, setDeckName] = useState('')
   const [format, setFormat] = useState('standard')
   const [selectedDeck, setSelectedDeck] = useState(null)
   const [deckCards, setDeckCards] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+
+  // Add handleDeleteDeck here, before the other handler functions
+  const handleDeleteDeck = async (deckId) => {
+    if (window.confirm('Are you sure you want to delete this deck?')) {
+      await deleteDeck(deckId)
+      setSelectedDeck(null)
+    }
+  }
   
   const formats = [
     'standard',
@@ -113,15 +121,25 @@ function DeckBuilder() {
           <button type="submit">Create Deck</button>
         </form>
 
-        <select 
-          value={selectedDeck?.id || ''} 
-          onChange={(e) => setSelectedDeck(decks.find(d => d.id === e.target.value))}
-        >
-          <option value="">Select a Deck</option>
-          {decks.map(deck => (
-            <option key={deck.id} value={deck.id}>{deck.name}</option>
-          ))}
-        </select>
+        <div className={styles.deckSelection}>
+          <select 
+            value={selectedDeck?.id || ''} 
+            onChange={(e) => setSelectedDeck(decks.find(d => d.id === e.target.value))}
+          >
+            <option value="">Select a Deck</option>
+            {decks.map(deck => (
+              <option key={deck.id} value={deck.id}>{deck.name}</option>
+            ))}
+          </select>
+          {selectedDeck && (
+            <button 
+              onClick={() => handleDeleteDeck(selectedDeck.id)}
+              className={styles.deleteButton}
+            >
+              Delete Deck
+            </button>
+          )}
+        </div>
       </div>
 
       {selectedDeck && (

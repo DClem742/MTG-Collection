@@ -7,7 +7,6 @@ function SearchForm({ setSearchResults }) {
 
   const handleSingleSearch = async () => {
     const url = `https://api.scryfall.com/cards/search?q=${encodeURIComponent(singleCardName)}`
-    
     try {
       const response = await fetch(url)
       const data = await response.json()

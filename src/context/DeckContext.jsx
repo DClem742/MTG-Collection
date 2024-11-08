@@ -77,13 +77,26 @@ export function DeckProvider({ children }) {
     }
   }
 
+  const deleteDeck = async (deckId) => {
+    const { error } = await supabase
+      .from('decks')
+      .delete()
+      .eq('id', deckId)
+
+    if (!error) {
+      setDecks(current => current.filter(deck => deck.id !== deckId))
+      toast.success('Deck deleted successfully')
+    }
+  }
+
   return (
     <DeckContext.Provider value={{ 
       decks, 
       createDeck, 
       getDeckCards, 
       addCardToDeck, 
-      removeCardFromDeck 
+      removeCardFromDeck,
+      deleteDeck 
     }}>
       {children}
     </DeckContext.Provider>
