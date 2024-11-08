@@ -1,0 +1,157 @@
+.deckBuilder {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #121212;
+  min-height: 100vh;
+  color: white;
+}
+
+.deckControls {
+  margin-bottom: 2rem;
+}
+
+.deckControls form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.deckControls input,
+.deckControls select {
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 2px solid #2d2d2d;
+  border-radius: 4px;
+  background: #1e1e1e;
+  color: white;
+}
+
+.deckControls button {
+  padding: 0.8rem 1.5rem;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.deckBuilderGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.collectionCards,
+.deckCards {
+  background: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.card {
+  cursor: pointer;
+  padding: 0.5rem;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: all 0.2s;
+  background: #2d2d2d;
+}
+
+.card:hover {
+  border-color: #2ecc71;
+  background: rgba(46, 204, 113, 0.1);
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.card p {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: 2px solid #2d2d2d;
+  border-radius: 4px;
+  background: #1e1e1e;
+  color: white;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #2ecc71;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: 2px solid #2d2d2d;
+  border-radius: 4px;
+  background: #1e1e1e;
+  color: white;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #2ecc71;
+}
+
+.deckList {
+  margin-top: 1rem;
+}
+.cardTypeGroup {
+  margin: 1.5rem 0;
+}
+
+.cardTypeGroup h4 {
+  color: #2ecc71;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #2d2d2d;
+}
+
+.deckListItem {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  color: #ffffff;
+}
+
+.deckListItem span:first-child {
+  width: 30px;
+  color: #7f8c8d;
+}
+
+.deckListItem button {
+  margin-left: auto;
+  padding: 0.2rem 0.5rem;
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.deckListItem:hover button {
+  opacity: 1;
+}

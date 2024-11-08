@@ -24,6 +24,9 @@ function Navbar() {
         <li>
           <Link to="/collection">Collection</Link>
         </li>
+        <li>
+          <Link to="/decks">Decks</Link>
+        </li>
         {user ? (
           <>
             <li>{user.email}</li>
