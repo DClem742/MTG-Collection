@@ -23,21 +23,31 @@ export function CollectionProvider({ children }) {
 
   const addToCollection = (card) => {
     if (!user?.id) return
-    
+
+    const essentialCardData = {
+      id: card.id,
+      name: card.name,
+      set_name: card.set_name,
+      collector_number: card.collector_number,
+      image_uris: { small: card.image_uris?.small },
+      type_line: card.type_line,
+      colors: card.colors,
+      prices: card.prices
+    }
+
     setCollections(prev => {
       const userCollection = prev[user.id] || []
       const existingCard = userCollection.find(c => c.id === card.id)
       
       const updatedCollection = existingCard
         ? userCollection.map(c => c.id === card.id ? { ...c, quantity: (c.quantity || 1) + 1 } : c)
-        : [...userCollection, { ...card, quantity: 1 }]
+        : [...userCollection, { ...essentialCardData, quantity: 1 }]
 
       const newCollections = { ...prev, [user.id]: updatedCollection }
       localStorage.setItem(`mtgCollection_${user.id}`, JSON.stringify(updatedCollection))
       return newCollections
     })
   }
-
   const updateQuantity = (cardId, newQuantity) => {
     if (!user?.id) return
 

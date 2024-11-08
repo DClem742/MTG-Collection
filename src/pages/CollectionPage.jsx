@@ -107,11 +107,26 @@ function CollectionPage() {
           {filteredCollection.map((card) => (
             <tr key={card.id}>
               <td>
-                <img 
-                  src={card.image_uris?.small} 
-                  alt={card.name} 
-                  className={styles.cardThumbnail}
-                />
+                {card.card_faces && card.card_faces[0].image_uris ? (
+                  <div className={styles.doubleFaced}>
+                    <img 
+                      src={card.card_faces[0].image_uris.small} 
+                      alt={card.name}
+                      className={styles.cardThumbnail}
+                    />
+                    <img 
+                      src={card.card_faces[1].image_uris.small} 
+                      alt={card.name}
+                      className={styles.cardThumbnail}
+                    />
+                  </div>
+                ) : (
+                  <img 
+                    src={card.image_uris?.small} 
+                    alt={card.name} 
+                    className={styles.cardThumbnail}
+                  />
+                )}
               </td>
               <td>{card.name}</td>
               <td>{card.set_name}</td>
