@@ -9,34 +9,31 @@ export function DeckProvider({ children }) {
   const [decks, setDecks] = useState([])
   const { user } = useAuth()
 
-  useEffect(() => {
-    if (user) {
-      fetchDecks()
-    }
-  }, [user])
-
   const fetchDecks = async () => {
-    const { data } = await supabase
+    console.log('Fetching decks for user:', user.id)
+    
+    const { data, error } = await supabase
       .from('decks')
       .select('*')
       .eq('user_id', user.id)
-    
+
+    console.log('Fetched deck details:', JSON.stringify(data, null, 2))
+
     if (data) setDecks(data)
   }
 
   const createDeck = async (name, format) => {
     const { data, error } = await supabase
       .from('decks')
-      .insert([{
+      .insert({
         name,
         format,
         user_id: user.id
-      }])
+      })
       .select()
 
-    if (!error) {
-      setDecks(current => [...current, data[0]])
-      toast.success('Deck created successfully')
+    if (!error && data) {
+      setDecks(prevDecks => [...prevDecks, data[0]])
       return data[0]
     }
   }
@@ -78,16 +75,26 @@ export function DeckProvider({ children }) {
   }
 
   const deleteDeck = async (deckId) => {
-    const { error } = await supabase
+    console.log('Starting deletion process for deck:', deckId)
+    
+    const { data, error } = await supabase
       .from('decks')
       .delete()
       .eq('id', deckId)
+      .select()
+
+    console.log('Deletion response:', { data, error })
 
     if (!error) {
-      setDecks(current => current.filter(deck => deck.id !== deckId))
-      toast.success('Deck deleted successfully')
+      setDecks(prevDecks => prevDecks.filter(deck => deck.id !== deckId))
     }
   }
+  // Fetch decks when user changes
+  useEffect(() => {
+    if (user) {
+      fetchDecks()
+    }
+  }, [user])
 
   return (
     <DeckContext.Provider value={{ 

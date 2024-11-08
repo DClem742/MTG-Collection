@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useDeck } from '../context/DeckContext'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
-
 function DeckBuilder() {
   const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck } = useDeck()
   const { collection } = useCollection()
@@ -95,6 +94,13 @@ function DeckBuilder() {
     return groups
   }
 
+  const handleDeleteDeck = async (deckId) => {
+    if (window.confirm('Are you sure you want to delete this deck?')) {
+      await deleteDeck(deckId)
+      setSelectedDeck(null)
+    }
+  }
+
   return (
     <div className={styles.deckBuilder}>
       <div className={styles.deckControls}>
@@ -114,17 +120,26 @@ function DeckBuilder() {
           <button type="submit">Create Deck</button>
         </form>
 
-        <select 
-          value={selectedDeck?.id || ''} 
-          onChange={(e) => setSelectedDeck(decks.find(d => d.id === e.target.value))}
-        >
-          <option value="">Select a Deck</option>
-          {decks.map(deck => (
-            <option key={deck.id} value={deck.id}>{deck.name}</option>
-          ))}
-        </select>
+        <div className={styles.deckSelection}>
+          <select 
+            value={selectedDeck?.id || ''} 
+            onChange={(e) => setSelectedDeck(decks.find(d => d.id === e.target.value))}
+          >
+            <option value="">Select a Deck</option>
+            {decks.map(deck => (
+              <option key={deck.id} value={deck.id}>{deck.name}</option>
+            ))}
+          </select>
+          {selectedDeck && (
+            <button 
+              onClick={() => handleDeleteDeck(selectedDeck.id)}
+              className={styles.deleteButton}
+            >
+              Delete Deck
+            </button>
+          )}
+        </div>
       </div>
-
       {selectedDeck && (
         <div className={styles.deckBuilderGrid}>
           <div className={styles.searchSection}>
