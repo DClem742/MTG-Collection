@@ -11,15 +11,8 @@ function DeckBuilder() {
   const [selectedDeck, setSelectedDeck] = useState(null)
   const [deckCards, setDeckCards] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState([])
 
-  // Add handleDeleteDeck here, before the other handler functions
-  const handleDeleteDeck = async (deckId) => {
-    if (window.confirm('Are you sure you want to delete this deck?')) {
-      await deleteDeck(deckId)
-      setSelectedDeck(null)
-    }
-  }
-  
   const formats = [
     'standard',
     'modern',
@@ -29,6 +22,46 @@ function DeckBuilder() {
     'vintage',
     'pauper'
   ]
+
+  const handleSearch = (term) => {
+    if (!term.trim()) {
+      setSearchResults([])
+      return
+    }
+    const results = collection.filter(card => 
+      card.name.toLowerCase().includes(term.toLowerCase())
+    )
+    setSearchResults(results)
+  }
+
+  useEffect(() => {
+    handleSearch(searchTerm)
+  }, [searchTerm])
+
+  useEffect(() => {
+    if (selectedDeck) {
+      const loadDeckCards = async () => {
+        const cards = await getDeckCards(selectedDeck.id)
+        setDeckCards(cards)
+      }
+      loadDeckCards()
+    }
+  }, [selectedDeck])
+
+  const handleCreateDeck = async (e) => {
+    e.preventDefault()
+    const newDeck = await createDeck(deckName, format)
+    setSelectedDeck(newDeck)
+    setDeckName('')
+  }
+
+  const handleAddCard = async (card) => {
+    if (selectedDeck) {
+      await addCardToDeck(selectedDeck.id, card)
+      const updatedCards = await getDeckCards(selectedDeck.id)
+      setDeckCards(updatedCards)
+    }
+  }
 
   const groupCardsByType = (cards) => {
     const groups = {
@@ -62,43 +95,6 @@ function DeckBuilder() {
     return groups
   }
 
-  const filteredCollection = collection.filter(card => 
-    card.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  useEffect(() => {
-    if (selectedDeck) {
-      const loadDeckCards = async () => {
-        const cards = await getDeckCards(selectedDeck.id)
-        setDeckCards(cards)
-      }
-      loadDeckCards()
-    }
-  }, [selectedDeck])
-
-  const handleCreateDeck = async (e) => {
-    e.preventDefault()
-    const newDeck = await createDeck(deckName, format)
-    setSelectedDeck(newDeck)
-    setDeckName('')
-  }
-
-  const handleAddCard = async (card) => {
-    if (selectedDeck) {
-      await addCardToDeck(selectedDeck.id, card)
-      const updatedCards = await getDeckCards(selectedDeck.id)
-      setDeckCards(updatedCards)
-    }
-  }
-
-  const handleRemoveCard = async (cardId) => {
-    if (selectedDeck) {
-      await removeCardFromDeck(selectedDeck.id, cardId)
-      const updatedCards = await getDeckCards(selectedDeck.id)
-      setDeckCards(updatedCards)
-    }
-  }
-
   return (
     <div className={styles.deckBuilder}>
       <div className={styles.deckControls}>
@@ -110,10 +106,7 @@ function DeckBuilder() {
             placeholder="Deck Name"
             required
           />
-          <select 
-            value={format} 
-            onChange={(e) => setFormat(e.target.value)}
-          >
+          <select value={format} onChange={(e) => setFormat(e.target.value)}>
             {formats.map(f => (
               <option key={f} value={f}>{f.charAt(0).toUpperCase() + f.slice(1)}</option>
             ))}
@@ -121,31 +114,20 @@ function DeckBuilder() {
           <button type="submit">Create Deck</button>
         </form>
 
-        <div className={styles.deckSelection}>
-          <select 
-            value={selectedDeck?.id || ''} 
-            onChange={(e) => setSelectedDeck(decks.find(d => d.id === e.target.value))}
-          >
-            <option value="">Select a Deck</option>
-            {decks.map(deck => (
-              <option key={deck.id} value={deck.id}>{deck.name}</option>
-            ))}
-          </select>
-          {selectedDeck && (
-            <button 
-              onClick={() => handleDeleteDeck(selectedDeck.id)}
-              className={styles.deleteButton}
-            >
-              Delete Deck
-            </button>
-          )}
-        </div>
+        <select 
+          value={selectedDeck?.id || ''} 
+          onChange={(e) => setSelectedDeck(decks.find(d => d.id === e.target.value))}
+        >
+          <option value="">Select a Deck</option>
+          {decks.map(deck => (
+            <option key={deck.id} value={deck.id}>{deck.name}</option>
+          ))}
+        </select>
       </div>
 
       {selectedDeck && (
         <div className={styles.deckBuilderGrid}>
-          <div className={styles.collectionCards}>
-            <h3>Your Collection</h3>
+          <div className={styles.searchSection}>
             <input
               type="text"
               placeholder="Search cards in collection..."
@@ -153,14 +135,17 @@ function DeckBuilder() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className={styles.searchInput}
             />
-            <div className={styles.cardList}>
-              {filteredCollection.map(card => (
-                <div 
-                  key={card.id} 
-                  className={styles.cardListItem}
-                  onClick={() => handleAddCard(card)}
-                >
-                  <span>{card.name}</span>
+            <div className={styles.searchResults}>
+              {searchResults.map(card => (
+                <div key={card.id} className={styles.cardResult}>
+                  <img src={card.image_uris?.small} alt={card.name} />
+                  <div className={styles.cardInfo}>
+                    <h3>{card.name}</h3>
+                    <p>Set: {card.set_name}</p>
+                    <p>Type: {card.type_line}</p>
+                    <p>Mana Cost: {card.mana_cost}</p>
+                  </div>
+                  <button onClick={() => handleAddCard(card)}>Add to Deck</button>
                 </div>
               ))}
             </div>
@@ -173,10 +158,10 @@ function DeckBuilder() {
                 <div key={type} className={styles.cardTypeGroup}>
                   <h4>{type} ({cards.length})</h4>
                   {cards.map(card => (
-                    <div key={card.id} className={styles.deckListItem}>
+                    <div key={card.id} className={styles.deckCard}>
                       <span>{card.quantity}x</span>
                       <span>{card.card_data.name}</span>
-                      <button onClick={() => handleRemoveCard(card.id)}>×</button>
+                      <button onClick={() => removeCardFromDeck(selectedDeck.id, card.id)}>Remove</button>
                     </div>
                   ))}
                 </div>

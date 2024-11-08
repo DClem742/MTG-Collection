@@ -155,3 +155,19 @@
 .deckListItem:hover button {
   opacity: 1;
 }
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.filters select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  min-width: 150px;
+}
