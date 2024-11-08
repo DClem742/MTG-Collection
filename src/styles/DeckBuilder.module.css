@@ -171,3 +171,15 @@
   border: 1px solid #ddd;
   min-width: 150px;
 }
+
+.deckHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.totalCount {
+  font-size: 1.1rem;
+  color: #666;
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDeck } from '../context/DeckContext'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
+
 function DeckBuilder() {
   const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck } = useDeck()
   const { collection } = useCollection()
@@ -10,7 +11,9 @@ function DeckBuilder() {
   const [selectedDeck, setSelectedDeck] = useState(null)
   const [deckCards, setDeckCards] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [bulkSearchTerm, setBulkSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
+  const [cardQuantities, setCardQuantities] = useState({})
 
   const formats = [
     'standard',
@@ -28,9 +31,54 @@ function DeckBuilder() {
       return
     }
     const results = collection.filter(card => 
-      card.name.toLowerCase().includes(term.toLowerCase())
+      card.name.toLowerCase() === term.toLowerCase()
     )
     setSearchResults(results)
+  }
+
+  const handleBulkSearch = async () => {
+    const cardNames = bulkSearchTerm.split('\n').filter(name => name.trim())
+    let results = []
+
+    for (const name of cardNames) {
+      const url = `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name.trim())}`
+      try {
+        const response = await fetch(url)
+        if (!response.ok) continue
+        const data = await response.json()
+        results.push(data)
+      } catch (error) {
+        console.log(`Error searching for ${name}:`, error)
+      }
+    }
+    setSearchResults(results)
+  }
+
+  const handleAddAllToDeck = async () => {
+    if (selectedDeck && searchResults.length > 0) {
+      for (const card of searchResults) {
+        await handleAddCard(card)
+      }
+      setSearchResults([])
+      setBulkSearchTerm('')
+    }
+  }
+
+  const setCardQuantity = (cardId, quantity) => {
+    setCardQuantities(prev => ({
+      ...prev,
+      [cardId]: Math.max(1, quantity)
+    }))
+  }
+
+  const handleAddCard = async (card) => {
+    if (selectedDeck) {
+      const quantity = cardQuantities[card.id] || 1
+      await addCardToDeck(selectedDeck.id, card, quantity)
+      const updatedCards = await getDeckCards(selectedDeck.id)
+      setDeckCards(updatedCards)
+      setCardQuantities(prev => ({ ...prev, [card.id]: 1 }))
+    }
   }
 
   useEffect(() => {
@@ -54,12 +102,15 @@ function DeckBuilder() {
     setDeckName('')
   }
 
-  const handleAddCard = async (card) => {
-    if (selectedDeck) {
-      await addCardToDeck(selectedDeck.id, card)
-      const updatedCards = await getDeckCards(selectedDeck.id)
-      setDeckCards(updatedCards)
+  const handleDeleteDeck = async (deckId) => {
+    if (window.confirm('Are you sure you want to delete this deck?')) {
+      await deleteDeck(deckId)
+      setSelectedDeck(null)
     }
+  }
+
+  const getTotalCardCount = (cards) => {
+    return cards.reduce((total, card) => total + (card.quantity || 1), 0)
   }
 
   const groupCardsByType = (cards) => {
@@ -90,15 +141,7 @@ function DeckBuilder() {
         groups.Lands.push(card)
       }
     })
-
     return groups
-  }
-
-  const handleDeleteDeck = async (deckId) => {
-    if (window.confirm('Are you sure you want to delete this deck?')) {
-      await deleteDeck(deckId)
-      setSelectedDeck(null)
-    }
   }
 
   return (
@@ -140,17 +183,29 @@ function DeckBuilder() {
           )}
         </div>
       </div>
+
       {selectedDeck && (
         <div className={styles.deckBuilderGrid}>
           <div className={styles.searchSection}>
-            <input
-              type="text"
-              placeholder="Search cards in collection..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={styles.searchInput}
-            />
+            <div className={styles.bulkSearch}>
+              <textarea
+                value={bulkSearchTerm}
+                onChange={(e) => setBulkSearchTerm(e.target.value)}
+                placeholder="Enter multiple card names (one per line)"
+                className={styles.bulkSearchInput}
+              />
+              <button onClick={handleBulkSearch}>Search Multiple Cards</button>
+            </div>
+
             <div className={styles.searchResults}>
+              {searchResults.length > 0 && (
+                <button 
+                  className={styles.addAllButton}
+                  onClick={handleAddAllToDeck}
+                >
+                  Add All to Deck
+                </button>
+              )}
               {searchResults.map(card => (
                 <div key={card.id} className={styles.cardResult}>
                   <img src={card.image_uris?.small} alt={card.name} />
@@ -159,6 +214,11 @@ function DeckBuilder() {
                     <p>Set: {card.set_name}</p>
                     <p>Type: {card.type_line}</p>
                     <p>Mana Cost: {card.mana_cost}</p>
+                    <div className={styles.quantityControls}>
+                      <button onClick={() => setCardQuantity(card.id, (cardQuantities[card.id] || 1) - 1)}>-</button>
+                      <span>{cardQuantities[card.id] || 1}</span>
+                      <button onClick={() => setCardQuantity(card.id, (cardQuantities[card.id] || 1) + 1)}>+</button>
+                    </div>
                   </div>
                   <button onClick={() => handleAddCard(card)}>Add to Deck</button>
                 </div>
@@ -167,7 +227,10 @@ function DeckBuilder() {
           </div>
 
           <div className={styles.deckCards}>
-            <h3>{selectedDeck.name}</h3>
+            <div className={styles.deckHeader}>
+              <h3>{selectedDeck.name}</h3>
+              <h4 className={styles.totalCount}>Total Cards: {getTotalCardCount(deckCards)}</h4>
+            </div>
             {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
               cards.length > 0 && (
                 <div key={type} className={styles.cardTypeGroup}>

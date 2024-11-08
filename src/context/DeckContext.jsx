@@ -47,21 +47,44 @@ export function DeckProvider({ children }) {
     return data || []
   }
 
-  const addCardToDeck = async (deckId, card) => {
-    const { data, error } = await supabase
+  const addCardToDeck = async (deckId, card, quantity = 1) => {
+    // First check if card already exists in deck
+    const { data: existingCard } = await supabase
       .from('deck_cards')
-      .insert([{
-        deck_id: deckId,
-        card_data: card
-      }])
-      .select()
+      .select('*')
+      .eq('deck_id', deckId)
+      .eq('card_data->>name', card.name)
+      .single()
 
-    if (!error) {
-      toast.success('Card added to deck')
-      return data[0]
+    if (existingCard) {
+      // Update existing card quantity
+      const { data, error } = await supabase
+        .from('deck_cards')
+        .update({ quantity: existingCard.quantity + quantity })
+        .eq('id', existingCard.id)
+        .select()
+
+      if (!error) {
+        toast.success('Card quantity updated')
+        return data[0]
+      }
+    } else {
+      // Insert new card
+      const { data, error } = await supabase
+        .from('deck_cards')
+        .insert([{
+          deck_id: deckId,
+          card_data: card,
+          quantity: quantity
+        }])
+        .select()
+
+      if (!error) {
+        toast.success('Card added to deck')
+        return data[0]
+      }
     }
   }
-
   const removeCardFromDeck = async (deckId, cardId) => {
     const { error } = await supabase
       .from('deck_cards')
