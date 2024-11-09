@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDeck } from '../context/DeckContext'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
-
+import popupStyles from '../styles/CardPopup.module.css'
 function DeckBuilder() {
   const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck, setCommander } = useDeck()
   const { collection } = useCollection()
@@ -16,7 +16,44 @@ function DeckBuilder() {
   const [cardQuantities, setCardQuantities] = useState({})
   const [commander, setCommanderState] = useState(null)
   const [flippedCards, setFlippedCards] = useState({})
+  const [hoverCard, setHoverCard] = useState(null)
+  // Add the new state and functions here
+  const [cardPrints, setCardPrints] = useState({})
+  const [selectedPrint, setSelectedPrint] = useState({})
+  const [showingPrintsForCard, setShowingPrintsForCard] = useState(null)
 
+  const fetchCardPrints = async (cardId) => {
+    const card = deckCards.find(c => c.id === cardId)
+    const printsUrl = card.card_data.prints_search_uri
+    const response = await fetch(printsUrl)
+    const data = await response.json()
+    setCardPrints(prev => ({
+      ...prev,
+      [cardId]: data.data
+    }))
+  }
+
+  const selectPrint = (cardId, printData) => {
+    setSelectedPrint(prev => ({
+      ...prev,
+      [cardId]: printData
+    }))
+  }
+
+  const handleCardClick = async (card) => {
+    if (showingPrintsForCard === card.id) {
+      setShowingPrintsForCard(null)
+      return
+    }
+    
+    setShowingPrintsForCard(card.id)
+    const response = await fetch(card.card_data.prints_search_uri)
+    const data = await response.json()
+    setCardPrints(prev => ({
+      ...prev,
+      [card.id]: data.data
+    }))
+  }
   const handleCardFlip = (cardId) => {
     setFlippedCards(prev => ({
       ...prev,
@@ -46,15 +83,7 @@ function DeckBuilder() {
     }
   }
 
-  const formats = [
-    'standard',
-    'modern',
-    'commander',
-    'pioneer',
-    'legacy',
-    'vintage',
-    'pauper'
-  ]
+  const formats = ['commander']
 
   const handleSearch = (term) => {
     if (!term.trim()) {
@@ -111,7 +140,6 @@ function DeckBuilder() {
       setCardQuantities(prev => ({ ...prev, [card.id]: 1 }))
     }
   }
-
   useEffect(() => {
     handleSearch(searchTerm)
   }, [searchTerm])
@@ -207,17 +235,30 @@ function DeckBuilder() {
           </select>
           <button type="submit">Create Deck</button>
         </form>
-
         <div className={styles.deckSelection}>
-          <select 
-            value={selectedDeck?.id || ''} 
-            onChange={(e) => setSelectedDeck(decks.find(d => d.id === e.target.value))}
-          >
-            <option value="">Select a Deck</option>
+          <div className={styles.deckGrid}>
             {decks.map(deck => (
-              <option key={deck.id} value={deck.id}>{deck.name}</option>
+              <div 
+                key={deck.id} 
+                className={`${styles.deckCard} ${selectedDeck?.id === deck.id ? styles.selected : ''}`}
+                onClick={() => setSelectedDeck(deck)}
+              >
+                {deck.commander ? (
+                  <img 
+                    src={deck.commander.image_uris?.normal} 
+                    alt={deck.commander.name}
+                  />
+                ) : (
+                  <div className={styles.placeholderImage}>
+                    No Commander Set
+                  </div>
+                )}
+                <div className={styles.deckInfo}>
+                  <h3>{deck.name}</h3>
+                </div>
+              </div>
             ))}
-          </select>
+          </div>
           {selectedDeck && (
             <button 
               onClick={() => handleDeleteDeck(selectedDeck.id)}
@@ -276,7 +317,7 @@ function DeckBuilder() {
                     </div>
                   </div>
                   <button onClick={() => handleAddCard(card)}>Add to Deck</button>
-                  {selectedDeck?.format === 'commander' && isValidCommander(card) && (
+                  {isValidCommander(card) && (
                     <button 
                       className={styles.commanderButton}
                       onClick={() => handleSetCommander(card)}
@@ -288,20 +329,32 @@ function DeckBuilder() {
               ))}
             </div>
           </div>
-
           <div className={styles.deckCards}>
-            <div className={styles.deckHeader}>
-              <h3>{selectedDeck.name}</h3>
-              <h4 className={styles.totalCount}>Total Cards: {getTotalCardCount(deckCards)}</h4>
-            </div>
+            {/* Add this function to calculate total deck price */}
+            {(() => {
+              const calculateDeckPrice = (cards) => {
+                return cards.reduce((total, card) => {
+                  const price = card.card_data.prices?.usd || 0
+                  return total + (price * card.quantity)
+                }, 0)
+              }
+
+              return (
+                <div className={styles.deckHeader}>
+                  <h3>{selectedDeck.name}</h3>
+                  <h4 className={styles.totalCount}>
+                    Total Cards: {getTotalCardCount(deckCards)} | 
+                    Deck Value: ${calculateDeckPrice(deckCards).toFixed(2)}
+                  </h4>
+                </div>
+              )
+            })()}
 
             
             {selectedDeck.commander && (
               <div className={styles.commanderSection}>
                 <h4>Commander</h4>
                 <div className={styles.commanderCard}>
-
-
                   <img src={selectedDeck.commander.image_uris?.small} alt={selectedDeck.commander.name} />
                   <span>{selectedDeck.commander.name}</span>
                 </div>
@@ -313,14 +366,81 @@ function DeckBuilder() {
                 <div key={type} className={styles.cardTypeGroup}>
                   <h4>{type} ({cards.length})</h4>
                   {cards.map(card => (
-                    <div key={card.id} className={styles.deckCard}>
-                      <span>{card.quantity}x</span>
-                      <span>{card.card_data.name}</span>
-                      <button onClick={() => removeCardFromDeck(selectedDeck.id, card.id)}>Remove</button>
+                    <div key={card.id} className={styles.deckListContainer}>
+                      <div 
+                        className={styles.deckCard}
+                        onClick={() => handleCardClick(card)}
+                        onMouseEnter={(e) => {
+                          if (!showingPrintsForCard) {
+                            setHoverCard({
+                              card: selectedPrint[card.id] || card.card_data,
+                              x: e.clientX + 10,
+                              y: e.clientY + 10
+                            })
+                          }
+                        }}
+                        onMouseLeave={() => setHoverCard(null)}
+                      >
+                        <span>{card.quantity}x</span>
+                        <span>{card.card_data.name}</span>
+                        <button onClick={(e) => {
+                          e.stopPropagation()
+                          removeCardFromDeck(selectedDeck.id, card.id)
+                        }}>Remove</button>
+                      </div>
+
+                      {showingPrintsForCard === card.id && cardPrints[card.id] && (
+                        <div 
+                          className={styles.printsSelector}
+                          style={{
+                            position: 'fixed',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)'
+                          }}
+                        >
+                          {cardPrints[card.id].map(print => (
+                            <img 
+                              key={print.id}
+                              src={print.image_uris?.small} 
+                              alt={print.set_name}
+                              onClick={() => {
+                                setSelectedPrint(prev => ({
+                                  ...prev,
+                                  [card.id]: print
+                                }))
+                                setShowingPrintsForCard(null)
+                              }}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               )
+            ))}          </div>
+        </div>
+      )}
+      {hoverCard && (
+        <div 
+          className={popupStyles.cardPopup} 
+          style={{ left: hoverCard.x, top: hoverCard.y }}
+        >
+          <img 
+            className={popupStyles.cardPopupImage}
+            src={selectedPrint[hoverCard.card.id]?.image_uris?.normal || hoverCard.card.image_uris?.normal} 
+            alt={hoverCard.card.name} 
+          />
+          <div className={popupStyles.printSelector}>
+            {cardPrints[hoverCard.card.id]?.map(print => (
+              <img 
+                key={print.id}
+                src={print.image_uris?.small}
+                alt={`${print.set_name} printing`}
+                onClick={() => selectPrint(hoverCard.card.id, print)}
+                className={popupStyles.printThumbnail}
+              />
             ))}
           </div>
         </div>

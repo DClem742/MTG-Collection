@@ -239,3 +239,72 @@
 .cardImage:hover .flipHint {
   opacity: 1;
 }
+
+.deckGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.deckCard {
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.deckCard:hover {
+  transform: translateY(-5px);
+}
+
+.deckCard img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.deckInfo {
+  padding: 0.5rem;
+  background: rgba(0,0,0,0.8);
+  color: white;
+}
+.selected {
+  border: 2px solid gold;
+  transform: translateY(-5px);
+}
+.placeholderImage {
+  height: 280px;
+  background: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.printsSelector {
+  position: absolute;
+  z-index: 1000;
+  background: #1a1a1a;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 400px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.printsSelector img {
+  width: 100px;
+  height: auto;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.printsSelector img:hover {
+  border-color: gold;
+}
