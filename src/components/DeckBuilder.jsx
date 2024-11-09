@@ -127,13 +127,10 @@ function DeckBuilder() {
         const freshDeckData = decks.find(d => d.id === selectedDeck.id)
         console.log('Fresh deck data:', freshDeckData)
         console.log('Commander data:', freshDeckData?.commander)
-        
-        setCommanderState(freshDeckData?.commander)
       }
       loadDeckData()
     }
   }, [selectedDeck, decks])
-
   const handleCreateDeck = async (e) => {
     e.preventDefault()
     const newDeck = await createDeck(deckName, format)
@@ -186,7 +183,7 @@ function DeckBuilder() {
   return (
     <div className={styles.deckBuilder}>
       <div className={styles.deckControls}>
-        {selectedDeck?.format === 'commander' && commander && (
+        {commander && (
           <div className={styles.commanderSection}>
             <h4>Commander</h4>
             <div className={styles.commanderCard}>
@@ -297,15 +294,20 @@ function DeckBuilder() {
               <h3>{selectedDeck.name}</h3>
               <h4 className={styles.totalCount}>Total Cards: {getTotalCardCount(deckCards)}</h4>
             </div>
-            {commander && (
+
+            
+            {selectedDeck.commander && (
               <div className={styles.commanderSection}>
                 <h4>Commander</h4>
                 <div className={styles.commanderCard}>
-                  <img src={commander.image_uris?.small} alt={commander.name} />
-                  <span>{commander.name}</span>
+
+
+                  <img src={selectedDeck.commander.image_uris?.small} alt={selectedDeck.commander.name} />
+                  <span>{selectedDeck.commander.name}</span>
                 </div>
               </div>
             )}
+
             {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
               cards.length > 0 && (
                 <div key={type} className={styles.cardTypeGroup}>
