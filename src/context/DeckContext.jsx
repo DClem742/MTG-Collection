@@ -14,7 +14,14 @@ export function DeckProvider({ children }) {
     
     const { data, error } = await supabase
       .from('decks')
-      .select('*')
+      .select(`
+        id,
+        user_id,
+        name,
+        format,
+        created_at,
+        commander
+      `)
       .eq('user_id', user.id)
 
     console.log('Fetched deck details:', JSON.stringify(data, null, 2))
@@ -46,18 +53,17 @@ export function DeckProvider({ children }) {
     
     return data || []
   }
-
   const addCardToDeck = async (deckId, card, quantity = 1) => {
-    // First check if card already exists in deck
-    const { data: existingCard } = await supabase
+    // First check if card already exists in deck using containedBy
+    const { data: existingCards } = await supabase
       .from('deck_cards')
       .select('*')
       .eq('deck_id', deckId)
-      .eq('card_data->>name', card.name)
-      .single()
+      .contains('card_data', { name: card.name })
+
+    const existingCard = existingCards?.[0]
 
     if (existingCard) {
-      // Update existing card quantity
       const { data, error } = await supabase
         .from('deck_cards')
         .update({ quantity: existingCard.quantity + quantity })
@@ -69,7 +75,6 @@ export function DeckProvider({ children }) {
         return data[0]
       }
     } else {
-      // Insert new card
       const { data, error } = await supabase
         .from('deck_cards')
         .insert([{
@@ -114,17 +119,21 @@ export function DeckProvider({ children }) {
   }
 
   const setCommander = async (deckId, card) => {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('decks')
       .update({ commander: card })
       .eq('id', deckId)
+      .select()
 
     if (!error) {
+      setDecks(prevDecks => prevDecks.map(deck => 
+        deck.id === deckId ? { ...deck, commander: card } : deck
+      ))
       toast.success(`${card.name} set as Commander`)
     }
+    return { data, error }
   }
 
-  // Fetch decks when user changes
   useEffect(() => {
     if (user) {
       fetchDecks()
@@ -145,16 +154,5 @@ export function DeckProvider({ children }) {
     </DeckContext.Provider>
   )
 }
+
 export const useDeck = () => useContext(DeckContext)
-
-const setCommander = async (deckId, card) => {
-  const { error } = await supabase
-    .from('decks')
-    .update({ commander: card })
-    .eq('id', deckId)
-    .select()
-
-  if (!error) {
-    toast.success(`${card.name} set as Commander`)
-  }
-}

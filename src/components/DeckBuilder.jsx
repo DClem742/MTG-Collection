@@ -30,8 +30,19 @@ function DeckBuilder() {
 
   const handleSetCommander = async (card) => {
     if (selectedDeck) {
-      await setCommander(selectedDeck.id, card)
-      setCommanderState(card)
+      // Prepare a clean card object with only the necessary data
+      const commanderData = {
+        id: card.id,
+        name: card.name,
+        image_uris: card.image_uris,
+        type_line: card.type_line
+      }
+      
+      // Update local state first for immediate feedback
+      setCommanderState(commanderData)
+      
+      // Then update the backend
+      await setCommander(selectedDeck.id, commanderData)
     }
   }
 
@@ -107,13 +118,21 @@ function DeckBuilder() {
 
   useEffect(() => {
     if (selectedDeck) {
-      const loadDeckCards = async () => {
+      const loadDeckData = async () => {
+        console.log('Loading deck:', selectedDeck)
         const cards = await getDeckCards(selectedDeck.id)
         setDeckCards(cards)
+        
+        // Get fresh deck data including commander
+        const freshDeckData = decks.find(d => d.id === selectedDeck.id)
+        console.log('Fresh deck data:', freshDeckData)
+        console.log('Commander data:', freshDeckData?.commander)
+        
+        setCommanderState(freshDeckData?.commander)
       }
-      loadDeckCards()
+      loadDeckData()
     }
-  }, [selectedDeck])
+  }, [selectedDeck, decks])
 
   const handleCreateDeck = async (e) => {
     e.preventDefault()
@@ -167,6 +186,15 @@ function DeckBuilder() {
   return (
     <div className={styles.deckBuilder}>
       <div className={styles.deckControls}>
+        {selectedDeck?.format === 'commander' && commander && (
+          <div className={styles.commanderSection}>
+            <h4>Commander</h4>
+            <div className={styles.commanderCard}>
+              <img src={commander.image_uris?.small} alt={commander.name} />
+              <span>{commander.name}</span>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleCreateDeck}>
           <input
             type="text"
