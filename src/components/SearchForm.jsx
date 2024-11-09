@@ -4,13 +4,24 @@ import styles from '../styles/SearchForm.module.css'
 function SearchForm({ setSearchResults }) {
   const [singleCardName, setSingleCardName] = useState('')
   const [multipleCards, setMultipleCards] = useState('')
+  const [flippedCards, setFlippedCards] = useState({})
+
+  const handleCardFlip = (cardId) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [cardId]: !prev[cardId]
+    }))
+  }
 
   const handleSingleSearch = async () => {
     const url = `https://api.scryfall.com/cards/search?q=${encodeURIComponent(singleCardName)}`
     try {
       const response = await fetch(url)
       const data = await response.json()
-      setSearchResults(data.data)
+      setSearchResults(data.data.map(card => ({
+        ...card,
+        isFlipped: false
+      })))
     } catch (error) {
       console.log('Error:', error)
       setSearchResults([])

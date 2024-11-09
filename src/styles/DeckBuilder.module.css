@@ -216,3 +216,26 @@
   width: 100px;
   border-radius: 4px;
 }
+
+.cardImage {
+  position: relative;
+  cursor: pointer;
+}
+
+.flipHint {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  padding: 4px;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cardImage:hover .flipHint {
+  opacity: 1;
+}

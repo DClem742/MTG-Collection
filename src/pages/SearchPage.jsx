@@ -1,12 +1,19 @@
 import { useState } from 'react'
 import { useCollection } from '../context/CollectionContext'
 import SearchForm from '../components/SearchForm'
-import CardList from '../components/CardList'
 import styles from '../styles/SearchPage.module.css'
 
 function SearchPage() {
   const [searchResults, setSearchResults] = useState([])
   const { addToCollection } = useCollection()
+  const [flippedCards, setFlippedCards] = useState({})
+
+  const handleCardFlip = (cardId) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [cardId]: !prev[cardId]
+    }))
+  }
 
   const handleAddAllToCollection = () => {
     searchResults.forEach(card => addToCollection(card))
@@ -24,7 +31,27 @@ function SearchPage() {
           >
             Add All to Collection
           </button>
-          <CardList cards={searchResults} showAddButton={true} />
+          <div className={styles.cardGrid}>
+            {searchResults.map(card => (
+              <div key={card.id} className={styles.cardResult}>
+                {card.card_faces ? (
+                  <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
+                    <img 
+                      src={flippedCards[card.id] ? card.card_faces[1].image_uris?.small : card.card_faces[0].image_uris?.small} 
+                      alt={card.name}
+                    />
+                    <span className={styles.flipHint}>Click to flip</span>
+                  </div>
+                ) : (
+                  <img src={card.image_uris?.small} alt={card.name} />
+                )}
+                <div className={styles.cardInfo}>
+                  <h3>{card.name}</h3>
+                  <button onClick={() => addToCollection(card)}>Add to Collection</button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

@@ -15,6 +15,14 @@ function DeckBuilder() {
   const [searchResults, setSearchResults] = useState([])
   const [cardQuantities, setCardQuantities] = useState({})
   const [commander, setCommanderState] = useState(null)
+  const [flippedCards, setFlippedCards] = useState({})
+
+  const handleCardFlip = (cardId) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [cardId]: !prev[cardId]
+    }))
+  }
 
   const isValidCommander = (card) => {
     return card.type_line?.includes('Legendary') && card.type_line?.includes('Creature')
@@ -220,7 +228,17 @@ function DeckBuilder() {
               )}
               {searchResults.map(card => (
                 <div key={card.id} className={styles.cardResult}>
-                  <img src={card.image_uris?.small} alt={card.name} />
+                  {card.card_faces ? (
+                    <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
+                      <img 
+                        src={flippedCards[card.id] ? card.card_faces[1].image_uris?.small : card.card_faces[0].image_uris?.small} 
+                        alt={card.name}
+                      />
+                      <span className={styles.flipHint}>Click to flip</span>
+                    </div>
+                  ) : (
+                    <img src={card.image_uris?.small} alt={card.name} />
+                  )}
                   <div className={styles.cardInfo}>
                     <h3>{card.name}</h3>
                     <p>Set: {card.set_name}</p>
