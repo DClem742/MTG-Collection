@@ -112,6 +112,18 @@ export function DeckProvider({ children }) {
       setDecks(prevDecks => prevDecks.filter(deck => deck.id !== deckId))
     }
   }
+
+  const setCommander = async (deckId, card) => {
+    const { error } = await supabase
+      .from('decks')
+      .update({ commander: card })
+      .eq('id', deckId)
+
+    if (!error) {
+      toast.success(`${card.name} set as Commander`)
+    }
+  }
+
   // Fetch decks when user changes
   useEffect(() => {
     if (user) {
@@ -126,11 +138,23 @@ export function DeckProvider({ children }) {
       getDeckCards, 
       addCardToDeck, 
       removeCardFromDeck,
-      deleteDeck 
+      deleteDeck,
+      setCommander 
     }}>
       {children}
     </DeckContext.Provider>
   )
 }
-
 export const useDeck = () => useContext(DeckContext)
+
+const setCommander = async (deckId, card) => {
+  const { error } = await supabase
+    .from('decks')
+    .update({ commander: card })
+    .eq('id', deckId)
+    .select()
+
+  if (!error) {
+    toast.success(`${card.name} set as Commander`)
+  }
+}

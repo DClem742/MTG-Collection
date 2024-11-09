@@ -4,7 +4,7 @@ import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
 
 function DeckBuilder() {
-  const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck } = useDeck()
+  const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck, setCommander } = useDeck()
   const { collection } = useCollection()
   const [deckName, setDeckName] = useState('')
   const [format, setFormat] = useState('standard')
@@ -14,6 +14,18 @@ function DeckBuilder() {
   const [bulkSearchTerm, setBulkSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [cardQuantities, setCardQuantities] = useState({})
+  const [commander, setCommanderState] = useState(null)
+
+  const isValidCommander = (card) => {
+    return card.type_line?.includes('Legendary') && card.type_line?.includes('Creature')
+  }
+
+  const handleSetCommander = async (card) => {
+    if (selectedDeck) {
+      await setCommander(selectedDeck.id, card)
+      setCommanderState(card)
+    }
+  }
 
   const formats = [
     'standard',
@@ -221,6 +233,14 @@ function DeckBuilder() {
                     </div>
                   </div>
                   <button onClick={() => handleAddCard(card)}>Add to Deck</button>
+                  {selectedDeck?.format === 'commander' && isValidCommander(card) && (
+                    <button 
+                      className={styles.commanderButton}
+                      onClick={() => handleSetCommander(card)}
+                    >
+                      Set as Commander
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -231,6 +251,15 @@ function DeckBuilder() {
               <h3>{selectedDeck.name}</h3>
               <h4 className={styles.totalCount}>Total Cards: {getTotalCardCount(deckCards)}</h4>
             </div>
+            {commander && (
+              <div className={styles.commanderSection}>
+                <h4>Commander</h4>
+                <div className={styles.commanderCard}>
+                  <img src={commander.image_uris?.small} alt={commander.name} />
+                  <span>{commander.name}</span>
+                </div>
+              </div>
+            )}
             {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
               cards.length > 0 && (
                 <div key={type} className={styles.cardTypeGroup}>
