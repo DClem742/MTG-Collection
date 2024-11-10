@@ -3,11 +3,13 @@ import { useDeck } from '../context/DeckContext'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
 import popupStyles from '../styles/CardPopup.module.css'
+
 function DeckBuilder() {
   const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck, setCommander } = useDeck()
-  const { collection } = useCollection()
+  const { collection, addToCollection } = useCollection()
+  
   const [deckName, setDeckName] = useState('')
-  const [format, setFormat] = useState('standard')
+  const [format, setFormat] = useState('commander')
   const [selectedDeck, setSelectedDeck] = useState(null)
   const [deckCards, setDeckCards] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -17,7 +19,6 @@ function DeckBuilder() {
   const [commander, setCommanderState] = useState(null)
   const [flippedCards, setFlippedCards] = useState({})
   const [hoverCard, setHoverCard] = useState(null)
-  // Add the new state and functions here
   const [cardPrints, setCardPrints] = useState({})
   const [selectedPrint, setSelectedPrint] = useState(() => {
     const saved = localStorage.getItem('selectedPrints')
@@ -25,76 +26,25 @@ function DeckBuilder() {
   })
   const [showingPrintsForCard, setShowingPrintsForCard] = useState(null)
 
-  // Add this effect to save selections when they change
   useEffect(() => {
     localStorage.setItem('selectedPrints', JSON.stringify(selectedPrint))
   }, [selectedPrint])
-  const fetchCardPrints = async (cardId) => {
-    const card = deckCards.find(c => c.id === cardId)
-    const printsUrl = card.card_data.prints_search_uri
-    const response = await fetch(printsUrl)
-    const data = await response.json()
-    setCardPrints(prev => ({
-      ...prev,
-      [cardId]: data.data
-    }))
-  }
 
-  const selectPrint = (cardId, printData) => {
-    setSelectedPrint(prev => ({
-      ...prev,
-      [cardId]: printData
-    }))
-  }
+  useEffect(() => {
+    handleSearch(searchTerm)
+  }, [searchTerm])
 
-  const handleCardClick = async (card) => {
-    if (!card) return
-    
-    if (showingPrintsForCard === card.id) {
-      setShowingPrintsForCard(null)
-      return
-    }
-    
-    setShowingPrintsForCard(card.id)
-    
-    // Get the card name from either commander or deck card
-    const cardName = card.name || card.card_data.name
-    
-    // Use the same enhanced search for both types
-    const response = await fetch(`https://api.scryfall.com/cards/search?q=!"${cardName}" include:extras unique:prints`)
-    const data = await response.json()
-    setCardPrints(prev => ({
-      ...prev,
-      [card.id]: data.data
-    }))
-  }
-  const handleCardFlip = (cardId) => {
-    setFlippedCards(prev => ({
-      ...prev,
-      [cardId]: !prev[cardId]
-    }))
-  }
-
-  const isValidCommander = (card) => {
-    return card.type_line?.includes('Legendary') && card.type_line?.includes('Creature')
-  }
-
-  const handleSetCommander = async (card) => {
+  useEffect(() => {
     if (selectedDeck) {
-      const commanderData = {
-        id: card.id,
-        name: card.name,
-        image_uris: card.image_uris,
-        card_faces: card.card_faces,  // Add this line
-        type_line: card.type_line
+      const loadDeckData = async () => {
+        const cards = await getDeckCards(selectedDeck.id)
+        setDeckCards(cards)
+        const freshDeckData = decks.find(d => d.id === selectedDeck.id)
+        setCommanderState(freshDeckData?.commander)
       }
-      
-      setCommanderState(commanderData)
-      await setCommander(selectedDeck.id, commanderData)
+      loadDeckData()
     }
-  }
-
-  const formats = ['commander']
+  }, [selectedDeck, decks])
 
   const handleSearch = (term) => {
     if (!term.trim()) {
@@ -102,7 +52,7 @@ function DeckBuilder() {
       return
     }
     const results = collection.filter(card => 
-      card.name.toLowerCase() === term.toLowerCase()
+      card.name.toLowerCase().includes(term.toLowerCase())
     )
     setSearchResults(results)
   }
@@ -142,36 +92,36 @@ function DeckBuilder() {
     }))
   }
 
-  const { addToCollection } = useCollection()
-
-  const handleAddCard = async (card) => {
-    if (selectedDeck) {
-      const quantity = cardQuantities[card.id] || 1
-      await addCardToDeck(selectedDeck.id, card, quantity)
-      addToCollection(card) // Add this line to sync with collection
-      const updatedCards = await getDeckCards(selectedDeck.id)
-      setDeckCards(updatedCards)
-      setCardQuantities(prev => ({ ...prev, [card.id]: 1 }))
+  const handleCardClick = async (card) => {
+    if (!card) return
+    
+    if (showingPrintsForCard === card.id) {
+      setShowingPrintsForCard(null)
+      return
     }
-  };  useEffect(() => {
-    handleSearch(searchTerm)
-  }, [searchTerm])
+    
+    setShowingPrintsForCard(card.id)
+    const cardName = card.name || card.card_data.name
+    const response = await fetch(`https://api.scryfall.com/cards/search?q=!"${cardName}" include:extras unique:prints`)
+    const data = await response.json()
+    setCardPrints(prev => ({
+      ...prev,
+      [card.id]: data.data
+    }))
+  }
 
-  useEffect(() => {
-    if (selectedDeck) {
-      const loadDeckData = async () => {
-        console.log('Loading deck:', selectedDeck)
-        const cards = await getDeckCards(selectedDeck.id)
-        setDeckCards(cards)
-        
-        // Get fresh deck data including commander
-        const freshDeckData = decks.find(d => d.id === selectedDeck.id)
-        console.log('Fresh deck data:', freshDeckData)
-        console.log('Commander data:', freshDeckData?.commander)
-      }
-      loadDeckData()
-    }
-  }, [selectedDeck, decks])
+  const handleRemoveCard = async (deckId, cardId) => {
+    await removeCardFromDeck(deckId, cardId)
+    setDeckCards(prevCards => prevCards.filter(card => card.id !== cardId))
+  }
+
+  const handleCardFlip = (cardId) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [cardId]: !prev[cardId]
+    }))
+  }
+
   const handleCreateDeck = async (e) => {
     e.preventDefault()
     const newDeck = await createDeck(deckName, format)
@@ -184,6 +134,35 @@ function DeckBuilder() {
       await deleteDeck(deckId)
       setSelectedDeck(null)
     }
+  }
+
+  const handleAddCard = async (card) => {
+    if (selectedDeck) {
+      const quantity = cardQuantities[card.id] || 1
+      await addCardToDeck(selectedDeck.id, card, quantity)
+      addToCollection(card)
+      const updatedCards = await getDeckCards(selectedDeck.id)
+      setDeckCards(updatedCards)
+      setCardQuantities(prev => ({ ...prev, [card.id]: 1 }))
+    }
+  }
+
+  const handleSetCommander = async (card) => {
+    if (selectedDeck) {
+      const commanderData = {
+        id: card.id,
+        name: card.name,
+        image_uris: card.image_uris,
+        card_faces: card.card_faces,
+        type_line: card.type_line
+      }
+      setCommanderState(commanderData)
+      await setCommander(selectedDeck.id, commanderData)
+    }
+  }
+
+  const isValidCommander = (card) => {
+    return card.type_line?.includes('Legendary') && card.type_line?.includes('Creature')
   }
 
   const getTotalCardCount = (cards) => {
@@ -221,18 +200,16 @@ function DeckBuilder() {
     return groups
   }
 
+  const calculateDeckPrice = (cards) => {
+    return cards.reduce((total, card) => {
+      const price = card.card_data.prices?.usd || 0
+      return total + (price * card.quantity)
+    }, 0)
+  }
+
   return (
     <div className={styles.deckBuilder}>
       <div className={styles.deckControls}>
-        {commander && (
-          <div className={styles.commanderSection}>
-            <h4>Commander</h4>
-            <div className={styles.commanderCard}>
-              <img src={commander.image_uris?.small} alt={commander.name} />
-              <span>{commander.name}</span>
-            </div>
-          </div>
-        )}
         <form onSubmit={handleCreateDeck}>
           <input
             type="text"
@@ -242,12 +219,11 @@ function DeckBuilder() {
             required
           />
           <select value={format} onChange={(e) => setFormat(e.target.value)}>
-            {formats.map(f => (
-              <option key={f} value={f}>{f.charAt(0).toUpperCase() + f.slice(1)}</option>
-            ))}
+            <option value="commander">Commander</option>
           </select>
           <button type="submit">Create Deck</button>
         </form>
+
         <div className={styles.deckSelection}>
           <div className={styles.deckGrid}>
             {decks.map(deck => (
@@ -275,35 +251,14 @@ function DeckBuilder() {
                 </div>
 
                 {showingPrintsForCard === deck.commander?.id && cardPrints[deck.commander?.id] && (
-                  <div 
-                    className={styles.printsSelector}
-                    style={{
-                      position: 'fixed',
-                      left: '50%',
-                      top: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      zIndex: 1000,
-                      padding: '20px',
-                      background: '#1a1a1a',
-                      borderRadius: '8px',
-                      boxShadow: '0 0 20px rgba(0,0,0,0.5)'
-                    }}
-                  >
-                    <h3 style={{color: 'white', marginBottom: '10px'}}>Select Artwork</h3>
-                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px'}}>
+                  <div className={styles.printsSelector}>
+                    <div className={styles.printsGrid}>
                       {cardPrints[deck.commander.id].map(print => (
                         <img 
                           key={print.id}
                           src={print.image_uris?.normal} 
                           alt={print.set_name}
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            cursor: 'pointer',
-                            borderRadius: '10px'
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation()
+                          onClick={() => {
                             setSelectedPrint(prev => ({
                               ...prev,
                               [deck.commander.id]: print
@@ -318,7 +273,8 @@ function DeckBuilder() {
               </div>
             ))}
           </div>
-          {selectedDeck && (            <button 
+          {selectedDeck && (
+            <button 
               onClick={() => handleDeleteDeck(selectedDeck.id)}
               className={styles.deleteButton}
             >
@@ -331,6 +287,13 @@ function DeckBuilder() {
       {selectedDeck && (
         <div className={styles.deckBuilderGrid}>
           <div className={styles.searchSection}>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search for cards..."
+              className={styles.searchInput}
+            />
             <div className={styles.bulkSearch}>
               <textarea
                 value={bulkSearchTerm}
@@ -352,17 +315,7 @@ function DeckBuilder() {
               )}
               {searchResults.map(card => (
                 <div key={card.id} className={styles.cardResult}>
-                  {card.card_faces ? (
-                    <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
-                      <img 
-                        src={flippedCards[card.id] ? card.card_faces[1].image_uris?.small : card.card_faces[0].image_uris?.small} 
-                        alt={card.name}
-                      />
-                      <span className={styles.flipHint}>Click to flip</span>
-                    </div>
-                  ) : (
-                    <img src={card.image_uris?.small} alt={card.name} />
-                  )}
+                  <img src={card.image_uris?.small} alt={card.name} />
                   <div className={styles.cardInfo}>
                     <h3>{card.name}</h3>
                     <p>Set: {card.set_name}</p>
@@ -387,138 +340,31 @@ function DeckBuilder() {
               ))}
             </div>
           </div>
+
           <div className={styles.deckCards}>
-            {/* Add this function to calculate total deck price */}
-            {(() => {
-              const calculateDeckPrice = (cards) => {
-                return cards.reduce((total, card) => {
-                  const price = card.card_data.prices?.usd || 0
-                  return total + (price * card.quantity)
-                }, 0)
-              }
-
-              return (
-                <div className={styles.deckHeader}>
-                  <h3>{selectedDeck.name}</h3>
-                  <h4 className={styles.totalCount}>
-                    Total Cards: {getTotalCardCount(deckCards)} | 
-                    Deck Value: ${calculateDeckPrice(deckCards).toFixed(2)}
-                  </h4>
-                </div>
-              )
-            })()}
-
-
-            {selectedDeck.commander && (
-              <div className={styles.commanderSection}>
-                <h4>Commander</h4>
-                <div className={styles.commanderCard}>
-
-                  {selectedDeck.commander.card_faces && selectedDeck.commander.card_faces[0].image_uris ? (
-                    <div className={styles.doubleFaced}>
-                      <img 
-                        src={selectedDeck.commander.card_faces[0].image_uris.small} 
-                        alt={selectedDeck.commander.name}
-                        className={styles.cardThumbnail}
-                      />
-                      <img 
-                        src={selectedDeck.commander.card_faces[1].image_uris.small} 
-                        alt={selectedDeck.commander.name}
-                        className={styles.cardThumbnail}
-                      />
-                    </div>
-                  ) : (
-                    <img 
-                      src={selectedDeck.commander.image_uris?.small} 
-                      alt={selectedDeck.commander.name} 
-                      className={styles.cardThumbnail}
-                    />
-                  )}
-                  <span>{selectedDeck.commander.name}</span>
-                </div>
-              </div>
-            )}
+            <div className={styles.deckHeader}>
+              <h3>{selectedDeck.name}</h3>
+              <h4 className={styles.totalCount}>
+                Total Cards: {getTotalCardCount(deckCards)} | 
+                Deck Value: ${calculateDeckPrice(deckCards).toFixed(2)}
+              </h4>
+            </div>
 
             {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
               cards.length > 0 && (
                 <div key={type} className={styles.cardTypeGroup}>
                   <h4>{type} ({cards.length})</h4>
                   {cards.map(card => (
-                    <div key={card.id} className={styles.deckListContainer}>
-                      <div 
-                        className={styles.deckCard}
-                        onClick={() => handleCardClick(card)}
-                        onMouseEnter={(e) => {
-                          if (!showingPrintsForCard) {
-                            setHoverCard({
-                              card: selectedPrint[card.id] || card.card_data,
-                              x: e.clientX + 10,
-                              y: e.clientY + 10
-                            })
-                          }
-                        }}
-                        onMouseLeave={() => setHoverCard(null)}
-                      >
-                        <span>{card.quantity}x</span>
-                        <span>{card.card_data.name}</span>
-                        <button onClick={(e) => {
-                          e.stopPropagation()
-                          removeCardFromDeck(selectedDeck.id, card.id)
-                        }}>Remove</button>
-                      </div>
-
-                      {showingPrintsForCard === card.id && cardPrints[card.id] && (
-                        <div 
-                          className={styles.printsSelector}
-                          style={{
-                            position: 'fixed',
-                            left: '50%',
-                            top: '50%',
-                            transform: 'translate(-50%, -50%)'
-                          }}
-                        >
-                          {cardPrints[card.id].map(print => (
-                            <img 
-                              key={print.id}
-                              src={print.image_uris?.small} 
-                              alt={print.set_name}
-                              onClick={() => {
-                                setSelectedPrint(prev => ({
-                                  ...prev,
-                                  [card.id]: print
-                                }))
-                                setShowingPrintsForCard(null)
-                              }}
-                            />
-                          ))}
-                        </div>
-                      )}
+                    <div key={card.id} className={styles.deckCard}>
+                      <span>{card.quantity}x</span>
+                      <span>{card.card_data.name}</span>
+                      <button onClick={() => handleRemoveCard(selectedDeck.id, card.id)}>
+                        Remove
+                      </button>
                     </div>
                   ))}
                 </div>
               )
-            ))}          </div>
-        </div>
-      )}
-      {hoverCard && (
-        <div 
-          className={popupStyles.cardPopup} 
-          style={{ left: hoverCard.x, top: hoverCard.y }}
-        >
-          <img 
-            className={popupStyles.cardPopupImage}
-            src={selectedPrint[hoverCard.card.id]?.image_uris?.normal || hoverCard.card.image_uris?.normal} 
-            alt={hoverCard.card.name} 
-          />
-          <div className={popupStyles.printSelector}>
-            {cardPrints[hoverCard.card.id]?.map(print => (
-              <img 
-                key={print.id}
-                src={print.image_uris?.small}
-                alt={`${print.set_name} printing`}
-                onClick={() => selectPrint(hoverCard.card.id, print)}
-                className={popupStyles.printThumbnail}
-              />
             ))}
           </div>
         </div>
