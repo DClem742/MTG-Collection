@@ -3,6 +3,8 @@ import { useDeck } from '../context/DeckContext'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
 import popupStyles from '../styles/CardPopup.module.css'
+import DeckStats from './DeckStats'
+
 
 function DeckBuilder() {
   const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck, setCommander } = useDeck()
@@ -350,6 +352,9 @@ function DeckBuilder() {
               </h4>
             </div>
 
+            
+            <DeckStats cards={deckCards} />
+            
             {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
               cards.length > 0 && (
                 <div key={type} className={styles.cardTypeGroup}>
