@@ -86,7 +86,6 @@ function DeckBuilder() {
       setBulkSearchTerm('')
     }
   }
-
   const setCardQuantity = (cardId, quantity) => {
     setCardQuantities(prev => ({
       ...prev,
@@ -97,6 +96,30 @@ function DeckBuilder() {
   const handleCardClick = async (card) => {
     if (!card) return
     
+  {cards.map(card => (
+    <div key={card.id} className={styles.deckCard}>
+      <span>{card.quantity}x</span>
+      <span>{card.card_data.name}</span>
+      {card.card_data.layout === 'modal_dfc' && (
+        <div className={styles.doubleFaced}>
+          <img 
+            src={`https://api.scryfall.com/cards/${card.card_data.id}?format=image&face=front`}
+            alt={card.card_data.name}
+            className={styles.cardThumbnail}
+            onClick={() => handleCardFlip(card.id)}
+          />
+          {flippedCards[card.id] && (
+            <img 
+              src={`https://api.scryfall.com/cards/${card.card_data.id}?format=image&face=back`}
+              alt={`${card.card_data.name} (back)`}
+              className={styles.cardThumbnail}
+            />
+          )}
+        </div>
+      )}
+      <button onClick={() => handleRemoveCard(selectedDeck.id, card.id)}>Remove</button>
+    </div>
+  ))}
     if (showingPrintsForCard === card.id) {
       setShowingPrintsForCard(null)
       return
@@ -200,9 +223,8 @@ function DeckBuilder() {
       }
     })
     return groups
-  }
-
-  const calculateDeckPrice = (cards) => {
+  };
+    const calculateDeckPrice = (cards) => {
     return cards.reduce((total, card) => {
       const price = card.card_data.prices?.usd || 0
       return total + (price * card.quantity)
@@ -317,7 +339,19 @@ function DeckBuilder() {
               )}
               {searchResults.map(card => (
                 <div key={card.id} className={styles.cardResult}>
-                  <img src={card.image_uris?.small} alt={card.name} />
+                  {card.layout === 'modal_dfc' ? (
+                    <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
+                      <img 
+                        src={flippedCards[card.id] 
+                          ? card.card_faces[1].image_uris.normal
+                          : card.card_faces[0].image_uris.normal} 
+                        alt={card.name}
+                      />
+                      <span className={styles.flipHint}>Click to flip</span>
+                    </div>
+                  ) : (
+                    <img src={card.image_uris?.normal} alt={card.name} />
+                  )}
                   <div className={styles.cardInfo}>
                     <h3>{card.name}</h3>
                     <p>Set: {card.set_name}</p>

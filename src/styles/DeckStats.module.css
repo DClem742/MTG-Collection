@@ -13,6 +13,12 @@
   padding: 15px;
   border-radius: 8px;
   text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statSection:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .statSection h3 {
@@ -24,8 +30,24 @@
   font-size: 2.5rem;
   font-weight: bold;
   color: var(--text-accent);
+  cursor: help;
+  transition: color 0.2s;
 }
 
+.avgCmc:hover {
+  color: #ffd700;
+}
+
+.ratio div {
+  padding: 8px;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.ratio div:hover {
+  background: var(--bg-accent);
+}
 .ratio {
   display: flex;
   flex-direction: column;
