@@ -116,9 +116,23 @@ function DeckBuilder() {
 
   const handleCardClick = async (card) => {
     if (!card) return
-    
   {cards.map(card => (
-    <div key={card.id} className={styles.deckCard}>
+    <div 
+      key={card.id}
+      className={styles.deckCard}
+      onClick={() => handleCardClick(card)}
+      onMouseEnter={(e) => {
+        console.log('Mouse enter triggered', card)
+        if (!showingPrintsForCard) {
+          setHoverCard({
+            card: selectedPrint[card.id] || card.card_data,
+            x: e.clientX + 10,
+            y: e.clientY + 10
+          })
+        }
+      }}
+      onMouseLeave={() => setHoverCard(null)}
+    >
       <span>{card.quantity}x</span>
       <span>{card.card_data.name}</span>
       {card.card_data.layout === 'modal_dfc' && (
@@ -409,18 +423,27 @@ function DeckBuilder() {
             </div>
             
             <DeckStats cards={deckCards} />
-            
             {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
               cards.length > 0 && (
                 <div key={type} className={styles.cardTypeGroup}>
                   <h4>{type} ({cards.length})</h4>
                   {cards.map(card => (
-                    <div key={card.id} className={styles.deckCard}>
+                    <div 
+                      key={card.id} 
+                      className={styles.deckCard}
+                      onMouseEnter={(e) => {
+                        console.log('Hovering over card:', card)
+                        setHoverCard({
+                          card: card.card_data,
+                          x: e.clientX + 10,
+                          y: e.clientY + 10
+                        })
+                      }}
+                      onMouseLeave={() => setHoverCard(null)}
+                    >
                       <span>{card.quantity}x</span>
                       <span>{card.card_data.name}</span>
-                      <button onClick={() => handleRemoveCard(selectedDeck.id, card.id)}>
-                        Remove
-                      </button>
+                      <button onClick={() => handleRemoveCard(selectedDeck.id, card.id)}>Remove</button>
                     </div>
                   ))}
                 </div>
@@ -429,8 +452,33 @@ function DeckBuilder() {
           </div>
         </div>
       )}
+      
+      {hoverCard && (
+        <div 
+          className={popupStyles.cardPopup} 
+          style={{ left: hoverCard.x, top: hoverCard.y }}
+        >
+          <img 
+            className={popupStyles.cardPopupImage}
+            src={hoverCard.card.layout === 'transform' 
+              ? hoverCard.card.card_faces[0].image_uris.normal
+              : (selectedPrint[hoverCard.card.id]?.image_uris?.normal || hoverCard.card.image_uris?.normal)} 
+            alt={hoverCard.card.name} 
+          />
+          <div className={popupStyles.printSelector}>
+            {cardPrints[hoverCard.card.id]?.map(print => (
+              <img 
+                key={print.id}
+                src={print.image_uris?.small}
+                alt={`${print.set_name} printing`}
+                onClick={() => selectPrint(hoverCard.card.id, print)}
+                className={popupStyles.printThumbnail}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
-  )
-}
+  )}
 
 export default DeckBuilder
