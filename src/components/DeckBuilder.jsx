@@ -31,7 +31,6 @@ function DeckBuilder() {
   useEffect(() => {
     localStorage.setItem('selectedPrints', JSON.stringify(selectedPrint))
   }, [selectedPrint])
-
   useEffect(() => {
     handleSearch(searchTerm)
   }, [searchTerm])
@@ -115,47 +114,120 @@ function DeckBuilder() {
   }
 
   const handleCardClick = async (card) => {
+    console.log('Card clicked:', card)
     if (!card) return
-  {cards.map(card => (
-    <div 
-      key={card.id}
-      className={styles.deckCard}
-      onClick={() => handleCardClick(card)}
-      onMouseEnter={(e) => {
-        console.log('Mouse enter triggered', card)
-        if (!showingPrintsForCard) {
-          setHoverCard({
-            card: selectedPrint[card.id] || card.card_data,
-            x: e.clientX + 10,
-            y: e.clientY + 10
-          })
-        }
-      }}
-      onMouseLeave={() => setHoverCard(null)}
-    >
-      <span>{card.quantity}x</span>
-      <span>{card.card_data.name}</span>
-      {card.card_data.layout === 'modal_dfc' && (
-        <div className={styles.doubleFaced}>
-          <img 
-            src={`https://api.scryfall.com/cards/${card.card_data.id}?format=image&face=front`}
-            alt={card.card_data.name}
-            className={styles.cardThumbnail}
-            onClick={() => handleCardFlip(card.id)}
-          />
-          {flippedCards[card.id] && (
-            <img 
-              src={`https://api.scryfall.com/cards/${card.card_data.id}?format=image&face=back`}
-              alt={`${card.card_data.name} (back)`}
-              className={styles.cardThumbnail}
-            />
-          )}
-        </div>
-      )}
-      <button onClick={() => handleRemoveCard(selectedDeck.id, card.id)}>Remove</button>
-    </div>
+
+  {Object.entries(groupCardsByType(deckCards)).map(([type, groupedCards]) => (
+    groupedCards.length > 0 && (
+      <div key={type} className={styles.cardTypeGroup}>
+        <h4>{type} ({groupedCards.length})</h4>
+        {groupedCards.map(card => (
+          <div 
+            key={card.id} 
+            className={styles.deckCard}
+            onClick={() => handleCardClick(card)}
+            onMouseEnter={(e) => {
+              if (!showingPrintsForCard) {
+                const cardToShow = selectedPrint[card.id] || card.card_data
+                setHoverCard({
+                  card: cardToShow,
+                  x: e.clientX + 10,
+                  y: e.clientY + 10
+                })
+              }
+            }}
+            onMouseLeave={() => setHoverCard(null)}
+          >
+            <span>{card.quantity}x</span>
+            <span>{card.card_data.name}</span>
+            <button onClick={(e) => {
+              e.stopPropagation()
+              handleRemoveCard(selectedDeck.id, card.id)
+            }}>Remove</button>
+          </div>
+        ))}
+      </div>
+    )
   ))}
-    if (showingPrintsForCard === card.id) {
+  {Object.entries(groupCardsByType(deckCards)).map(([type, groupedCards]) => (
+    groupedCards.length > 0 && (
+      <div key={type} className={styles.cardTypeGroup}>
+        <h4>{type} ({groupedCards.length})</h4>
+        {groupedCards.map(card => (
+          <div 
+            key={card.id} 
+            className={styles.deckCard}
+            onClick={() => handleCardClick(card)}
+            onMouseEnter={(e) => {
+              console.log('Selected prints:', selectedPrint)
+              console.log('Current card:', card)
+              const cardToShow = selectedPrint[card.id] || card.card_data
+              console.log('Card being shown:', cardToShow)
+              setHoverCard({
+                card: cardToShow,
+                x: e.clientX + 10,
+                y: e.clientY + 10
+              })
+            }}
+            onMouseLeave={() => setHoverCard(null)}
+          >
+            <span>{card.quantity}x</span>
+            <span>{card.card_data.name}</span>
+            {showingPrintsForCard === card.id && cardPrints[card.id] && (
+              <div 
+                className={styles.printsSelector}
+                style={{
+                  position: 'fixed',
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 1000,
+                  padding: '20px',
+                  background: '#1a1a1a',
+                  borderRadius: '8px',
+                  boxShadow: '0 0 20px rgba(0,0,0,0.5)'
+                }}
+              >
+                <h3 style={{color: 'white', marginBottom: '10px'}}>Select Artwork</h3>
+                <div style={{
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+                  gap: '10px',
+                  maxHeight: '70vh',
+                  overflowY: 'auto'
+                }}>
+                  {cardPrints[card.id].map(print => (
+                    <img 
+                      key={print.id}
+                      src={print.image_uris?.normal}
+                      alt={print.set_name}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        cursor: 'pointer',
+                        borderRadius: '10px'
+                      }}
+                      onClick={() => {
+                        setSelectedPrint(prev => ({
+                          ...prev,
+                          [card.id]: print
+                        }))
+                        setShowingPrintsForCard(null)
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            <button onClick={(e) => {
+              e.stopPropagation()
+              handleRemoveCard(selectedDeck.id, card.id)
+            }}>Remove</button>
+          </div>
+        ))}
+      </div>
+    )
+  ))}    if (showingPrintsForCard === card.id) {
       setShowingPrintsForCard(null)
       return
     }
@@ -265,7 +337,6 @@ function DeckBuilder() {
       return total + (price * card.quantity)
     }, 0)
   }
-
   return (
     <div className={styles.deckBuilder}>
       <div className={styles.deckControls}>
@@ -308,27 +379,6 @@ function DeckBuilder() {
                     <h3>{deck.name}</h3>
                   </div>
                 </div>
-
-                {showingPrintsForCard === deck.commander?.id && cardPrints[deck.commander?.id] && (
-                  <div className={styles.printsSelector}>
-                    <div className={styles.printsGrid}>
-                      {cardPrints[deck.commander.id].map(print => (
-                        <img 
-                          key={print.id}
-                          src={print.image_uris?.normal} 
-                          alt={print.set_name}
-                          onClick={() => {
-                            setSelectedPrint(prev => ({
-                              ...prev,
-                              [deck.commander.id]: print
-                            }))
-                            setShowingPrintsForCard(null)
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -431,8 +481,8 @@ function DeckBuilder() {
                     <div 
                       key={card.id} 
                       className={styles.deckCard}
+                      onClick={() => handleCardClick(card)}
                       onMouseEnter={(e) => {
-                        console.log('Hovering over card:', card)
                         setHoverCard({
                           card: card.card_data,
                           x: e.clientX + 10,
@@ -443,7 +493,10 @@ function DeckBuilder() {
                     >
                       <span>{card.quantity}x</span>
                       <span>{card.card_data.name}</span>
-                      <button onClick={() => handleRemoveCard(selectedDeck.id, card.id)}>Remove</button>
+                      <button onClick={(e) => {
+                        e.stopPropagation()
+                        handleRemoveCard(selectedDeck.id, card.id)
+                      }}>Remove</button>
                     </div>
                   ))}
                 </div>
@@ -460,25 +513,36 @@ function DeckBuilder() {
         >
           <img 
             className={popupStyles.cardPopupImage}
-            src={hoverCard.card.layout === 'transform' 
-              ? hoverCard.card.card_faces[0].image_uris.normal
-              : (selectedPrint[hoverCard.card.id]?.image_uris?.normal || hoverCard.card.image_uris?.normal)} 
+            src={hoverCard.card.image_uris?.normal} 
             alt={hoverCard.card.name} 
           />
-          <div className={popupStyles.printSelector}>
-            {cardPrints[hoverCard.card.id]?.map(print => (
+        </div>
+      )}
+
+      {/* Print selector moved to root level */}
+      {showingPrintsForCard && cardPrints[showingPrintsForCard] && (
+        <div className={styles.printsSelector}>
+          <h3>Select Artwork</h3>
+          <div className={styles.printsGrid}>
+            {cardPrints[showingPrintsForCard].map(print => (
               <img 
                 key={print.id}
-                src={print.image_uris?.small}
-                alt={`${print.set_name} printing`}
-                onClick={() => selectPrint(hoverCard.card.id, print)}
-                className={popupStyles.printThumbnail}
+                src={print.image_uris?.normal}
+                alt={print.set_name}
+                className={styles.printOption}
+                onClick={() => {
+                  setSelectedPrint(prev => ({
+                    ...prev,
+                    [showingPrintsForCard]: print
+                  }))
+                  setShowingPrintsForCard(null)
+                }}
               />
             ))}
           </div>
         </div>
       )}
     </div>
-  )}
-
+  )
+            }
 export default DeckBuilder

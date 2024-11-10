@@ -282,33 +282,36 @@
   justify-content: center;
   color: #666;
 }
-
 .printsSelector {
-  position: absolute;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1000;
+  padding: 20px;
   background: #1a1a1a;
-  padding: 10px;
   border-radius: 8px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  max-width: 400px;
-  max-height: 300px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.printsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
-.printsSelector img {
-  width: 100px;
+.printOption {
+  width: 100%;
   height: auto;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 0.2s;
+  border-radius: 10px;
 }
 
 .printsSelector img:hover {
   border-color: gold;
 }
-
 .doubleFaced {
   position: relative;
   perspective: 1000px;
