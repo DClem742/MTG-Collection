@@ -59,6 +59,27 @@ function DeckBuilder() {
     setSearchResults(results)
   }
 
+  {searchResults.map(card => {
+    const frontImage = card.card_faces?.[0]?.image_uris?.normal
+    const backImage = card.card_faces?.[1]?.image_uris?.normal
+    
+    return (
+      <div key={card.id} className={styles.cardResult}>
+        {card.layout === 'transform' && frontImage ? (
+          <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
+            <img 
+              src={flippedCards[card.id] ? backImage : frontImage}
+              alt={card.name}
+            />
+            <span className={styles.flipHint}>Click to flip</span>
+          </div>
+        ) : (
+          <img src={card.image_uris?.normal} alt={card.name} />
+        )}
+        {/* Rest of your card info display */}
+      </div>
+    )
+  })}
   const handleBulkSearch = async () => {
     const cardNames = bulkSearchTerm.split('\n').filter(name => name.trim())
     let results = []
@@ -327,7 +348,6 @@ function DeckBuilder() {
               />
               <button onClick={handleBulkSearch}>Search Multiple Cards</button>
             </div>
-
             <div className={styles.searchResults}>
               {searchResults.length > 0 && (
                 <button 
@@ -337,46 +357,48 @@ function DeckBuilder() {
                   Add All to Deck
                 </button>
               )}
-              {searchResults.map(card => (
-                <div key={card.id} className={styles.cardResult}>
-                  {card.layout === 'modal_dfc' ? (
-                    <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
-                      <img 
-                        src={flippedCards[card.id] 
-                          ? card.card_faces[1].image_uris.normal
-                          : card.card_faces[0].image_uris.normal} 
-                        alt={card.name}
-                      />
-                      <span className={styles.flipHint}>Click to flip</span>
+              {searchResults.map(card => {
+                console.log('Transform card full data:', card)
+                return (
+                  <div key={card.id} className={styles.cardResult}>
+                    {card.layout === 'transform' ? (
+                      <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
+                        <img 
+                          src={card.card_faces[flippedCards[card.id] ? 1 : 0].image_uris.normal}
+                          alt={card.name}
+                          onLoad={() => console.log('Image loaded successfully')}
+                          onError={(e) => console.log('Image load error:', e)}
+                        />
+                        <span className={styles.flipHint}>Click to flip</span>
+                      </div>
+                    ) : (
+                      <img src={card.image_uris?.normal} alt={card.name} />
+                    )}
+                    <div className={styles.cardInfo}>
+                      <h3>{card.name}</h3>
+                      <p>Set: {card.set_name}</p>
+                      <p>Type: {card.type_line}</p>
+                      <p>Mana Cost: {card.mana_cost}</p>
+                      <div className={styles.quantityControls}>
+                        <button onClick={() => setCardQuantity(card.id, (cardQuantities[card.id] || 1) - 1)}>-</button>
+                        <span>{cardQuantities[card.id] || 1}</span>
+                        <button onClick={() => setCardQuantity(card.id, (cardQuantities[card.id] || 1) + 1)}>+</button>
+                      </div>
                     </div>
-                  ) : (
-                    <img src={card.image_uris?.normal} alt={card.name} />
-                  )}
-                  <div className={styles.cardInfo}>
-                    <h3>{card.name}</h3>
-                    <p>Set: {card.set_name}</p>
-                    <p>Type: {card.type_line}</p>
-                    <p>Mana Cost: {card.mana_cost}</p>
-                    <div className={styles.quantityControls}>
-                      <button onClick={() => setCardQuantity(card.id, (cardQuantities[card.id] || 1) - 1)}>-</button>
-                      <span>{cardQuantities[card.id] || 1}</span>
-                      <button onClick={() => setCardQuantity(card.id, (cardQuantities[card.id] || 1) + 1)}>+</button>
-                    </div>
+                    <button onClick={() => handleAddCard(card)}>Add to Deck</button>
+                    {isValidCommander(card) && (
+                      <button 
+                        className={styles.commanderButton}
+                        onClick={() => handleSetCommander(card)}
+                      >
+                        Set as Commander
+                      </button>
+                    )}
                   </div>
-                  <button onClick={() => handleAddCard(card)}>Add to Deck</button>
-                  {isValidCommander(card) && (
-                    <button 
-                      className={styles.commanderButton}
-                      onClick={() => handleSetCommander(card)}
-                    >
-                      Set as Commander
-                    </button>
-                  )}
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
-
           <div className={styles.deckCards}>
             <div className={styles.deckHeader}>
               <h3>{selectedDeck.name}</h3>
@@ -385,7 +407,6 @@ function DeckBuilder() {
                 Deck Value: ${calculateDeckPrice(deckCards).toFixed(2)}
               </h4>
             </div>
-
             
             <DeckStats cards={deckCards} />
             
