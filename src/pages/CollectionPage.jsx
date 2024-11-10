@@ -11,6 +11,7 @@ function CollectionPage() {
     type: '',
     color: ''
   })
+  const [showResults, setShowResults] = useState(false)
 
   const sets = [...new Set(collection.map(card => card.set_name))]
   const cardTypes = [
@@ -49,14 +50,13 @@ function CollectionPage() {
     return matchesSet && matchesType && matchesColor
   })
 
-  const totalCollectionValue = filteredCollection.reduce((total, card) => {
-    return total + ((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1))
-  }, 0)
+  const handleSearch = () => {
+    setShowResults(true)
+  }
 
   return (
     <div className={styles.collectionPage}>
       <h1>My Collection</h1>
-      <h2>Total Collection Value: ${totalCollectionValue.toFixed(2)}</h2>
       
       <div className={styles.filters}>
         <select 
@@ -88,67 +88,79 @@ function CollectionPage() {
             <option key={color} value={color}>{color}</option>
           ))}
         </select>
+
+        <button onClick={handleSearch} className={styles.searchButton}>
+          Search Collection
+        </button>
       </div>
 
-      <table className={styles.collectionTable}>
-        <thead>
-          <tr>
-            <th>Card Image</th>
-            <th>Name</th>
-            <th>Set</th>
-            <th>Collector Number</th>
-            <th>Price</th>
-            <th>Current Quantity</th>
-            <th>Total Value</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredCollection.map((card) => (
-            <tr key={card.id}>
-              <td>
-                {card.card_faces && card.card_faces[0].image_uris ? (
-                  <div className={styles.doubleFaced}>
-                    <img 
-                      src={card.card_faces[0].image_uris.small} 
-                      alt={card.name}
-                      className={styles.cardThumbnail}
-                    />
-                    <img 
-                      src={card.card_faces[1].image_uris.small} 
-                      alt={card.name}
-                      className={styles.cardThumbnail}
-                    />
-                  </div>
-                ) : (
-                  <img 
-                    src={card.image_uris?.small} 
-                    alt={card.name} 
-                    className={styles.cardThumbnail}
-                  />
-                )}
-              </td>
-              <td>{card.name}</td>
-              <td>{card.set_name}</td>
-              <td>{card.collector_number}</td>
-              <td>${cardPrices[card.id]?.usd || '0.00'}</td>
-                          <td className={styles.quantityControls}>
-                            <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
-                            <span className={styles.currentQuantity}>{card.quantity || 1}</span>
-                            <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
-                          </td>
-              <td>${((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)).toFixed(2)}</td>
-              <td>
-                <button onClick={() => updateQuantity(card.id, 0)}>Remove</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {showResults && (
+        <>
+          <h2>Search Results</h2>
+          <h3>Total Value: ${filteredCollection.reduce((total, card) => 
+            total + ((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)), 0).toFixed(2)}
+          </h3>
+          
+          <table className={styles.collectionTable}>
+            <thead>
+              <tr>
+                <th>Card Image</th>
+                <th>Name</th>
+                <th>Set</th>
+                <th>Collector Number</th>
+                <th>Price</th>
+                <th>Current Quantity</th>
+                <th>Total Value</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCollection.map((card) => (
+                <tr key={card.id}>
+                  <td>
+                    {card.card_faces && card.card_faces[0].image_uris ? (
+                      <div className={styles.doubleFaced}>
+                        <img 
+                          src={card.card_faces[0].image_uris.small} 
+                          alt={card.name}
+                          className={styles.cardThumbnail}
+                        />
+                        <img 
+                          src={card.card_faces[1].image_uris.small} 
+                          alt={card.name}
+                          className={styles.cardThumbnail}
+                        />
+                      </div>
+                    ) : (
+                      <img 
+                        src={card.image_uris?.small} 
+                        alt={card.name} 
+                        className={styles.cardThumbnail}
+                      />
+                    )}
+                  </td>
+                  <td>{card.name}</td>
+                  <td>{card.set_name}</td>
+                  <td>{card.collector_number}</td>
+                  <td>${cardPrices[card.id]?.usd || '0.00'}</td>
+                              <td className={styles.quantityControls}>
+                                <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
+                                <span className={styles.currentQuantity}>{card.quantity || 1}</span>
+                                <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
+                              </td>
+                  <td>${((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)).toFixed(2)}</td>
+                  <td>
+                    <button onClick={() => updateQuantity(card.id, 0)}>Remove</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   )
 }
-
 export default CollectionPage
 
 const getCardColor = (card) => {

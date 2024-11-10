@@ -19,9 +19,16 @@ function DeckBuilder() {
   const [hoverCard, setHoverCard] = useState(null)
   // Add the new state and functions here
   const [cardPrints, setCardPrints] = useState({})
-  const [selectedPrint, setSelectedPrint] = useState({})
+  const [selectedPrint, setSelectedPrint] = useState(() => {
+    const saved = localStorage.getItem('selectedPrints')
+    return saved ? JSON.parse(saved) : {}
+  })
   const [showingPrintsForCard, setShowingPrintsForCard] = useState(null)
 
+  // Add this effect to save selections when they change
+  useEffect(() => {
+    localStorage.setItem('selectedPrints', JSON.stringify(selectedPrint))
+  }, [selectedPrint])
   const fetchCardPrints = async (cardId) => {
     const card = deckCards.find(c => c.id === cardId)
     const printsUrl = card.card_data.prints_search_uri
@@ -41,13 +48,20 @@ function DeckBuilder() {
   }
 
   const handleCardClick = async (card) => {
+    if (!card) return
+    
     if (showingPrintsForCard === card.id) {
       setShowingPrintsForCard(null)
       return
     }
     
     setShowingPrintsForCard(card.id)
-    const response = await fetch(card.card_data.prints_search_uri)
+    
+    // Get the card name from either commander or deck card
+    const cardName = card.name || card.card_data.name
+    
+    // Use the same enhanced search for both types
+    const response = await fetch(`https://api.scryfall.com/cards/search?q=!"${cardName}" include:extras unique:prints`)
     const data = await response.json()
     setCardPrints(prev => ({
       ...prev,
@@ -238,29 +252,74 @@ function DeckBuilder() {
         <div className={styles.deckSelection}>
           <div className={styles.deckGrid}>
             {decks.map(deck => (
-              <div 
-                key={deck.id} 
-                className={`${styles.deckCard} ${selectedDeck?.id === deck.id ? styles.selected : ''}`}
-                onClick={() => setSelectedDeck(deck)}
-              >
-                {deck.commander ? (
-                  <img 
-                    src={deck.commander.image_uris?.normal} 
-                    alt={deck.commander.name}
-                  />
-                ) : (
-                  <div className={styles.placeholderImage}>
-                    No Commander Set
+              <div key={deck.id}>
+                <div 
+                  className={`${styles.deckCard} ${selectedDeck?.id === deck.id ? styles.selected : ''}`}
+                >
+                  {deck.commander ? (
+                    <img 
+                      src={selectedPrint[deck.commander.id]?.image_uris?.normal || deck.commander.image_uris?.normal} 
+                      alt={deck.commander.name}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleCardClick(deck.commander)
+                      }}
+                    />
+                  ) : (
+                    <div className={styles.placeholderImage}>
+                      No Commander Set
+                    </div>
+                  )}
+                  <div className={styles.deckInfo} onClick={() => setSelectedDeck(deck)}>
+                    <h3>{deck.name}</h3>
+                  </div>
+                </div>
+
+                {showingPrintsForCard === deck.commander?.id && cardPrints[deck.commander?.id] && (
+                  <div 
+                    className={styles.printsSelector}
+                    style={{
+                      position: 'fixed',
+                      left: '50%',
+                      top: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      zIndex: 1000,
+                      padding: '20px',
+                      background: '#1a1a1a',
+                      borderRadius: '8px',
+                      boxShadow: '0 0 20px rgba(0,0,0,0.5)'
+                    }}
+                  >
+                    <h3 style={{color: 'white', marginBottom: '10px'}}>Select Artwork</h3>
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px'}}>
+                      {cardPrints[deck.commander.id].map(print => (
+                        <img 
+                          key={print.id}
+                          src={print.image_uris?.normal} 
+                          alt={print.set_name}
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            cursor: 'pointer',
+                            borderRadius: '10px'
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedPrint(prev => ({
+                              ...prev,
+                              [deck.commander.id]: print
+                            }))
+                            setShowingPrintsForCard(null)
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 )}
-                <div className={styles.deckInfo}>
-                  <h3>{deck.name}</h3>
-                </div>
               </div>
             ))}
           </div>
-          {selectedDeck && (
-            <button 
+          {selectedDeck && (            <button 
               onClick={() => handleDeleteDeck(selectedDeck.id)}
               className={styles.deleteButton}
             >
