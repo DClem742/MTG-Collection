@@ -57,8 +57,15 @@ export function CollectionProvider({ children }) {
     })
   }
 
+  const removeAllCards = () => {
+    if (!user?.id) return
+    
+    setCollection([])
+    localStorage.setItem(`mtgCollection_${user.id}`, JSON.stringify([]))
+  }
+
   return (
-    <CollectionContext.Provider value={{ collection, addToCollection, updateQuantity }}>
+    <CollectionContext.Provider value={{ collection, addToCollection, updateQuantity, removeAllCards }}>
       {children}
     </CollectionContext.Provider>
   )

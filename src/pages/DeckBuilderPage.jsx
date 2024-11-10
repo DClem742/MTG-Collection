@@ -8,6 +8,8 @@ function DeckBuilderPage() {
   const [searchResults, setSearchResults] = useState([])
   const [searchPerformed, setSearchPerformed] = useState(false)
 
+  console.log('Current deck state:', deck)
+
   const handleSearch = (results) => {
     setSearchResults(results)
     setSearchPerformed(true)
@@ -36,6 +38,7 @@ function DeckBuilderPage() {
           </div>
         )}
       </div>
+
 
       <div className={styles.deckSection}>
         <h2>Current Deck</h2>

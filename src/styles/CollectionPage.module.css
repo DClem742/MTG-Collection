@@ -166,3 +166,12 @@
 .sortableHeader:hover::after {
   opacity: 1;
 }
+
+.removeAllButton {
+  background-color: #dc3545;
+  margin-left: 10px;
+}
+
+.removeAllButton:hover {
+  background-color: #c82333;
+}

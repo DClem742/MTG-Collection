@@ -3,7 +3,7 @@ import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/CollectionPage.module.css'
 
 function CollectionPage() {
-  const { collection, updateQuantity } = useCollection()
+  const { collection, updateQuantity, removeAllCards } = useCollection()
   const [isLoading, setIsLoading] = useState(false)
   const [cardPrices, setCardPrices] = useState({})
   const [filters, setFilters] = useState({
@@ -12,6 +12,13 @@ function CollectionPage() {
     color: ''
   })
   const [showResults, setShowResults] = useState(false)
+
+  const handleRemoveAll = () => {
+    if (window.confirm('Are you sure you want to remove all cards from your collection?')) {
+      removeAllCards()
+      setShowResults(false)
+    }
+  }
 
   const sets = [...new Set(collection.map(card => card.set_name))]
   const cardTypes = [
@@ -91,6 +98,12 @@ function CollectionPage() {
 
         <button onClick={handleSearch} className={styles.searchButton}>
           Search Collection
+        </button>
+        <button 
+          onClick={handleRemoveAll} 
+          className={`${styles.searchButton} ${styles.removeAllButton}`}
+        >
+          Remove All Cards
         </button>
       </div>
 
