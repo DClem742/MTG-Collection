@@ -26,7 +26,8 @@ export function CollectionProvider({ children }) {
       name: card.name,
       set_name: card.set_name,
       collector_number: card.collector_number,
-      image_uris: { small: card.image_uris?.small },
+      image_uris: card.image_uris,
+      card_faces: card.card_faces,
       type_line: card.type_line,
       colors: card.colors,
       prices: card.prices

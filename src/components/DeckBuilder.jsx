@@ -81,18 +81,15 @@ function DeckBuilder() {
 
   const handleSetCommander = async (card) => {
     if (selectedDeck) {
-      // Prepare a clean card object with only the necessary data
       const commanderData = {
         id: card.id,
         name: card.name,
         image_uris: card.image_uris,
+        card_faces: card.card_faces,  // Add this line
         type_line: card.type_line
       }
       
-      // Update local state first for immediate feedback
       setCommanderState(commanderData)
-      
-      // Then update the backend
       await setCommander(selectedDeck.id, commanderData)
     }
   }
@@ -145,16 +142,18 @@ function DeckBuilder() {
     }))
   }
 
+  const { addToCollection } = useCollection()
+
   const handleAddCard = async (card) => {
     if (selectedDeck) {
       const quantity = cardQuantities[card.id] || 1
       await addCardToDeck(selectedDeck.id, card, quantity)
+      addToCollection(card) // Add this line to sync with collection
       const updatedCards = await getDeckCards(selectedDeck.id)
       setDeckCards(updatedCards)
       setCardQuantities(prev => ({ ...prev, [card.id]: 1 }))
     }
-  }
-  useEffect(() => {
+  };  useEffect(() => {
     handleSearch(searchTerm)
   }, [searchTerm])
 
@@ -409,12 +408,32 @@ function DeckBuilder() {
               )
             })()}
 
-            
+
             {selectedDeck.commander && (
               <div className={styles.commanderSection}>
                 <h4>Commander</h4>
                 <div className={styles.commanderCard}>
-                  <img src={selectedDeck.commander.image_uris?.small} alt={selectedDeck.commander.name} />
+
+                  {selectedDeck.commander.card_faces && selectedDeck.commander.card_faces[0].image_uris ? (
+                    <div className={styles.doubleFaced}>
+                      <img 
+                        src={selectedDeck.commander.card_faces[0].image_uris.small} 
+                        alt={selectedDeck.commander.name}
+                        className={styles.cardThumbnail}
+                      />
+                      <img 
+                        src={selectedDeck.commander.card_faces[1].image_uris.small} 
+                        alt={selectedDeck.commander.name}
+                        className={styles.cardThumbnail}
+                      />
+                    </div>
+                  ) : (
+                    <img 
+                      src={selectedDeck.commander.image_uris?.small} 
+                      alt={selectedDeck.commander.name} 
+                      className={styles.cardThumbnail}
+                    />
+                  )}
                   <span>{selectedDeck.commander.name}</span>
                 </div>
               </div>
