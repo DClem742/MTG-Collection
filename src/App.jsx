@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { CollectionProvider } from './context/CollectionContext'
 import { DeckProvider } from './context/DeckContext'
@@ -33,5 +33,4 @@ function App() {
     </BrowserRouter>
   )
 }
-
 export default App
