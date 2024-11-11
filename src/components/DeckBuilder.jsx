@@ -237,20 +237,22 @@ function DeckBuilder() {
               {decks.map(deck => (
                 <div key={deck.id}>
                   <div className={styles.deckCard}>
-                    <div onClick={() => handleDeckSelect(deck)}>
-                      {deck.commander ? (
-                        <img 
-                          src={selectedPrint[deck.commander.id]?.image_uris?.normal || deck.commander.image_uris?.normal} 
-                          alt={deck.commander.name}
-                        />
-                      ) : (
-                        <div className={styles.placeholderImage}>
-                          No Commander Set
-                        </div>
-                      )}
-                      <div className={styles.deckInfo}>
-                        <h3>{deck.name}</h3>
+                    {deck.commander ? (
+                      <img 
+                        src={selectedPrint[deck.commander.id]?.image_uris?.normal || deck.commander.image_uris?.normal} 
+                        alt={deck.commander.name}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleCardClick(deck.commander)
+                        }}
+                      />
+                    ) : (
+                      <div className={styles.placeholderImage}>
+                        No Commander Set
                       </div>
+                    )}
+                    <div className={styles.deckInfo} onClick={() => handleDeckSelect(deck)}>
+                      <h3>{deck.name}</h3>
                     </div>
                     <button 
                       className={styles.deleteButton}

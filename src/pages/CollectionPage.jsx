@@ -12,6 +12,7 @@ function CollectionPage() {
     color: ''
   })
   const [showResults, setShowResults] = useState(false)
+  const [activeCategory, setActiveCategory] = useState('all')
 
   const handleRemoveAll = () => {
     if (window.confirm('Are you sure you want to remove all cards from your collection?')) {
@@ -31,6 +32,24 @@ function CollectionPage() {
     'Land'
   ]
   const colors = ['White', 'Blue', 'Black', 'Red', 'Green', 'Colorless', 'Multicolor']
+
+  const categories = {
+    all: 'All Cards',
+    creatures: 'Creatures',
+    instants: 'Instants',
+    sorceries: 'Sorceries',
+    artifacts: 'Artifacts',
+    enchantments: 'Enchantments',
+    planeswalkers: 'Planeswalkers',
+    lands: 'Lands'
+  }
+
+  const getCategoryCards = (cards, category) => {
+    if (category === 'all') return cards
+    return cards.filter(card => 
+      card.type_line?.toLowerCase().includes(category.slice(0, -1).toLowerCase())
+    )
+  }
 
   useEffect(() => {
     const fetchPrices = async () => {
@@ -54,7 +73,10 @@ function CollectionPage() {
     const matchesSet = !filters.set || card.set_name === filters.set
     const matchesType = !filters.type || card.type_line?.includes(filters.type)
     const matchesColor = !filters.color || getCardColor(card) === filters.color
-    return matchesSet && matchesType && matchesColor
+
+    const matchesCategory = activeCategory === 'all' || 
+      card.type_line?.toLowerCase().includes(activeCategory.slice(0, -1).toLowerCase())
+    return matchesSet && matchesType && matchesColor && matchesCategory
   })
 
   const handleSearch = () => {
