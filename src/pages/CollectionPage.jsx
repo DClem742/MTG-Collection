@@ -13,6 +13,10 @@ function CollectionPage() {
   })
   const [showResults, setShowResults] = useState(false)
   const [activeCategory, setActiveCategory] = useState('all')
+  // Add these new states after your existing useState declarations
+  const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
+  const [cardSize, setCardSize] = useState('medium') // 'small', 'medium', 'large'
+  const [isCompactMode, setIsCompactMode] = useState(false)
 
   const handleRemoveAll = () => {
     if (window.confirm('Are you sure you want to remove all cards from your collection?')) {
@@ -73,7 +77,6 @@ function CollectionPage() {
     const matchesSet = !filters.set || card.set_name === filters.set
     const matchesType = !filters.type || card.type_line?.includes(filters.type)
     const matchesColor = !filters.color || getCardColor(card) === filters.color
-
     const matchesCategory = activeCategory === 'all' || 
       card.type_line?.toLowerCase().includes(activeCategory.slice(0, -1).toLowerCase())
     return matchesSet && matchesType && matchesColor && matchesCategory
@@ -86,6 +89,55 @@ function CollectionPage() {
   return (
     <div className={styles.collectionPage}>
       <h1>My Collection</h1>
+      
+      <div className={styles.displayControls}>
+        <div className={styles.viewControls}>
+          <button 
+            className={`${styles.viewButton} ${viewMode === 'grid' ? styles.active : ''}`}
+            onClick={() => setViewMode('grid')}
+          >
+            Grid View
+          </button>
+          <button 
+            className={`${styles.viewButton} ${viewMode === 'list' ? styles.active : ''}`}
+            onClick={() => setViewMode('list')}
+          >
+            List View
+          </button>
+        </div>
+
+        <div className={styles.sizeControls}>
+          <button 
+            className={`${styles.sizeButton} ${cardSize === 'small' ? styles.active : ''}`}
+            onClick={() => setCardSize('small')}
+          >
+            Small
+          </button>
+          <button 
+            className={`${styles.sizeButton} ${cardSize === 'medium' ? styles.active : ''}`}
+            onClick={() => setCardSize('medium')}
+          >
+            Medium
+          </button>
+          <button 
+            className={`${styles.sizeButton} ${cardSize === 'large' ? styles.active : ''}`}
+            onClick={() => setCardSize('large')}
+          >
+            Large
+          </button>
+        </div>
+
+        <div className={styles.compactControl}>
+          <label>
+            <input
+              type="checkbox"
+              checked={isCompactMode}
+              onChange={(e) => setIsCompactMode(e.target.checked)}
+            />
+            Compact Mode
+          </label>
+        </div>
+      </div>
       
       <div className={styles.filters}>
         <select 
@@ -136,68 +188,102 @@ function CollectionPage() {
             total + ((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)), 0).toFixed(2)}
           </h3>
           
-          <table className={styles.collectionTable}>
-            <thead>
-              <tr>
-                <th>Card Image</th>
-                <th>Name</th>
-                <th>Set</th>
-                <th>Collector Number</th>
-                <th>Price</th>
-                <th>Current Quantity</th>
-                <th>Total Value</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCollection.map((card) => (
-                <tr key={card.id}>
-                  <td>
+          <div className={`${styles.collectionDisplay} ${styles[viewMode]} ${styles[cardSize]} ${isCompactMode ? styles.compact : ''}`}>
+            {viewMode === 'grid' ? (
+              <div className={styles.cardGrid}>
+                {filteredCollection.map((card) => (
+                  <div key={card.id} className={styles.cardGridItem}>
                     {card.card_faces && card.card_faces[0].image_uris ? (
                       <div className={styles.doubleFaced}>
                         <img 
-                          src={card.card_faces[0].image_uris.small} 
+                          src={card.card_faces[0].image_uris.normal} 
                           alt={card.name}
-                          className={styles.cardThumbnail}
+                          className={styles.cardImage}
                         />
                         <img 
-                          src={card.card_faces[1].image_uris.small} 
+                          src={card.card_faces[1].image_uris.normal} 
                           alt={card.name}
-                          className={styles.cardThumbnail}
+                          className={styles.cardImage}
                         />
                       </div>
                     ) : (
                       <img 
-                        src={card.image_uris?.small} 
+                        src={card.image_uris?.normal} 
                         alt={card.name} 
-                        className={styles.cardThumbnail}
+                        className={styles.cardImage}
                       />
                     )}
-                  </td>
-                  <td>{card.name}</td>
-                  <td>{card.set_name}</td>
-                  <td>{card.collector_number}</td>
-                  <td>${cardPrices[card.id]?.usd || '0.00'}</td>
-                              <td className={styles.quantityControls}>
-                                <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
-                                <span className={styles.currentQuantity}>{card.quantity || 1}</span>
-                                <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
-                              </td>
-                  <td>${((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)).toFixed(2)}</td>
-                  <td>
-                    <button onClick={() => updateQuantity(card.id, 0)}>Remove</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    <div className={styles.cardInfo}>
+                      <h3>{card.name}</h3>
+                      <p>Quantity: {card.quantity}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <table className={styles.collectionTable}>
+                <thead>
+                  <tr>
+                    <th>Card Image</th>
+                    <th>Name</th>
+                    <th>Set</th>
+                    <th>Collector Number</th>
+                    <th>Price</th>
+                    <th>Current Quantity</th>
+                    <th>Total Value</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCollection.map((card) => (
+                    <tr key={card.id}>
+                      <td>
+                        {card.card_faces && card.card_faces[0].image_uris ? (
+                          <div className={styles.doubleFaced}>
+                            <img 
+                              src={card.card_faces[0].image_uris.small} 
+                              alt={card.name}
+                              className={styles.cardThumbnail}
+                            />
+                            <img 
+                              src={card.card_faces[1].image_uris.small} 
+                              alt={card.name}
+                              className={styles.cardThumbnail}
+                            />
+                          </div>
+                        ) : (
+                          <img 
+                            src={card.image_uris?.small} 
+                            alt={card.name} 
+                            className={styles.cardThumbnail}
+                          />
+                        )}
+                      </td>
+                      <td>{card.name}</td>
+                      <td>{card.set_name}</td>
+                      <td>{card.collector_number}</td>
+                      <td>${cardPrices[card.id]?.usd || '0.00'}</td>
+                                  <td className={styles.quantityControls}>
+                                    <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
+                                    <span className={styles.currentQuantity}>{card.quantity || 1}</span>
+                                    <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
+                                  </td>
+                      <td>${((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)).toFixed(2)}</td>
+                      <td>
+                        <button onClick={() => updateQuantity(card.id, 0)}>Remove</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </>
       )}
     </div>
   )
 }
 export default CollectionPage
-
 const getCardColor = (card) => {
   if (!card.colors || card.colors.length === 0) return 'Colorless'
   if (card.colors.length > 1) return 'Multicolor'
