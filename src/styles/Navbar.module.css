@@ -11,7 +11,6 @@
   font-size: 1.5rem;
   font-weight: bold;
 }
-
 .navLinks {
   list-style: none;
   display: flex;
@@ -19,13 +18,33 @@
   margin: 0;
   padding: 0;
 }
-
 .navLinks a {
-  color: white;
+  color: #ffffff;
   text-decoration: none;
-  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
 }
 
-.navLinks a:hover {
+/* Home button blue glow */
+.navLinks a[href="/"]:hover {
   color: #3498db;
+  text-shadow: 0 0 10px #3498db, 0 0 20px #3498db;
+}
+
+/* Search button purple glow */
+.navLinks a[href="/search"]:hover {
+  color: #9b59b6;
+  text-shadow: 0 0 10px #9b59b6, 0 0 20px #9b59b6;
+}
+
+/* Collection button red glow */
+.navLinks a[href="/collection"]:hover {
+  color: #e74c3c;
+  text-shadow: 0 0 10px #e74c3c, 0 0 20px #e74c3c;
+}
+
+/* Decks button green glow */
+.navLinks a[href="/decks"]:hover {
+  color: #2ecc71;
+  text-shadow: 0 0 10px #2ecc71, 0 0 20px #2ecc71;
 }

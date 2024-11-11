@@ -1,0 +1,14 @@
+.appContainer {
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.light {
+  background-color: #ffffff;
+  color: #121212;
+}

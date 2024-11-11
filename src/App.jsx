@@ -10,27 +10,30 @@ import SearchPage from './pages/SearchPage'
 import CollectionPage from './pages/CollectionPage'
 import DeckBuilder from './components/DeckBuilder'
 import toast, { Toaster } from 'react-hot-toast'
+import styles from './styles/App.module.css'
+
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <CollectionProvider>
-          <DeckProvider>
-            <Navbar />
-            <Toaster position="top-center" />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/collection" element={<CollectionPage />} />
-              <Route path="/decks" element={<DeckBuilder />} />
-            </Routes>
-          </DeckProvider>
-        </CollectionProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <div className={styles.appContainer}>
+      <BrowserRouter>
+        <AuthProvider>
+          <CollectionProvider>
+            <DeckProvider>
+              <Navbar />
+              <Toaster position="top-center" />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/collection" element={<CollectionPage />} />
+                <Route path="/decks" element={<DeckBuilder />} />
+              </Routes>
+            </DeckProvider>
+          </CollectionProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </div>
   )
-}
-export default App
+}export default App

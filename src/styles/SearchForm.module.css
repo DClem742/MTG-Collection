@@ -4,7 +4,8 @@
   flex-direction: column;
   gap: 1rem;
   padding: 10px;
-  margin: 1rem auto;
+  max-width: 800px;
+  margin: 2rem auto;
 }
 
 .singleSearch, .bulkSearch {
@@ -13,16 +14,114 @@
   gap: 1rem;
 }
 
-.singleSearch input, .bulkSearch textarea {
+.bulkSearch {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.bulkSearchInput {
   width: 100%;
-  padding: 0.8rem;
+  height: 120px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid #2c3e50;
+  border-radius: 8px;
+  resize: vertical;
+  font-family: inherit;
   font-size: 1rem;
-  border: 2px solid #ddd;
-  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.bulkSearchInput:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+
+.bulkSearchButton {
+  width: 100%;
+  padding: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bulkSearchButton:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+
+.bulkSearchButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  border: 2px solid #3a3a3a;
+  border-radius: 8px;
+  background-color: #2d2d2d;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #3498db;
+  background-color: #2d2d2d;
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+  transform: translateY(-1px);
+}
+
+.searchInput::placeholder {
+  color: #808080;
+  opacity: 0.8;
+}
+
+.searchWrapper {
+  position: relative;
+  margin-bottom: 2rem;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #2c3e50;
+  pointer-events: none;
+}
+
+.bulkSearch {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .bulkSearch textarea {
   min-height: 150px;
+}
+
+.bulkSearchInput {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  border-color: #3a3a3a;
 }
 
 button {
@@ -43,8 +142,6 @@ button:hover {
 @media (min-width: 768px) {
   .searchContainer {
     padding: 20px;
-    max-width: 600px;
-    margin: 2rem auto;
   }
 }
 
@@ -53,4 +150,214 @@ button:hover {
   .searchContainer {
     gap: 2rem;
   }
+}
+
+.searchContainer {
+  background-color: #121212;
+  min-height: 100vh;
+  padding: 2rem;
+  color: #ffffff;
+}
+
+/* Enhance the search input with a magical glow */
+.searchInput {
+  background: rgba(45, 45, 45, 0.9);
+  border: 2px solid #3498db;
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+  transform-style: preserve-3d;
+}
+
+.searchInput:focus {
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+  transform: translateY(-2px);
+}
+
+.cardResult {
+  background-color: #1e1e1e;
+}
+
+.cardInfo {
+  color: #ffffff;
+}
+
+.cardInfo p {
+  color: #b0b0b0;
+}
+
+.searchResults {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+/* Add card hover animations */
+.cardResult {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.whiteCard:hover {
+  box-shadow: 
+    0 0 30px rgba(248, 231, 185, 0.9),
+    0 0 50px rgba(248, 231, 185, 0.5);
+  border: 2px solid #f8e7b9;
+}
+
+.blueCard:hover {
+  box-shadow: 
+    0 0 30px rgba(14, 104, 171, 0.9),
+    0 0 50px rgba(14, 104, 171, 0.5);
+  border: 2px solid #0e68ab;
+}
+
+.blackCard:hover {
+  box-shadow: 
+    0 0 30px rgba(166, 159, 157, 0.9),
+    0 0 50px rgba(166, 159, 157, 0.5);
+  border: 2px solid #a69f9d;
+}
+
+.redCard:hover {
+  box-shadow: 
+    0 0 30px rgba(211, 32, 42, 0.9),
+    0 0 50px rgba(211, 32, 42, 0.5);
+  border: 2px solid #d3202a;
+}
+
+.greenCard:hover {
+  box-shadow: 
+    0 0 30px rgba(0, 115, 62, 0.9),
+    0 0 50px rgba(0, 115, 62, 0.5);
+  border: 2px solid #00733e;
+}
+
+.multiCard:hover {
+  box-shadow: 
+    0 0 30px rgba(207, 181, 59, 0.9),
+    0 0 50px rgba(207, 181, 59, 0.5);
+  border: 2px solid #cfb53b;
+}
+
+.colorlessCard:hover {
+  box-shadow: 
+    0 0 30px rgba(192, 192, 192, 0.9),
+    0 0 50px rgba(192, 192, 192, 0.5);
+  border: 2px solid #c0c0c0;
+}
+.cardImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Style the card info section */
+.cardInfo {
+  background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(45, 45, 45, 0.9));
+  border-top: 2px solid rgba(52, 152, 219, 0.3);
+  padding: 1rem;
+}
+
+.cardInfo h3 {
+  color: #3498db;
+  font-size: 1.2rem;
+  text-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+  margin: 0 0 0.5rem;
+}
+
+.cardInfo p {
+  margin: 0.25rem 0;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* Add loading animation for search results */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.searchResults {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Style the bulk search textarea */
+.bulkSearchInput {
+  background: rgba(45, 45, 45, 0.9);
+  border: 2px solid #2ecc71;
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.2);
+}
+
+.bulkSearchInput:focus {
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+}
+
+/* Enhance button styles */
+.addButton {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background: linear-gradient(to right, #3498db, #2980b9);
+  border: none;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.addButton:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
+}
+
+.addButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(46, 204, 113, 0.2);
+}
+
+/* Add gradient backgrounds */
+.searchContainer {
+  background: linear-gradient(to bottom, #121212, #1a1a1a);
+}
+
+/* Style scrollbars */
+.bulkSearchInput::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bulkSearchInput::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.bulkSearchInput::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 4px;
+}
+
+/* Add subtle transitions */
+.searchInput,
+.bulkSearchInput,
+.cardResult {
+  transition: all 0.3s ease;
+}
+
+/* Enhance button styles */
+.bulkSearchButton {
+  background: linear-gradient(to right, #3498db, #2980b9);
+  border: none;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.searchIcon {
+  color: #3498db;
 }
