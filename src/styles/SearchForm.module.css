@@ -71,18 +71,42 @@
   background: rgba(45, 45, 45, 0.9);
   border: 2px solid #3a3a3a;
   transition: all 0.3s ease;
+  color: #ffffff;
+  transform-style: preserve-3d;
 }
 
 .searchInput:focus {
   outline: none;
   border: 2px solid #3498db;
-  background-color: #2d2d2d;
-  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+  box-shadow: 
+    0 0 30px #3498db,
+    0 0 60px rgba(52, 152, 219, 0.6),
+    0 0 90px rgba(52, 152, 219, 0.3);
   transform: translateY(-2px);
 }
+
 .searchInput::placeholder {
   color: #808080;
   opacity: 0.8;
+  font-style: italic;
+  font-size: 1.2rem;
+  transition: opacity 0.3s ease;
+}
+
+.searchInput:focus::placeholder {
+  opacity: 0.5;
+}
+
+.bulkSearchInput::placeholder {
+  color: #808080;
+  opacity: 0.8;
+  font-style: italic;
+  font-size: 1.2rem;
+  transition: opacity 0.3s ease;
+}
+
+.bulkSearchInput:focus::placeholder {
+  opacity: 0.5;
 }
 
 .searchWrapper {
@@ -152,7 +176,6 @@ button:hover {
 /* Desktop (1024px and up) */
 @media (min-width: 1024px) {
   .searchContainer {
-
     max-width: 1200px;
   }
 }
@@ -182,30 +205,35 @@ button:hover {
 .searchInput {
   background: rgba(45, 45, 45, 0.9);
   border: 2px solid #3a3a3a;
-  box-shadow: none;
   transition: all 0.3s ease;
+  box-shadow: none;
 }
 
 .searchInput:focus {
   border: 2px solid #3498db;
-  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+  box-shadow: 
+    0 0 5px #3498db,
+    0 0 15px #3498db,
+    0 0 30px #3498db,
+    0 0 60px rgba(52, 152, 219, 0.8);
   transform: translateY(-2px);
 }
-
-.bulkSearchInput {
+div[class*="bulkSearch"] textarea[class*="bulkSearchInput"] {
   background: rgba(45, 45, 45, 0.9);
   border: 2px solid #3a3a3a;
-  box-shadow: none;
   transition: all 0.3s ease;
+  box-shadow: none;
 }
 
-.bulkSearchInput:focus {
+div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
   border: 2px solid #3498db;
-  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+  box-shadow: 
+    0 0 5px #3498db,
+    0 0 15px #3498db,
+    0 0 30px #3498db,
+    0 0 60px rgba(52, 152, 219, 0.8);
   transform: translateY(-2px);
-}
-
-.cardResult {
+}.cardResult {
   background-color: #1e1e1e;
 }
 
@@ -223,16 +251,26 @@ button:hover {
   padding: 1rem;
 }
 
-/* Add card hover animations */
 .cardResult {
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: #1e1e1e;
   border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: min-content;
 }
+
+.cardInfo {
+  color: #ffffff;
+  width: 100%;
+  padding: 1rem;
+}
+
+.cardInfo p {
+  color: #b0b0b0;
+}
+
 .whiteCard:hover {
   box-shadow: 
     0 0 30px rgba(248, 231, 185, 0.9),
@@ -246,7 +284,6 @@ button:hover {
     0 0 50px rgba(14, 104, 171, 0.5);
   border: 2px solid #0e68ab;
 }
-
 .blackCard:hover {
   box-shadow: 
     0 0 30px rgba(60, 0, 172, 0.9),
@@ -287,6 +324,12 @@ button:hover {
   display: block;
 }
 
+.cardImage img {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+  border-radius: 4.75% / 3.5%;
+}
 /* Style the card info section */
 .cardInfo {
   background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(45, 45, 45, 0.9));

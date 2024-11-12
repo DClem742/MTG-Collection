@@ -123,7 +123,7 @@ function SearchForm() {
         <input
           type="text"
           className={styles.searchInput}
-          placeholder="Search for Magic cards..."
+          placeholder="Start typing Magic cards..."
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
         />
@@ -134,7 +134,7 @@ function SearchForm() {
         <textarea
           value={bulkSearchTerm}
           onChange={(e) => setBulkSearchTerm(e.target.value)}
-          placeholder="Enter multiple card names (one per line)"
+          placeholder="Enter multiple card names (one per line, exact match)"
           className={styles.bulkSearchInput}
         />
         <button 
