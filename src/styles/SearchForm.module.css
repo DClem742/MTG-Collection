@@ -151,14 +151,33 @@ button:hover {
     gap: 2rem;
   }
 }
-
 .searchContainer {
-  background-color: #121212;
+  background-image: url('/images/mtg-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   min-height: 100vh;
   padding: 2rem;
-  color: #ffffff;
+  position: relative;
 }
 
+/* Add an overlay to improve text readability */
+.searchContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+/* Ensure content stays above the overlay */
+.searchWrapper, .bulkSearch, .searchResults {
+  position: relative;
+  z-index: 2;
+}
 /* Enhance the search input with a magical glow */
 .searchInput {
   background: rgba(45, 45, 45, 0.9);
@@ -217,9 +236,9 @@ button:hover {
 
 .blackCard:hover {
   box-shadow: 
-    0 0 30px rgba(166, 159, 157, 0.9),
-    0 0 50px rgba(166, 159, 157, 0.5);
-  border: 2px solid #a69f9d;
+    0 0 30px rgba(60, 0, 172, 0.9),
+    0 0 50px rgba(60, 0, 172, 0.9);
+  border: 2px solid  #2e0166;
 }
 
 .redCard:hover {
@@ -261,14 +280,45 @@ button:hover {
   border-top: 2px solid rgba(52, 152, 219, 0.3);
   padding: 1rem;
 }
-
 .cardInfo h3 {
-  color: #3498db;
   font-size: 1.2rem;
-  text-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
   margin: 0 0 0.5rem;
 }
 
+.whiteCard .cardInfo h3 {
+  color: #f8e7b9;
+  text-shadow: 0 0 10px rgba(248, 231, 185, 0.8);
+}
+
+.blueCard .cardInfo h3 {
+  color: #0e68ab;
+  text-shadow: 0 0 10px rgba(14, 104, 171, 0.8);
+}
+
+.blackCard .cardInfo h3 {
+  color: #800080;
+  text-shadow: 0 0 10px rgba(128, 0, 128, 0.8);
+}
+
+.redCard .cardInfo h3 {
+  color: #d3202a;
+  text-shadow: 0 0 10px rgba(211, 32, 42, 0.8);
+}
+
+.greenCard .cardInfo h3 {
+  color: #00733e;
+  text-shadow: 0 0 10px rgba(0, 115, 62, 0.8);
+}
+
+.multiCard .cardInfo h3 {
+  color: #cfb53b;
+  text-shadow: 0 0 10px rgba(207, 181, 59, 0.8);
+}
+
+.colorlessCard .cardInfo h3 {
+  color: #c0c0c0;
+  text-shadow: 0 0 10px rgba(192, 192, 192, 0.8);
+}
 .cardInfo p {
   margin: 0.25rem 0;
   color: #7f8c8d;
@@ -301,7 +351,6 @@ button:hover {
   width: 100%;
   padding: 0.8rem;
   margin-top: 1rem;
-  background: linear-gradient(to right, #3498db, #2980b9);
   border: none;
   color: white;
   text-transform: uppercase;
@@ -310,6 +359,38 @@ button:hover {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+/* Override the default gradient for each color */
+.whiteCard .addButton {
+  background: #f8e7b9 !important;
+  color: #000000;
+}
+
+.blueCard .addButton {
+  background: #0e68ab !important;
+}
+
+.blackCard .addButton {
+  background: #800080 !important;
+}
+
+.redCard .addButton {
+  background: #d3202a !important;
+}
+
+.greenCard .addButton {
+  background: #00733e !important;
+}
+
+.colorlessCard .addButton {
+  background: #c0c0c0 !important;
+  color: #000000;
+}
+
+.multiCard .addButton {
+  background: #cfb53b !important;
+  color: #000000;
 }
 
 .addButton:hover {
@@ -322,7 +403,6 @@ button:hover {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(46, 204, 113, 0.2);
 }
-
 /* Add gradient backgrounds */
 .searchContainer {
   background: linear-gradient(to bottom, #121212, #1a1a1a);
@@ -361,3 +441,221 @@ button:hover {
 .searchIcon {
   color: #3498db;
 }
+
+@font-face {
+  font-family: 'Mana';
+  src: url('/fonts/mana.ttf') format('truetype');
+}
+
+.manaSymbol {
+  font-family: 'Mana', sans-serif;
+  font-size: 1.2rem;
+  margin: 0 2px;
+}
+
+/* Two-color combinations */
+.greenBlackCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(128, 0, 128, 0.9);
+  border: 2px solid #00733e;
+}
+
+.redWhiteCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(211, 32, 42, 0.9),
+    30px 0 30px -10px rgba(248, 231, 185, 0.9);
+  border: 2px solid #d3202a;
+}
+.blueRedCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(14, 104, 171, 0.9),
+    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+  border: 2px solid #0e68ab;
+}
+.whiteBlueCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(248, 231, 185, 0.9),
+    30px 0 30px -10px rgba(14, 104, 171, 0.9);
+  border: 2px solid #0e68ab;
+}
+
+.blackRedCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(128, 0, 128, 0.9),
+    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+  border: 2px solid #d3202a;
+}
+
+.whiteBlackCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(248, 231, 185, 0.9),
+    30px 0 30px -10px rgba(128, 0, 128, 0.9);
+  border: 2px solid #800080;
+}
+
+.greenWhiteCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(248, 231, 185, 0.9);
+  border: 2px solid #00733e;
+}
+
+.greenBlueCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(14, 104, 171, 0.9);
+  border: 2px solid #00733e;
+}
+
+.blueBlackCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(14, 104, 171, 0.9),
+    30px 0 30px -10px rgba(128, 0, 128, 0.9);
+  border: 2px solid #0e68ab;
+}
+
+.greenRedCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+  border: 2px solid #00733e;
+/* Base button reset */
+.addButton {
+  background-color: transparent; /* Reset default background */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Then make our color styles more specific */
+.cardResult[class*="Card"] .addButton {
+  background-color: inherit;
+}
+
+/* Now target each color specifically */
+.cardResult.whiteCard .addButton {
+  background-color: #f8e7b9;
+  color: #000000;
+}
+
+.cardResult.blueCard .addButton {
+  background-color: #0e68ab;
+  color: #ffffff;
+}
+
+.cardResult.blackCard .addButton {
+  background-color: #800080;
+  color: #ffffff;
+}
+
+.cardResult.redCard .addButton {
+  background-color: #d3202a;
+  color: #ffffff;
+}
+
+.cardResult.greenCard .addButton {
+  background-color: #00733e;
+  color: #ffffff;
+}
+
+.cardResult.colorlessCard .addButton {
+  background-color: #c0c0c0;
+  color: #000000;
+}
+
+.cardResult.multiCard .addButton {
+  background: linear-gradient(to right, #cfb53b, #e6c654);
+  color: #000000;
+}}/* Dual color gradient buttons */
+.whiteBlueCard .addButton {
+  background: linear-gradient(to right, #f8e7b9, #0e68ab);
+}
+
+.blackRedCard .addButton {
+  background: linear-gradient(to right, #800080, #d3202a);
+}
+
+.whiteBlackCard .addButton {
+  background: linear-gradient(to right, #f8e7b9, #800080);
+}
+
+.greenWhiteCard .addButton {
+  background: linear-gradient(to right, #00733e, #f8e7b9);
+}
+
+.greenBlueCard .addButton {
+  background: linear-gradient(to right, #00733e, #0e68ab);
+}
+
+.blueBlackCard .addButton {
+  background: linear-gradient(to right, #0e68ab, #800080);
+}
+
+.greenRedCard .addButton {
+  background: linear-gradient(to right, #00733e, #d3202a);
+}
+
+.redWhiteCard .addButton {
+  background: linear-gradient(to right, #d3202a, #f8e7b9);
+}
+
+.blueRedCard .addButton {
+  background: linear-gradient(to right, #0e68ab, #d3202a);
+}
+
+.greenBlackCard .addButton {
+  background: linear-gradient(to right, #00733e, #800080);
+}
+
+/* Single color button hovers */
+.whiteCard .addButton:hover {
+  background-color: #f8e7b9;
+  box-shadow: 0 0 15px rgba(248, 231, 185, 0.8);
+  transform: translateY(-2px);
+}
+
+.blueCard .addButton:hover {
+  background-color: #0e68ab;
+  box-shadow: 0 0 15px rgba(14, 104, 171, 0.8);
+  transform: translateY(-2px);
+}
+
+.blackCard .addButton:hover {
+  background-color: #800080;
+  box-shadow: 0 0 15px rgba(128, 0, 128, 0.8);
+  transform: translateY(-2px);
+}
+
+.redCard .addButton:hover {
+  background-color: #d3202a;
+  box-shadow: 0 0 15px rgba(211, 32, 42, 0.8);
+  transform: translateY(-2px);
+}
+
+.greenCard .addButton:hover {
+  background-color: #00733e;
+  box-shadow: 0 0 15px rgba(0, 115, 62, 0.8);
+  transform: translateY(-2px);
+}
+
+/* Dual color button hovers with split glow */
+.whiteBlueCard .addButton:hover {
+  background: linear-gradient(to right, #f8e7b9, #0e68ab);
+  box-shadow: 
+    -10px 0 15px rgba(248, 231, 185, 0.8),
+    10px 0 15px rgba(14, 104, 171, 0.8);
+  transform: translateY(-2px);
+}
+
+.blackRedCard .addButton:hover {
+  background: linear-gradient(to right, #800080, #d3202a);
+  box-shadow: 
+    -10px 0 15px rgba(128, 0, 128, 0.8),
+    10px 0 15px rgba(211, 32, 42, 0.8);
+  transform: translateY(-2px);
+}
+
+/* Add the rest of the dual-color combinations with the same pattern */

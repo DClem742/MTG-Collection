@@ -1,6 +1,17 @@
 .appContainer {
+  background-image: url('/images/mtg-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   min-height: 100vh;
-  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .dark {

@@ -11,6 +11,7 @@ import CollectionPage from './pages/CollectionPage'
 import DeckBuilder from './components/DeckBuilder'
 import toast, { Toaster } from 'react-hot-toast'
 import styles from './styles/App.module.css'
+import 'mana-font/css/mana.css'
 
 
 function App() {

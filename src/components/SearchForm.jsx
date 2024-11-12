@@ -9,6 +9,12 @@ function SearchForm() {
   const [searchResults, setSearchResults] = useState([])
   const [flippedCards, setFlippedCards] = useState({})
 
+  const renderManaSymbols = (manaCost) => {
+    return manaCost?.replace(/[{}]/g, '').split('').map((symbol, index) => (
+      <i key={index} className={`ms ms-${symbol.toLowerCase()} ms-cost`}></i>
+    ))
+  }
+
   const handleSearch = async (value) => {
     setSearchTerm(value)
     if (!value.trim()) {
@@ -57,12 +63,50 @@ function SearchForm() {
 
   const handleAddCard = (card) => {
     addToCollection(card)
+    return (
+      <button 
+        className={styles.addButton}
+        onClick={() => handleAddCard(card)}
+        style={{
+          backgroundColor: card.colors?.length === 1 ? 
+            card.colors[0] === 'W' ? '#f8e7b9' :
+            card.colors[0] === 'U' ? '#0e68ab' :
+            card.colors[0] === 'B' ? '#800080' :
+            card.colors[0] === 'R' ? '#d3202a' :
+            card.colors[0] === 'G' ? '#00733e' :
+            '#c0c0c0' : 
+          card.colors?.length >= 3 ? '#cfb53b' : null,
+          color: card.colors?.length === 1 && card.colors[0] === 'W' ? '#000000' : '#ffffff'
+        }}
+      >
+        Add to Collection
+      </button>
+    )
   }
 
   const getColorClass = (card) => {
     if (!card.colors || card.colors.length === 0) return 'colorlessCard'
-    if (card.colors.length > 1) return 'multiCard'
-    
+  
+    if (card.colors.length === 2) {
+      // Sort the colors to ensure consistent ordering
+      const colorPair = card.colors.sort().join('')
+      const colorPairMap = {
+        'BG': 'greenBlackCard',    // Golgari
+        'RW': 'redWhiteCard',      // Boros
+        'RU': 'blueRedCard',       // Izzet
+        'UW': 'whiteBlueCard',     // Azorius
+        'BR': 'blackRedCard',      // Rakdos
+        'BW': 'whiteBlackCard',    // Orzhov
+        'GW': 'greenWhiteCard',    // Selesnya
+        'GU': 'greenBlueCard',     // Simic
+        'BU': 'blueBlackCard',     // Dimir
+        'GR': 'greenRedCard'       // Gruul
+      }
+      return colorPairMap[colorPair]
+    }
+  
+    if (card.colors.length > 2) return 'multiCard'
+  
     const colorMap = {
       W: 'whiteCard',
       U: 'blueCard',
@@ -70,10 +114,9 @@ function SearchForm() {
       R: 'redCard',
       G: 'greenCard'
     }
-    
+  
     return colorMap[card.colors[0]]
-  }
-
+  }  
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchWrapper}>
@@ -124,9 +167,9 @@ function SearchForm() {
               <h3>{card.name}</h3>
               <p>Set: {card.set_name}</p>
               <p>Type: {card.type_line}</p>
-              <p>Mana Cost: {card.mana_cost}</p>
+              <p>Mana Cost: {renderManaSymbols(card.mana_cost)}</p>
               <button 
-                className={styles.addButton}
+                className={`${styles.addButton} ${styles[getColorClass(card)]}`}
                 onClick={() => handleAddCard(card)}
               >
                 Add to Collection
@@ -138,5 +181,12 @@ function SearchForm() {
     </div>
   )
 }
-
 export default SearchForm
+
+const renderManaSymbols = (manaCost) => {
+  return manaCost?.replace(/[{}/]/g, '').split('').map((symbol, index) => (
+    <span key={index} className={styles.manaSymbol}>
+      {symbol}
+    </span>
+  ))
+}
