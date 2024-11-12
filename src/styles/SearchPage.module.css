@@ -64,14 +64,29 @@
 .cardImage:hover .flipHint {
   opacity: 1;
 }
-
+/* Base styles (mobile first) */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
   padding: 1rem;
 }
 
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .cardGrid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .cardGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+  }
+}
 .cardResult {
   display: flex;
   flex-direction: column;

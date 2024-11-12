@@ -15,32 +15,27 @@
 }
 
 .bulkSearch {
-  margin: 2rem 0;
+  margin: 2rem 1rem;
   padding: 1.5rem;
-  background: #f8f9fa;
+  background-color: #1e1e1e;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  width: auto;
+  box-sizing: border-box;
 }
 
 .bulkSearchInput {
   width: 100%;
-  height: 120px;
+  box-sizing: border-box;
   padding: 1rem;
-  margin-bottom: 1rem;
-  border: 2px solid #2c3e50;
-  border-radius: 8px;
-  resize: vertical;
-  font-family: inherit;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  background: rgba(45, 45, 45, 0.9);
+  border: 2px solid #3498db;
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
 }
-
 .bulkSearchInput:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
 }
-
 .bulkSearchButton {
   width: 100%;
   padding: 1rem;
@@ -52,7 +47,6 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .bulkSearchButton:hover {
   background-color: #2980b9;
   transform: translateY(-2px);
@@ -63,27 +57,29 @@
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
 }
-
+.searchWrapper {
+  position: relative;
+  margin: 1rem;
+  padding: 1rem;
+  width: auto;
+  box-sizing: border-box;
+}
 .searchInput {
   width: 100%;
+  box-sizing: border-box;
   padding: 1rem 1.5rem;
-  font-size: 1.2rem;
+  background: rgba(45, 45, 45, 0.9);
   border: 2px solid #3a3a3a;
-  border-radius: 8px;
-  background-color: #2d2d2d;
-  color: #ffffff;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .searchInput:focus {
   outline: none;
-  border-color: #3498db;
+  border: 2px solid #3498db;
   background-color: #2d2d2d;
-  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
-  transform: translateY(-1px);
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+  transform: translateY(-2px);
 }
-
 .searchInput::placeholder {
   color: #808080;
   opacity: 0.8;
@@ -91,10 +87,11 @@
 
 .searchWrapper {
   position: relative;
-  margin-bottom: 2rem;
+  margin: 0 1rem;
   background-color: #1e1e1e;
   border-radius: 8px;
   padding: 1rem;
+  width: calc(100% - 2rem);
 }
 
 .searchIcon {
@@ -138,39 +135,42 @@ button:hover {
   background-color: #34495e;
 }
 
+/* Base styles (mobile first) */
+.searchContainer {
+  padding: 10px;
+  margin: 0 auto;
+}
+
 /* Tablet (768px and up) */
 @media (min-width: 768px) {
   .searchContainer {
     padding: 20px;
+    max-width: 800px;
   }
 }
 
 /* Desktop (1024px and up) */
 @media (min-width: 1024px) {
   .searchContainer {
-    gap: 2rem;
+
+    max-width: 1200px;
   }
 }
 .searchContainer {
-  background-image: url('/images/mtg-background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  min-height: 100vh;
+  background: rgba(30, 30, 30, 0.9);  /* Adjust the 0.7 value to control opacity */
+  backdrop-filter: blur(8px);  /* This adds a nice frosted glass effect */
+  border-radius: 12px;
   padding: 2rem;
-  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.searchWrapper {
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-/* Add an overlay to improve text readability */
-.searchContainer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 1;
+.bulkSearch {
+  border-radius: 8px;
+  margin-top: 1.5rem;
 }
 
 /* Ensure content stays above the overlay */
@@ -181,13 +181,27 @@ button:hover {
 /* Enhance the search input with a magical glow */
 .searchInput {
   background: rgba(45, 45, 45, 0.9);
-  border: 2px solid #3498db;
-  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
-  transform-style: preserve-3d;
+  border: 2px solid #3a3a3a;
+  box-shadow: none;
+  transition: all 0.3s ease;
 }
 
 .searchInput:focus {
-  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+  border: 2px solid #3498db;
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+  transform: translateY(-2px);
+}
+
+.bulkSearchInput {
+  background: rgba(45, 45, 45, 0.9);
+  border: 2px solid #3a3a3a;
+  box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+.bulkSearchInput:focus {
+  border: 2px solid #3498db;
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
   transform: translateY(-2px);
 }
 
@@ -202,7 +216,6 @@ button:hover {
 .cardInfo p {
   color: #b0b0b0;
 }
-
 .searchResults {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -338,12 +351,13 @@ button:hover {
 /* Style the bulk search textarea */
 .bulkSearchInput {
   background: rgba(45, 45, 45, 0.9);
-  border: 2px solid #2ecc71;
-  box-shadow: 0 0 15px rgba(46, 204, 113, 0.2);
+  border: 2px solid #3a3a3a;
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
 }
 
 .bulkSearchInput:focus {
-  box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+  border-color: #3498db;
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
 }
 
 /* Enhance button styles */

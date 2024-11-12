@@ -1,3 +1,4 @@
+/* Base styles (mobile first) */
 .appContainer {
   background-image: url('/images/mtg-background.jpg');
   background-size: cover;
@@ -7,8 +8,21 @@
   width: 100%;
 }
 
-.contentWrapper {
-  position: relative;
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .appContainer {
+    /* Tablet specific styles */
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .appContainer {
+    /* Desktop specific styles */
+  }
+}
+
+.contentWrapper {  position: relative;
   z-index: 2;
   height: 100vh;
   overflow-y: auto;
