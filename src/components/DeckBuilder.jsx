@@ -254,12 +254,7 @@ function DeckBuilder() {
                     <div className={styles.deckInfo} onClick={() => handleDeckSelect(deck)}>
                       <h3>{deck.name}</h3>
                     </div>
-                    <button 
-                      className={styles.deleteButton}
-                      onClick={() => handleDeleteDeck(deck.id)}
-                    >
-                      Delete Deck
-                    </button>
+                   
                   </div>
                 </div>
               ))}
@@ -268,15 +263,26 @@ function DeckBuilder() {
         </div>
       ) : (
         <div className={styles.deckBuilderContainer}>
-          <button 
-            className={styles.backButton} 
-            onClick={() => {
-              setShowDeckSelection(true)
-              setSelectedDeck(null)
-            }}
-          >
-            Back to Deck Selection
-          </button>
+          <div className={styles.deckBuilderContainer}>
+            <div className={styles.navigationButtons}>
+              <button 
+                className={styles.backButton} 
+                onClick={() => {
+                  setShowDeckSelection(true)
+                  setSelectedDeck(null)
+                }}
+              >
+                Back to Deck Selection
+              </button>
+              
+              <button 
+                className={styles.deleteButton}
+                onClick={() => handleDeleteDeck(selectedDeck.id)}
+              >
+                Delete Deck
+              </button>
+            </div>
+          </div>
 
           <div className={styles.deckBuilderGrid}>
             <div className={styles.searchSection}>

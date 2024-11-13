@@ -13,12 +13,12 @@
 }
 
 .navCard {
-  background-color: #fff;
+  background-color: #000000;
   border-radius: 8px;
   padding: 2rem;
   width: 300px;
   text-decoration: none;
-  color: inherit;
+  color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -30,9 +30,26 @@
 
 .navCard h2 {
   margin-bottom: 1rem;
-  color: #2c3e50;
+  color: white;
 }
 
 .navCard p {
-  color: #666;
+  color: white;
+}
+
+.description {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.description p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }

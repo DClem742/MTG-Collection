@@ -13,11 +13,45 @@ function CollectionPage() {
   })
   const [showResults, setShowResults] = useState(false)
   const [activeCategory, setActiveCategory] = useState('all')
-  // Add these new states after your existing useState declarations
-  const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
-  const [cardSize, setCardSize] = useState('medium') // 'small', 'medium', 'large'
+  const [viewMode, setViewMode] = useState('grid')
+  const [cardSize, setCardSize] = useState('medium')
   const [isCompactMode, setIsCompactMode] = useState(false)
 
+  const getCardColor = (card) => {
+    if (!card.colors || card.colors.length === 0) return 'colorlessCard'
+    if (card.colors.length > 1) return 'multiCard'
+    const colorMap = {
+      W: 'whiteCard',
+      U: 'blueCard',
+      B: 'blackCard',
+      R: 'redCard',
+      G: 'greenCard'
+    }
+    return colorMap[card.colors[0]]
+  }
+
+  const getColorClass = (card) => {
+    if (!card.colors || card.colors.length === 0) return 'colorlessCard'
+    
+    if (card.colors.length === 2) {
+      const colorPair = card.colors.sort().join('')
+      const colorPairMap = {
+        'BG': 'greenBlackCard',
+        'RW': 'redWhiteCard', 
+        'RU': 'blueRedCard',
+        'UW': 'whiteBlueCard',
+        'BR': 'blackRedCard',
+        'BW': 'whiteBlackCard',
+        'GW': 'greenWhiteCard',
+        'GU': 'greenBlueCard',
+        'BU': 'blueBlackCard',
+        'GR': 'greenRedCard'
+      }
+      return colorPairMap[colorPair]
+    }
+
+  // Rest of your component code...
+}
   const handleRemoveAll = () => {
     if (window.confirm('Are you sure you want to remove all cards from your collection?')) {
       removeAllCards()
@@ -25,7 +59,9 @@ function CollectionPage() {
     }
   }
 
-  const sets = [...new Set(collection.map(card => card.set_name))]
+  const sets = [...new Set(collection.map(card => card.set_name))].sort((a, b) => 
+    a.localeCompare(b)
+  )
   const cardTypes = [
     'Creature',
     'Instant',
@@ -59,20 +95,44 @@ function CollectionPage() {
     const fetchPrices = async () => {
       setIsLoading(true)
       const prices = {}
-      await Promise.all(
-        collection.map(async (card) => {
-          const response = await fetch(`https://api.scryfall.com/cards/${card.id}`)
-          const data = await response.json()
-          prices[card.id] = data.prices
-        })
-      )
+      
+      // Process cards in smaller batches to respect API limits
+      const batchSize = 10
+      for (let i = 0; i < collection.length; i += batchSize) {
+        const batch = collection.slice(i, i + batchSize)
+        
+        try {
+          await Promise.all(
+            batch.map(async (card) => {
+              try {
+                const response = await fetch(`https://api.scryfall.com/cards/${card.id}`)
+                if (!response.ok) throw new Error('Network response was not ok')
+                const data = await response.json()
+                prices[card.id] = data.prices
+              } catch (cardError) {
+                console.log(`Price fetch failed for card ${card.name}`)
+                prices[card.id] = { usd: '0.00' }
+              }
+            })
+          )
+          
+          // Add a small delay between batches
+          if (i + batchSize < collection.length) {
+            await new Promise(resolve => setTimeout(resolve, 100))
+          }
+        } catch (batchError) {
+          console.log('Batch processing error:', batchError)
+        }
+      }
+      
       setCardPrices(prices)
       setIsLoading(false)
     }
 
-    fetchPrices()
+    if (collection.length > 0) {
+      fetchPrices()
+    }
   }, [collection])
-
   const filteredCollection = collection.filter(card => {
     const matchesSet = !filters.set || card.set_name === filters.set
     const matchesType = !filters.type || card.type_line?.includes(filters.type)
@@ -192,7 +252,7 @@ function CollectionPage() {
             {viewMode === 'grid' ? (
               <div className={styles.cardGrid}>
                 {filteredCollection.map((card) => (
-                  <div key={card.id} className={styles.cardGridItem}>
+                  <div key={card.id} className={`${styles.cardGridItem} ${styles[getColorClass(card)]}`}>
                     {card.card_faces && card.card_faces[0].image_uris ? (
                       <div className={styles.doubleFaced}>
                         <img 
@@ -284,15 +344,5 @@ function CollectionPage() {
   )
 }
 export default CollectionPage
-const getCardColor = (card) => {
-  if (!card.colors || card.colors.length === 0) return 'Colorless'
-  if (card.colors.length > 1) return 'Multicolor'
-  const colorMap = {
-    W: 'White',
-    U: 'Blue',
-    B: 'Black',
-    R: 'Red',
-    G: 'Green'
-  }
-  return colorMap[card.colors[0]]
-}
+
+ 
