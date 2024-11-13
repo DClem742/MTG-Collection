@@ -1,10 +1,36 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from '../styles/HomePage.module.css'
 
 function HomePage() {
+  const [isFanned, setIsFanned] = useState(false)
+  
+  const cards = [
+   '/images/AkromasWill.jpeg',
+   '/images/ArcaneDenial.jpeg',
+   '/images/VampiricTutor.jpeg',
+   '/images/Etali.jpeg',
+   '/images/Craterhoof.jpeg',
+   '/images/MtgCardBack.jpeg',
+  ]  
+
   return (
     <div className={styles.homePage}>
       <h1>Welcome to MTG Collection Tracker</h1>
+      
+      <div className={styles.cardFan} onClick={() => setIsFanned(!isFanned)}>
+        {cards.map((card, index) => (
+          <div 
+            key={index} 
+            className={`${styles.card} ${isFanned ? styles.fanned : ''}`}
+            style={{
+              backgroundImage: `url(${card})`,
+              '--index': index,
+            }}
+          />
+        ))}
+      </div>
+
       <div className={styles.description}>
         <p>
           Your ultimate destination for managing your Magic: The Gathering collection. 
@@ -29,5 +55,4 @@ function HomePage() {
     </div>
   )
 }
-
 export default HomePage

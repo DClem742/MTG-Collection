@@ -8,7 +8,7 @@
 .navigationCards {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 10rem;
   margin-top: 3rem;
 }
 
@@ -21,6 +21,7 @@
   color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
+  opacity: 75%;
 }
 
 .navCard:hover {
@@ -52,4 +53,35 @@
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   text-align: center;
+}
+.cardFan {
+  position: relative;
+  height: 400px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.card {
+  position: absolute;
+  width: 223px;
+  height: 310px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.5s ease;
+  transform-origin: bottom center;
+  transform: rotate(0) translateY(0);
+}
+
+.card.fanned {
+  transform: rotate(calc(var(--index) * 25deg - 60deg)) translateX(calc(var(--index) * 40px));
+}
+
+.card:hover {
+  z-index: 10;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }

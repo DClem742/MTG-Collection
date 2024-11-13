@@ -454,3 +454,31 @@
     30px 0 30px -10px rgba(128, 0, 128, 0.9);
   border: 2px solid #800080;
 }
+
+.greenRedCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+  border: 2px solid #00733e;
+}
+
+.greenBlueCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(14, 104, 171, 0.9);
+  border: 2px solid #00733e;
+}
+
+.greenWhiteCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(248, 231, 185, 0.9);
+  border: 2px solid #00733e;
+}
+
+.blueBlackCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(14, 104, 171, 0.9),
+    30px 0 30px -10px rgba(128, 0, 128, 0.9);
+  border: 2px solid #0e68ab;
+}
