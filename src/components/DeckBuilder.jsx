@@ -4,12 +4,13 @@ import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
 import DeckStats from './DeckStats'
 import popupStyles from '../styles/CardPopup.module.css'
-
+import DeckTester from './DeckTester'
 
 function DeckBuilder() {
   const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck, setCommander } = useDeck()
   const { collection, addToCollection } = useCollection()
   
+  const [isTestingMode, setIsTestingMode] = useState(false)
   const [deckName, setDeckName] = useState('')
   const [format, setFormat] = useState('commander')
   const [selectedDeck, setSelectedDeck] = useState(null)
@@ -278,6 +279,13 @@ function DeckBuilder() {
               </button>
               
               <button 
+                className={styles.testDeckButton}
+                onClick={() => setIsTestingMode(!isTestingMode)}
+              >
+                {isTestingMode ? 'Back to Deck' : 'Test Deck'}
+              </button>
+              
+              <button 
                 className={styles.deleteButton}
                 onClick={() => handleDeleteDeck(selectedDeck.id)}
               >
@@ -285,7 +293,6 @@ function DeckBuilder() {
               </button>
             </div>
           </div>
-
           <div className={styles.deckBuilderGrid}>
             <div className={styles.searchSection}>
               <input
@@ -352,46 +359,51 @@ function DeckBuilder() {
                 ))}
               </div>
             </div>
-
             <div className={styles.deckView}>
-              <div className={styles.deckHeader}>
-                <h3>{selectedDeck.name}</h3>
-                <h4 className={styles.totalCount}>
-                  Total Cards: {getTotalCardCount(deckCards)} | 
-                  Deck Value: ${calculateDeckPrice(deckCards).toFixed(2)}
-                </h4>
-              </div>
-              
-              <DeckStats cards={deckCards} />
-              {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
-                cards.length > 0 && (
-                  <div key={type} className={styles.cardTypeGroup}>
-                    <h4>{type} ({cards.length})</h4>
-                    {cards.map(card => (
-                      <div 
-                        key={card.id} 
-                        className={styles.deckCard}
-                        onClick={() => handleCardClick(card)}
-                        onMouseEnter={(e) => {
-                          setHoverCard({
-                            card: card.card_data,
-                            x: e.clientX + 10,
-                            y: e.clientY + 10
-                          })
-                        }}
-                        onMouseLeave={() => setHoverCard(null)}
-                      >
-                        <span>{card.quantity}x</span>
-                        <span>{card.card_data.name}</span>
-                        <button onClick={(e) => {
-                          e.stopPropagation()
-                          handleRemoveCard(selectedDeck.id, card.id)
-                        }}>Remove</button>
-                      </div>
-                    ))}
+              {isTestingMode ? (
+                <DeckTester deck={prepareDeckForTesting(deckCards)} />
+              ) : (
+                <>
+                  <div className={styles.deckHeader}>
+                    <h3>{selectedDeck.name}</h3>
+                    <h4 className={styles.totalCount}>
+                      Total Cards: {getTotalCardCount(deckCards)} | 
+                      Deck Value: ${calculateDeckPrice(deckCards).toFixed(2)}
+                    </h4>
                   </div>
-                )
-              ))}
+                  
+                  <DeckStats cards={deckCards} />
+                  {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
+                    cards.length > 0 && (
+                      <div key={type} className={styles.cardTypeGroup}>
+                        <h4>{type} ({cards.length})</h4>
+                        {cards.map(card => (
+                          <div 
+                            key={card.id} 
+                            className={styles.deckCard}
+                            onClick={() => handleCardClick(card)}
+                            onMouseEnter={(e) => {
+                              setHoverCard({
+                                card: card.card_data,
+                                x: e.clientX + 10,
+                                y: e.clientY + 10
+                              })
+                            }}
+                            onMouseLeave={() => setHoverCard(null)}
+                          >
+                            <span>{card.quantity}x</span>
+                            <span>{card.card_data.name}</span>
+                            <button onClick={(e) => {
+                              e.stopPropagation()
+                              handleRemoveCard(selectedDeck.id, card.id)
+                            }}>Remove</button>
+                          </div>
+                        ))}
+                      </div>
+                    )
+                  ))}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -436,3 +448,15 @@ function DeckBuilder() {
 
   )}
   export default DeckBuilder
+
+const prepareDeckForTesting = (deckCards) => {
+  // Create an array with the correct number of copies for each card
+  const testDeck = deckCards.flatMap(card => {
+    const copies = Array(card.quantity).fill(card.card_data)
+    return copies
+  })
+  
+  return testDeck
+}
+
+
