@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { useDeck } from '../context/DeckContext'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/DeckBuilder.module.css'
-import popupStyles from '../styles/CardPopup.module.css'
 import DeckStats from './DeckStats'
+import popupStyles from '../styles/CardPopup.module.css'
+
 
 function DeckBuilder() {
   const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck, setCommander } = useDeck()
@@ -214,11 +215,11 @@ function DeckBuilder() {
       return total + (price * card.quantity)
     }, 0)
   }
-
   return (
     <div className={styles.deckBuilder}>
       {showDeckSelection ? (
         <div className={styles.deckControls}>
+          <h2>Create a deck here:</h2>
           <form onSubmit={handleCreateDeck}>
             <input
               type="text"
@@ -232,6 +233,7 @@ function DeckBuilder() {
             </select>
             <button type="submit">Create Deck</button>
           </form>
+          <h3>Or select one of your current decks below:</h3>
           <div className={styles.deckSelection}>
             <div className={styles.deckGrid}>
               {decks.map(deck => (

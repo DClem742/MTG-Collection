@@ -248,14 +248,14 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 2rem;
-  padding: 1rem;
+  padding: 0rem;
 }
 
 .cardResult {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
+  padding: 0rem;
   background-color: #1e1e1e;
   border-radius: 12px;
   height: min-content;
@@ -264,7 +264,7 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
 .cardInfo {
   color: #ffffff;
   width: 100%;
-  padding: 1rem;
+  padding: 0rem;
 }
 
 .cardInfo p {
@@ -334,7 +334,7 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
 .cardInfo {
   background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(45, 45, 45, 0.9));
   border-top: 2px solid rgba(52, 152, 219, 0.3);
-  padding: 1rem;
+  padding: 0rem;
 }
 .cardInfo h3 {
   font-size: 1.2rem;
