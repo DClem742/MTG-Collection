@@ -20,7 +20,6 @@ export function CollectionProvider({ children }) {
 
   const addToCollection = (card) => {
     if (!user?.id) return
-
     const essentialCardData = {
       id: card.id,
       name: card.name,
@@ -30,7 +29,8 @@ export function CollectionProvider({ children }) {
       card_faces: card.card_faces,
       type_line: card.type_line,
       colors: card.colors,
-      prices: card.prices
+      prices: card.prices,
+      legalities: card.legalities
     }
 
     setCollection(prev => {

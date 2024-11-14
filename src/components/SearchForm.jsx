@@ -148,7 +148,7 @@ function SearchForm() {
       <div className={styles.searchResults}>
         {searchResults.map(card => (
           <div key={card.id} className={`${styles.cardResult} ${styles[getColorClass(card)]}`}>
-            {card.layout === 'transform' ? (
+            {(card.layout === 'transform' || card.layout === 'modal_dfc') ? (
               <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
                 <img 
                   src={card.card_faces[flippedCards[card.id] ? 1 : 0].image_uris.normal}

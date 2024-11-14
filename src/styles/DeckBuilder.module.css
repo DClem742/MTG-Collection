@@ -113,7 +113,7 @@
 }
 
 .searchInput {
-  width: 100%;
+  width: 78%;
   padding: 0.8rem;
   margin-bottom: 1rem;
   font-size: 1rem;
@@ -395,4 +395,16 @@
   background-color: #dc3545;
   color: white;
   border: none;
+}
+
+
+
+.deckBuilderTextarea {
+  width: 80%;
+  height: 100px;
+  min-height: 200px;
+  padding: 10px;
+  font-family: monospace;
+  border: 1px solid #ccc;
+  resize: vertical;
 }

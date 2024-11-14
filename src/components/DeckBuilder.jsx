@@ -301,7 +301,7 @@ function DeckBuilder() {
                   value={bulkSearchTerm}
                   onChange={(e) => setBulkSearchTerm(e.target.value)}
                   placeholder="Enter multiple card names (one per line)"
-                  className={styles.bulkSearchInput}
+                  className={styles.deckBuilderTextarea}
                 />
                 <button onClick={handleBulkSearch}>Search Multiple Cards</button>
               </div>

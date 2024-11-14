@@ -17,19 +17,6 @@ function CollectionPage() {
   const [cardSize, setCardSize] = useState('medium')
   const [isCompactMode, setIsCompactMode] = useState(false)
 
-  const getCardColor = (card) => {
-    if (!card.colors || card.colors.length === 0) return 'colorlessCard'
-    if (card.colors.length > 1) return 'multiCard'
-    const colorMap = {
-      W: 'whiteCard',
-      U: 'blueCard',
-      B: 'blackCard',
-      R: 'redCard',
-      G: 'greenCard'
-    }
-    return colorMap[card.colors[0]]
-  }
-
   const getColorClass = (card) => {
     if (!card.colors || card.colors.length === 0) return 'colorlessCard'
     
@@ -50,8 +37,19 @@ function CollectionPage() {
       return colorPairMap[colorPair]
     }
 
-  // Rest of your component code...
-}
+    if (card.colors.length > 2) return 'multiCard'
+
+    const colorMap = {
+      W: 'whiteCard',
+      U: 'blueCard',
+      B: 'blackCard',
+      R: 'redCard',
+      G: 'greenCard'
+    }
+
+    return colorMap[card.colors[0]]
+  }
+
   const handleRemoveAll = () => {
     if (window.confirm('Are you sure you want to remove all cards from your collection?')) {
       removeAllCards()
@@ -96,7 +94,6 @@ function CollectionPage() {
       setIsLoading(true)
       const prices = {}
       
-      // Process cards in smaller batches to respect API limits
       const batchSize = 10
       for (let i = 0; i < collection.length; i += batchSize) {
         const batch = collection.slice(i, i + batchSize)
@@ -116,7 +113,6 @@ function CollectionPage() {
             })
           )
           
-          // Add a small delay between batches
           if (i + batchSize < collection.length) {
             await new Promise(resolve => setTimeout(resolve, 100))
           }
@@ -133,6 +129,7 @@ function CollectionPage() {
       fetchPrices()
     }
   }, [collection])
+
   const filteredCollection = collection.filter(card => {
     const matchesSet = !filters.set || card.set_name === filters.set
     const matchesType = !filters.type || card.type_line?.includes(filters.type)
@@ -253,26 +250,11 @@ function CollectionPage() {
               <div className={styles.cardGrid}>
                 {filteredCollection.map((card) => (
                   <div key={card.id} className={`${styles.cardGridItem} ${styles[getColorClass(card)]}`}>
-                    {card.card_faces && card.card_faces[0].image_uris ? (
-                      <div className={styles.doubleFaced}>
-                        <img 
-                          src={card.card_faces[0].image_uris.normal} 
-                          alt={card.name}
-                          className={styles.cardImage}
-                        />
-                        <img 
-                          src={card.card_faces[1].image_uris.normal} 
-                          alt={card.name}
-                          className={styles.cardImage}
-                        />
-                      </div>
-                    ) : (
-                      <img 
-                        src={card.image_uris?.normal} 
-                        alt={card.name} 
-                        className={styles.cardImage}
-                      />
-                    )}
+                    <img 
+                      src={card.image_uris?.normal} 
+                      alt={card.name} 
+                      className={styles.cardImage}
+                    />
                     <div className={styles.cardInfo}>
                       <h3>{card.name}</h3>
                       <p>Quantity: {card.quantity}</p>
@@ -323,11 +305,11 @@ function CollectionPage() {
                       <td>{card.set_name}</td>
                       <td>{card.collector_number}</td>
                       <td>${cardPrices[card.id]?.usd || '0.00'}</td>
-                                  <td className={styles.quantityControls}>
-                                    <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
-                                    <span className={styles.currentQuantity}>{card.quantity || 1}</span>
-                                    <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
-                                  </td>
+                      <td className={styles.quantityControls}>
+                        <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
+                        <span className={styles.currentQuantity}>{card.quantity || 1}</span>
+                        <button onClick={() => updateQuantity(card.id, (card.quantity || 1) + 1)}>+</button>
+                      </td>
                       <td>${((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)).toFixed(2)}</td>
                       <td>
                         <button onClick={() => updateQuantity(card.id, 0)}>Remove</button>
@@ -343,6 +325,5 @@ function CollectionPage() {
     </div>
   )
 }
-export default CollectionPage
 
- 
+export default CollectionPage
