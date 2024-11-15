@@ -133,7 +133,8 @@ function CollectionPage() {
   const filteredCollection = collection.filter(card => {
     const matchesSet = !filters.set || card.set_name === filters.set
     const matchesType = !filters.type || card.type_line?.includes(filters.type)
-    const matchesColor = !filters.color || getCardColor(card) === filters.color
+    const matchesColor = !filters.color || 
+      (filters.color === 'Multicolor' ? card.colors?.length > 1 : getColorClass(card).includes(filters.color.toLowerCase()))
     const matchesCategory = activeCategory === 'all' || 
       card.type_line?.toLowerCase().includes(activeCategory.slice(0, -1).toLowerCase())
     return matchesSet && matchesType && matchesColor && matchesCategory
@@ -250,11 +251,21 @@ function CollectionPage() {
               <div className={styles.cardGrid}>
                 {filteredCollection.map((card) => (
                   <div key={card.id} className={`${styles.cardGridItem} ${styles[getColorClass(card)]}`}>
-                    <img 
-                      src={card.image_uris?.normal} 
-                      alt={card.name} 
-                      className={styles.cardImage}
-                    />
+                    {card.card_faces && card.card_faces[0].image_uris ? (
+                      <>
+                        <img 
+                          src={card.card_faces[0].image_uris.normal} 
+                          alt={`${card.name} front face`}
+                          className={styles.cardImage}
+                        />
+                      </>
+                    ) : (
+                      <img 
+                        src={card.image_uris?.normal} 
+                        alt={card.name} 
+                        className={styles.cardImage}
+                      />
+                    )}
                     <div className={styles.cardInfo}>
                       <h3>{card.name}</h3>
                       <p>Quantity: {card.quantity}</p>
