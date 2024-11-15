@@ -13,40 +13,31 @@ function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.logo}>Net Decked</div>
-      <ul className={styles.navLinks}>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/search">Search</Link>
-        </li>
-        <li>
-          <Link to="/collection">Collection</Link>
-        </li>
-        <li>
-          <Link to="/decks">Decks</Link>
-        </li>
-        
-        
+      <div className={styles.brand}>Net Decked</div>
+      <div className={styles.manaSymbols}>
+        <span className={styles.manaSymbol}>{'{W}'}</span>
+        <span className={styles.manaSymbol}>{'{U}'}</span>
+        <span className={styles.manaSymbol}>{'{B}'}</span>
+        <span className={styles.manaSymbol}>{'{R}'}</span>
+        <span className={styles.manaSymbol}>{'{G}'}</span>
+      </div>
+      <div className={styles.links}>
+        <Link to="/">Home</Link>
+        <Link to="/search">Search</Link>
+        <Link to="/collection">Collection</Link>
+        <Link to="/decks">Decks</Link>
         {user ? (
           <>
-            <li>{user.email}</li>
-            <li>
-              <button onClick={handleLogout}>Logout</button>
-            </li>
+            <span>{user.email}</span>
+            <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
           </>
         )}
-      </ul>
+      </div>
     </nav>
   )
 }

@@ -5,8 +5,10 @@ import styles from '../styles/DeckBuilder.module.css'
 import DeckStats from './DeckStats'
 import popupStyles from '../styles/CardPopup.module.css'
 import DeckTester from './DeckTester'
+import { useAuth } from '../context/AuthContext'
 
 function DeckBuilder() {
+  const { user } = useAuth()
   const { 
     createDeck, 
     decks, 
@@ -92,15 +94,27 @@ useEffect(() => {
   }
 
   const handleAddAllToDeck = async () => {
-    if (selectedDeck && searchResults.length > 0) {
+    const name = deckName || 'New Deck'
+    const format = 'commander'
+    
+    const newDeck = await createDeck(name, format)
+    
+    if (newDeck) {
+      setSelectedDeck(newDeck)
+      
       for (const card of searchResults) {
-        await handleAddCard(card)
+        await addCardToDeck(newDeck.id, card, cardQuantities[card.id] || 1)
+        addToCollection(card)
       }
+
+      const updatedCards = await getDeckCards(newDeck.id)
+      setDeckCards(updatedCards)
       setSearchResults([])
       setBulkSearchTerm('')
+      setSearchTerm('')
+      setShowDeckSelection(false)
     }
-  }
-
+  }  
   const setCardQuantity = (cardId, quantity) => {
     setCardQuantities(prev => ({
       ...prev,
@@ -144,11 +158,16 @@ useEffect(() => {
 
   const handleCreateDeck = async (e) => {
     e.preventDefault()
-    const newDeck = await createDeck(deckName, format)
+    const newDeck = await createDeck({
+      name: deckName || 'New Deck',
+      format: format
+    })
     setSelectedDeck(newDeck)
     setDeckName('')
     setShowDeckSelection(false)
   }
+
+  <h3>{selectedDeck?.name || 'New Deck'}</h3>
   const handleDeleteDeck = async (deckId) => {
     if (window.confirm('Are you sure you want to delete this deck?')) {
       await deleteDeck(deckId)
@@ -383,7 +402,7 @@ useEffect(() => {
               ) : (
                 <>
                   <div className={styles.deckHeader}>
-                    <h3>{selectedDeck.name}</h3>
+                    <h3>{selectedDeck?.name ?? 'New Deck'}</h3>
                     <h4 className={styles.totalCount}>
                       Total Cards: {getTotalCardCount(deckCards)} | 
                       Deck Value: ${calculateDeckPrice(deckCards).toFixed(2)}

@@ -180,7 +180,7 @@ button:hover {
   }
 }
 .searchContainer {
-  background: rgba(30, 30, 30, 0.9);  /* Adjust the 0.7 value to control opacity */
+  background: black;  /* Adjust the 0.7 value to control opacity */
   backdrop-filter: blur(8px);  /* This adds a nice frosted glass effect */
   border-radius: 12px;
   padding: 2rem;

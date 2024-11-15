@@ -12,31 +12,33 @@ import DeckBuilder from './components/DeckBuilder'
 import toast, { Toaster } from 'react-hot-toast'
 import styles from './styles/App.module.css'
 import 'mana-font/css/mana.css'
-
-
+import ErrorBoundary from './components/ErrorBoundary'
 
 
 function App() {
   return (
-    <div className={styles.appContainer}>
-      <BrowserRouter>
-        <AuthProvider>
-          <CollectionProvider>
-            <DeckProvider>
-              <Navbar />
-              <Toaster position="top-center" />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/collection" element={<CollectionPage />} />
-                <Route path="/decks" element={<DeckBuilder />} />
-              </Routes>
-            </DeckProvider>
-          </CollectionProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </div>
+    <ErrorBoundary>
+      <div className={styles.appContainer}>
+        <BrowserRouter>
+          <AuthProvider>
+            <CollectionProvider>
+              <DeckProvider>
+                <Navbar />
+                <Toaster position="top-center" />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/search" element={<SearchPage />} />
+                  <Route path="/collection" element={<CollectionPage />} />
+                  <Route path="/decks" element={<DeckBuilder />} />
+                </Routes>
+              </DeckProvider>
+            </CollectionProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </div>
+    </ErrorBoundary>
   )
-}export default App
+}
+export default App

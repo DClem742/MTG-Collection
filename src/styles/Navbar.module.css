@@ -1,20 +1,94 @@
 .navbar {
-  background-color: black;
-  padding: 1rem;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  z-index: 2;
-  
+  padding: 1rem 2rem;
+  background-color: #000000;
+}
+.brand {
+  flex: 1;
+  font-weight: 800;
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
+}
+.manaSymbols {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0 2rem;
+}
+.manaSymbol {
+  font-family: 'Mana', sans-serif;
+  font-size: 40px;
+  transition: all 0.3s ease;
 }
 
-.logo {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
+/* White mana */
+.manaSymbol:nth-child(1) {
+  color: #f8e7b9;
+  text-shadow: 0 0 10px #f8e7b9;
 }
+
+/* Blue mana */
+.manaSymbol:nth-child(2) {
+  color: #0e68ab;
+  text-shadow: 0 0 10px #0e68ab;
+}
+
+/* Black mana */
+.manaSymbol:nth-child(3) {
+  color: #800080;
+  text-shadow: 0 0 10px #800080;
+}
+
+/* Red mana */
+.manaSymbol:nth-child(4) {
+  color: #d3202a;
+  text-shadow: 0 0 10px #d3202a;
+}
+
+/* Green mana */
+.manaSymbol:nth-child(5) {
+  color: #00733e;
+  text-shadow: 0 0 10px #00733e;
+}
+.links {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+}
+.links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.4rem;
+  transition: all 0.3s ease;
+}
+
+.links a:hover {
+  color: #3498db;
+  text-shadow: 0 0 10px #3498db;
+  transform: translateY(-2px);
+}
+
+  @font-face {
+    font-family: 'Plantin MT Pro';
+    src: url('/fonts/PlantinMTPro.ttf') format('truetype');
+  }
+
+  .brand {
+    flex: 1;
+    font-family: 'Plantin MT Pro', serif;
+    font-weight: 800;
+    font-size: 2.2rem;
+    letter-spacing: 0.5px;
+  }.manaSymbol {
+  font-family: 'Mana', sans-serif;
+  font-size: 38px;
+  transition: all 0.3s ease;
+}
+
 .navLinks {
   list-style: none;
   display: flex;
@@ -25,12 +99,13 @@
   margin: 0;
   padding: 0;
 }
+
 .navLinks a {
   color: #ffffff;
   text-decoration: none;
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
-  font-size: 1.4rem;
+  font-size: 2.0rem;
   font-weight: 600;
 }
 
@@ -73,6 +148,7 @@
     0 0 40px #2ecc71,
     0 0 80px #2ecc71;
 }
+
 /* Tablet (768px and up) */
 @media (min-width: 768px) {
   .navbar {
