@@ -29,13 +29,14 @@ export function DeckProvider({ children }) {
     if (data) setDecks(data)
   }
 
-  const createDeck = async (name, format) => {
+  const createDeck = async (name, format, isPublic = false) => {
     const { data, error } = await supabase
       .from('decks')
       .insert({
         name,
         format,
-        user_id: user.id
+        user_id: user.id,
+        is_public: isPublic
       })
       .select()
 
@@ -44,7 +45,6 @@ export function DeckProvider({ children }) {
       return data[0]
     }
   }
-
   const getDeckCards = async (deckId) => {
     const { data } = await supabase
       .from('deck_cards')
@@ -148,11 +148,11 @@ export function DeckProvider({ children }) {
       addCardToDeck, 
       removeCardFromDeck,
       deleteDeck,
-      setCommander 
+      setCommander
     }}>
       {children}
     </DeckContext.Provider>
   )
 }
-
 export const useDeck = () => useContext(DeckContext)
+

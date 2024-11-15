@@ -7,9 +7,18 @@ import popupStyles from '../styles/CardPopup.module.css'
 import DeckTester from './DeckTester'
 
 function DeckBuilder() {
-  const { createDeck, decks, addCardToDeck, getDeckCards, removeCardFromDeck, deleteDeck, setCommander } = useDeck()
+  const { 
+    createDeck, 
+    decks, 
+    addCardToDeck, 
+    getDeckCards, 
+    removeCardFromDeck, 
+    deleteDeck, 
+    setCommander
+  } = useDeck()
   const { collection, addToCollection } = useCollection()
   
+  // Add this with your other useState declarations
   const [isTestingMode, setIsTestingMode] = useState(false)
   const [deckName, setDeckName] = useState('')
   const [format, setFormat] = useState('commander')
@@ -29,8 +38,11 @@ function DeckBuilder() {
   })
   const [showingPrintsForCard, setShowingPrintsForCard] = useState(null)
   const [showDeckSelection, setShowDeckSelection] = useState(true)
+  
 
-  useEffect(() => {
+// Add this sorting function before the return statement
+
+useEffect(() => {
     localStorage.setItem('selectedPrints', JSON.stringify(selectedPrint))
   }, [selectedPrint])
 
@@ -118,7 +130,6 @@ function DeckBuilder() {
     setSelectedDeck(deck)
     setShowDeckSelection(false)
   }
-
   const handleRemoveCard = async (deckId, cardId) => {
     await removeCardFromDeck(deckId, cardId)
     setDeckCards(prevCards => prevCards.filter(card => card.id !== cardId))
@@ -138,7 +149,6 @@ function DeckBuilder() {
     setDeckName('')
     setShowDeckSelection(false)
   }
-
   const handleDeleteDeck = async (deckId) => {
     if (window.confirm('Are you sure you want to delete this deck?')) {
       await deleteDeck(deckId)
@@ -156,21 +166,28 @@ function DeckBuilder() {
       setCardQuantities(prev => ({ ...prev, [card.id]: 1 }))
     }
   }
-
   const handleSetCommander = async (card) => {
     if (selectedDeck) {
+      // Fetch complete card data from Scryfall
+      const response = await fetch(`https://api.scryfall.com/cards/${card.id}`)
+      const fullCardData = await response.json()
+      
+      // Store complete card data including set information
       const commanderData = {
         id: card.id,
         name: card.name,
         image_uris: card.image_uris,
         card_faces: card.card_faces,
-        type_line: card.type_line
+        type_line: card.type_line,
+        set_name: fullCardData.set_name,
+        set: fullCardData.set,
+        card_data: fullCardData
       }
+      
       setCommanderState(commanderData)
       await setCommander(selectedDeck.id, commanderData)
     }
   }
-
   const isValidCommander = (card) => {
     return card.type_line?.includes('Legendary') && card.type_line?.includes('Creature')
   }
@@ -219,21 +236,23 @@ function DeckBuilder() {
   return (
     <div className={styles.deckBuilder}>
       {showDeckSelection ? (
-        <div className={styles.deckControls}>
-          <h2>Create a deck here:</h2>
-          <form onSubmit={handleCreateDeck}>
-            <input
-              type="text"
-              value={deckName}
-              onChange={(e) => setDeckName(e.target.value)}
-              placeholder="Deck Name"
-              required
-            />
-            <select value={format} onChange={(e) => setFormat(e.target.value)}>
-              <option value="commander">Commander</option>
-            </select>
-            <button type="submit">Create Deck</button>
-          </form>
+        <>
+          <div className={styles.deckControls}>
+            <h2>Create a deck here:</h2>
+            <form onSubmit={handleCreateDeck}>
+              <input
+                type="text"
+                value={deckName}
+                onChange={(e) => setDeckName(e.target.value)}
+                placeholder="Deck Name"
+                required
+              />
+              <select value={format} onChange={(e) => setFormat(e.target.value)}>
+                <option value="commander">Commander</option>
+              </select>
+              <button type="submit">Create Deck</button>
+            </form>
+          </div>
           <h3>Or select one of your current decks below:</h3>
           <div className={styles.deckSelection}>
             <div className={styles.deckGrid}>
@@ -241,8 +260,8 @@ function DeckBuilder() {
                 <div key={deck.id}>
                   <div className={styles.deckCard}>
                     {deck.commander ? (
-                      <img 
-                        src={selectedPrint[deck.commander.id]?.image_uris?.normal || deck.commander.image_uris?.normal} 
+                      <img
+                        src={selectedPrint[deck.commander.id]?.image_uris?.normal || deck.commander.image_uris?.normal}
                         alt={deck.commander.name}
                         onClick={(e) => {
                           e.stopPropagation()
@@ -257,13 +276,12 @@ function DeckBuilder() {
                     <div className={styles.deckInfo} onClick={() => handleDeckSelect(deck)}>
                       <h3>{deck.name}</h3>
                     </div>
-                   
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </>
       ) : (
         <div className={styles.deckBuilderContainer}>
           <div className={styles.deckBuilderContainer}>
@@ -446,7 +464,8 @@ function DeckBuilder() {
       )}
     </div>
 
-  )}
+  )
+}
   export default DeckBuilder
 
 const prepareDeckForTesting = (deckCards) => {
@@ -458,5 +477,9 @@ const prepareDeckForTesting = (deckCards) => {
   
   return testDeck
 }
+
+
+
+
 
 
