@@ -76,11 +76,9 @@
   transform-origin: bottom center;
   transform: rotate(0) translateY(0);
 }
-
-.card.fanned {
-  transform: rotate(calc(var(--index) * 25deg - 60deg)) translateX(calc(var(--index) * 40px));
+.fanned {
+  transform: rotate(calc((var(--index) - 3.5) * 10deg)) translateX(calc((var(--index) - 3.5) * 30px));
 }
-
 .card:hover {
   z-index: 10;
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);

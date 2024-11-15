@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.logo}>MTG Collection</div>
+      <div className={styles.logo}>Net Decked</div>
       <ul className={styles.navLinks}>
         <li>
           <Link to="/">Home</Link>

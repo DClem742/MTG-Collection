@@ -259,8 +259,22 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
   background-color: #1e1e1e;
   border-radius: 12px;
   height: min-content;
+  overflow: hidden;
 }
 
+.cardImage img {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+  border-radius: 12px;
+}
+.cardImage img {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+  border-radius: 4.75% / 3.5%;
+  border-radius: 15px;
+}
 .cardInfo {
   color: #ffffff;
   width: 100%;
