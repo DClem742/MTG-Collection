@@ -4,14 +4,12 @@ import styles from '../styles/DeckForm.module.css'
 
 function DeckForm({ onSubmit, initialData = null }) {
   const [name, setName] = useState(initialData?.name || '')
-  const [isPublic, setIsPublic] = useState(initialData?.is_public || false)
   const { user } = useAuth()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     onSubmit({
       name,
-      is_public: isPublic,
       user_id: user.id,
       cards: initialData?.cards || []
     })
@@ -28,17 +26,6 @@ function DeckForm({ onSubmit, initialData = null }) {
           onChange={(e) => setName(e.target.value)}
           required
         />
-      </div>
-      
-      <div className={styles.formGroup}>
-        <label className={styles.checkboxLabel}>
-          <input
-            type="checkbox"
-            checked={isPublic}
-            onChange={(e) => setIsPublic(e.target.checked)}
-          />
-          Make this deck public
-        </label>
       </div>
 
       <button type="submit" className={styles.submitButton}>

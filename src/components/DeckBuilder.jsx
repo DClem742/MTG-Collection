@@ -6,7 +6,6 @@ import DeckStats from './DeckStats'
 import popupStyles from '../styles/CardPopup.module.css'
 import DeckTester from './DeckTester'
 import { useAuth } from '../context/AuthContext'
-
 function DeckBuilder() {
   const { user } = useAuth()
   const { 
@@ -20,7 +19,6 @@ function DeckBuilder() {
   } = useDeck()
   const { collection, addToCollection } = useCollection()
   
-  // Add this with your other useState declarations
   const [isTestingMode, setIsTestingMode] = useState(false)
   const [deckName, setDeckName] = useState('')
   const [format, setFormat] = useState('commander')
@@ -40,11 +38,18 @@ function DeckBuilder() {
   })
   const [showingPrintsForCard, setShowingPrintsForCard] = useState(null)
   const [showDeckSelection, setShowDeckSelection] = useState(true)
-  
 
-// Add this sorting function before the return statement
+  const resetDeckBuilder = () => {
+    setSelectedDeck(null)
+    setDeckCards([])
+    setDeckName('')
+    setShowDeckSelection(true)
+    setSearchTerm('')
+    setBulkSearchTerm('')
+    setSearchResults([])
+  }
 
-useEffect(() => {
+  useEffect(() => {
     localStorage.setItem('selectedPrints', JSON.stringify(selectedPrint))
   }, [selectedPrint])
 
@@ -94,27 +99,21 @@ useEffect(() => {
   }
 
   const handleAddAllToDeck = async () => {
-    const name = deckName || 'New Deck'
-    const format = 'commander'
+    if (!selectedDeck) return
     
-    const newDeck = await createDeck(name, format)
-    
-    if (newDeck) {
-      setSelectedDeck(newDeck)
-      
-      for (const card of searchResults) {
-        await addCardToDeck(newDeck.id, card, cardQuantities[card.id] || 1)
-        addToCollection(card)
-      }
-
-      const updatedCards = await getDeckCards(newDeck.id)
-      setDeckCards(updatedCards)
-      setSearchResults([])
-      setBulkSearchTerm('')
-      setSearchTerm('')
-      setShowDeckSelection(false)
+    for (const card of searchResults) {
+      await addCardToDeck(selectedDeck.id, card, cardQuantities[card.id] || 1)
+      addToCollection(card)
     }
-  }  
+
+    const updatedCards = await getDeckCards(selectedDeck.id)
+    setDeckCards(updatedCards)
+    setSearchResults([])
+    setBulkSearchTerm('')
+    setSearchTerm('')
+    setShowDeckSelection(false)
+  }
+
   const setCardQuantity = (cardId, quantity) => {
     setCardQuantities(prev => ({
       ...prev,
@@ -158,20 +157,18 @@ useEffect(() => {
 
   const handleCreateDeck = async (e) => {
     e.preventDefault()
-    const newDeck = await createDeck({
-      name: deckName || 'New Deck',
-      format: format
-    })
-    setSelectedDeck(newDeck)
-    setDeckName('')
-    setShowDeckSelection(false)
+    const newDeck = await createDeck(deckName, format)
+    if (newDeck) {
+      setSelectedDeck(newDeck)
+      setDeckName('')
+      setShowDeckSelection(false)
+    }
   }
 
-  <h3>{selectedDeck?.name || 'New Deck'}</h3>
   const handleDeleteDeck = async (deckId) => {
     if (window.confirm('Are you sure you want to delete this deck?')) {
       await deleteDeck(deckId)
-      setSelectedDeck(null)
+      resetDeckBuilder()
     }
   }
 
@@ -187,11 +184,9 @@ useEffect(() => {
   }
   const handleSetCommander = async (card) => {
     if (selectedDeck) {
-      // Fetch complete card data from Scryfall
       const response = await fetch(`https://api.scryfall.com/cards/${card.id}`)
       const fullCardData = await response.json()
       
-      // Store complete card data including set information
       const commanderData = {
         id: card.id,
         name: card.name,
@@ -307,10 +302,7 @@ useEffect(() => {
             <div className={styles.navigationButtons}>
               <button 
                 className={styles.backButton} 
-                onClick={() => {
-                  setShowDeckSelection(true)
-                  setSelectedDeck(null)
-                }}
+                onClick={resetDeckBuilder}
               >
                 Back to Deck Selection
               </button>
@@ -497,8 +489,19 @@ const prepareDeckForTesting = (deckCards) => {
   return testDeck
 }
 
-
-
-
-
-
+// Inside the DeckBuilder component, with other state variables
+const resetDeckBuilder = () => {
+  setSelectedDeck(null)
+  setDeckCards([])
+  setDeckName('')
+  setShowDeckSelection(true)
+  setSearchTerm('')
+  setBulkSearchTerm('')
+  setSearchResults([])
+}
+<button 
+  className={styles.backButton} 
+  onClick={resetDeckBuilder}
+>
+  Back to Deck Selection
+</button>
