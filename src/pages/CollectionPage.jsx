@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/CollectionPage.module.css'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
 function CollectionPage() {
   const { collection, updateQuantity, removeAllCards } = useCollection()

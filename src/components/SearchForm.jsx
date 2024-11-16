@@ -150,17 +150,21 @@ function SearchForm() {
           <div key={card.id} className={`${styles.cardResult} ${styles[getColorClass(card)]}`}>
             {(card.layout === 'transform' || card.layout === 'modal_dfc') ? (
               <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
-                <img 
+                <LazyLoadImage 
                   src={card.card_faces[flippedCards[card.id] ? 1 : 0].image_uris.normal}
                   alt={card.name}
+                  effect="blur"
+                  threshold={100}
                 />
                 <span className={styles.flipHint}>Click to flip</span>
               </div>
             ) : (
-              <img 
+              <LazyLoadImage 
                 src={card.image_uris?.normal} 
                 alt={card.name} 
                 className={styles.cardImage}
+                effect="blur"
+                threshold={100}
               />
             )}
             <div className={styles.cardInfo}>

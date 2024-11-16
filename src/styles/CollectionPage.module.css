@@ -251,8 +251,16 @@
   border-radius: 0 0 12px 12px;
 }
 /* List view specific styles */
+.list {
+  background: rgba(45, 45, 45, 0.9);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
 .list .collectionTable {
   width: 100%;
+  color: white;
 }
 
 .collectionHeader {

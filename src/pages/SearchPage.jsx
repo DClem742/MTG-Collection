@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useCollection } from '../context/CollectionContext'
 import SearchForm from '../components/SearchForm'
 import styles from '../styles/SearchPage.module.css'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
 function SearchPage() {
   const [searchResults, setSearchResults] = useState([])

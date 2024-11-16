@@ -1,0 +1,20 @@
+.cardContainer {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.cardImage {
+  width: 100%;
+  height: auto;
+  border-radius: 4.75% / 3.5%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.cardContainer:hover {
+  transform: translateY(-5px);
+}
+
+.cardDetails {
+  padding: 8px;
+  text-align: center;
+}
