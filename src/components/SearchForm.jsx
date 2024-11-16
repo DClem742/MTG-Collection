@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/SearchForm.module.css'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
 function SearchForm() {
   const { addToCollection } = useCollection()
@@ -117,6 +119,12 @@ function SearchForm() {
   
     return colorMap[card.colors[0]]
   }  
+
+  // Add this handler function near your other handlers
+  const handleAddAllToCollection = () => {
+    searchResults.forEach(card => addToCollection(card))
+  }
+
   return (
     <div className={styles.searchContainer}>
       <div className={styles.searchWrapper}>
@@ -143,6 +151,14 @@ function SearchForm() {
         >
           Search Multiple Cards
         </button>
+        {searchResults.length > 0 && (
+          <button 
+            className={styles.addAllButton}
+            onClick={handleAddAllToCollection}
+          >
+            Add All to Collection
+          </button>
+        )}
       </div>
       
       <div className={styles.searchResults}>
