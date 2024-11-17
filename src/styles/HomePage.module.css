@@ -80,7 +80,6 @@
   align-items: center;
   cursor: pointer;
 }
-
 .card {
   position: absolute;
   width: 223px;
@@ -102,35 +101,72 @@
   z-index: 10;
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
+
+.homePage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcomeTitle {
+  color: #F88134;
+  background: rgba(0, 0, 0, 0.85);
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 4.2rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 2rem 0 4rem 0;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  text-shadow: 
+    0 0 10px rgba(248, 129, 52, 0.5),
+    0 0 20px rgba(248, 129, 52, 0.3);
+  box-shadow: 
+    0 0 30px rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(248, 129, 52, 0.3);
+}
+
 .featureGrid {
-  max-width: 800px;
-  margin: var(--spacing-xl) auto;
   display: grid;
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 2rem;
 }
 
 .featureCard {
-  background: #1a1a1a;
+  background: rgba(26, 26, 26, 0.95);
   border-radius: 12px;
-  padding: var(--spacing-lg);
-  margin: var(--spacing-md);
+  padding: 2rem;
+  text-align: center;
+  border: 2px solid rgba(248, 129, 52, 0.2);
   transition: all 0.3s ease;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
+
 .featureCard:hover {
   transform: translateY(-5px);
+  border-color: #F88134;
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(248, 129, 52, 0.3);
 }
+
 .featureCard h2 {
-  font-family: 'Cinzel', serif;
-  font-size: 1.8rem;
-  letter-spacing: 1.2px;
-  margin-bottom: 1rem;
+  color: #F88134;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .featureCard p {
-  font-family: 'Plantin MT Pro', serif;
   font-size: 1.1rem;
   line-height: 1.6;
+  color: #ffffff;
 }

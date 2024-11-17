@@ -1,45 +1,78 @@
 /* Base styles (mobile first) */
+/* Base styles (mobile first) */
 .searchPage {
   padding: 10px;
   margin: 0 auto;
 }
+.searchContainer {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #000000;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
 .searchInput {
-  background: #1a1a1a;
-  border: 2px solid #333;
-  color: #fff;
-  padding: 12px;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  background: rgba(30, 30, 30, 0.95);
+  border: 2px solid rgba(248, 129, 52, 0.3);
   border-radius: 8px;
+  color: white;
   transition: all 0.3s ease;
-  font-family: 'Plantin MT Pro', serif;
-  font-size: 1.1rem;
-  letter-spacing: 0.5px;
 }
 
 .searchInput:focus {
-  box-shadow: 0 0 15px rgba(66, 165, 245, 0.6); /* Blue mana glow */
-  border-color: #42a5f5;
+  outline: none;
+  border-color: #F88134;
+  box-shadow: 
+    0 0 15px rgba(248, 129, 52, 0.3),
+    0 0 30px rgba(248, 129, 52, 0.2);
 }
 
-.addAllButton {
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.bulkSearch {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(30, 30, 30, 0.95);
+  border-radius: 12px;
+  border: 2px solid rgba(248, 129, 52, 0.3);
+}
+
+.bulkSearchInput {
   width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.8rem 1.5rem;
-  background: #1a1a1a;
-  border: 2px solid #4caf50; /* Green mana color */
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  font-family: 'Cinzel', serif;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  min-height: 150px;
+  padding: 1rem;
+  background: rgba(45, 45, 45, 0.9);
+  border: 2px solid rgba(248, 129, 52, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-family: 'Plantin MT Pro', serif;
+  resize: vertical;
 }
 
-.addAllButton:hover {
-  box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
-  text-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+.addAllButton, .bulkSearchButton {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: #F88134;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.addAllButton:hover, .bulkSearchButton:hover {
+  background: #D27B1E;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(248, 129, 52, 0.4);
 }
 /* Tablet (768px and up) */
 @media (min-width: 768px) {

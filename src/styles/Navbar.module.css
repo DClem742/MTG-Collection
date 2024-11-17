@@ -11,7 +11,19 @@
   font-family: 'Pirata One', cursive;
   font-size: 2.4rem;
   letter-spacing: 2px;
-  color: #F88134;
+  color: #ffffff;
+  text-decoration: underline;
+  text-decoration-color: #F88134;
+  text-underline-offset: 8px;
+  filter: drop-shadow(0 0 8px rgba(248, 129, 52, 0.8));
+}
+
+.brand:hover {
+  text-decoration-color: #F88134;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.4),
+    0 0 20px rgba(248, 129, 52, 0.3);
+  box-shadow: 0 4px 15px rgba(248, 129, 52, 0.4);
 }
 
 .manaSymbols {

@@ -1,9 +1,8 @@
 /* Base styles (mobile first) */
 body {
   background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 50%, #000000 100%);
-  color: #ffffff;       /* Clean white text */
+  color: #ffffff;
 }
-
 
 .appContainer {
   background-image: url('/images/mtg-background.jpg');
@@ -14,9 +13,21 @@ body {
   width: 100%;
 }
 
-/* Mobile first base styles */
-.contentWrapper {
-  padding: var(--spacing-md);
+.contentWrapper {  
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.dark {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.light {
+  background-color: #ffffff;
+  color: #121212;
 }
 
 /* Tablet (768px and up) */
@@ -40,21 +51,6 @@ body {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-.contentWrapper {  position: relative;
-  z-index: 2;
-  height: 100vh;
-  overflow-y: auto;
-}
-
-.dark {
-  background-color: #121212;
-  color: #ffffff;
-}
-
-.light {
-  background-color: #ffffff;
-  color: #121212;
-}
 
 h1 {
   font-family: 'Cinzel', serif;
@@ -63,7 +59,6 @@ h1 {
   font-weight: 700;
   color: white;
 }
-
 h2 {
   font-family: 'Cinzel', serif;
   font-size: 2rem;
@@ -104,3 +99,15 @@ input, select {
 section {
   margin-bottom: var(--spacing-xl);
 }
+
+:root {
+  --primary: #F88134;
+  --primary-dark: #D27B1E;
+  --primary-light: #FF9B59;
+  --background-dark: #121212;
+  --background-light: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+}
+
+

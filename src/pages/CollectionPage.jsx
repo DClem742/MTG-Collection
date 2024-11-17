@@ -147,7 +147,7 @@ function CollectionPage() {
   }
   return (
     <div className={styles.collectionPage}>
-      <h1 className={styles.collectionTitle}>My Collection</h1>
+      <h1 className={styles.collectionHeader}></h1>
       
       <div className={styles.displayControls}>
         <div className={styles.viewControls}>
@@ -186,7 +186,7 @@ function CollectionPage() {
           </button>
         </div>
 
-        <div className={styles.compactControl}>
+       <div className={styles.compactControl}>
           <label>
             <input
               type="checkbox"
