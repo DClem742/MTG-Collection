@@ -10,6 +10,9 @@
   padding: 12px;
   border-radius: 8px;
   transition: all 0.3s ease;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
 }
 
 .searchInput:focus {
@@ -28,6 +31,10 @@
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .addAllButton:hover {
@@ -110,13 +117,17 @@
   border-radius: 8px;
 }
 
+.searchContainer {
+  padding: var(--spacing-lg);
+}
+
 .results {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 20px;
-  margin-top: 20px;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
 }
 
 h1 {
@@ -129,3 +140,15 @@ h1 {
   animation: glowingBorder 6s linear infinite;
 }
 
+.searchResults h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  letter-spacing: 1.5px;
+  margin: 2rem 0;
+}
+
+.cardDetails {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}

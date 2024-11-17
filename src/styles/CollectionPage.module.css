@@ -178,13 +178,23 @@
 .compact .cardInfo {
   font-size: 0.9em;
 }
-
 /* Grid view styles */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.0rem;
-  padding: 1rem;
+  gap: var(--spacing-md);
+  
+  /* Mobile */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  
+  /* Tablet */
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+  
+  /* Desktop */
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
 }
 .cardGridItem {
   display: flex;
@@ -264,24 +274,42 @@
 }
 
 .collectionHeader {
-  text-align: center;
-  padding: 2rem;
+  font-family: 'Cinzel', serif;
+  font-size: 2.8rem;
+  letter-spacing: 1.8px;
   margin-bottom: 2rem;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
+
+.cardInfo h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  margin: 0.8rem 0;
+}
+
+.cardInfo p {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
 .filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-md);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 2rem;
+  padding: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
 }
+
+.cardGrid {
+  margin-top: var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
 .filters select {
   background: #1a1a1a;
   border: 2px solid #e91e63; /* Red mana color */
@@ -466,4 +494,18 @@
   padding: 1rem 2rem;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.7);
+}
+
+button, .searchButton {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+select, input {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
 }
