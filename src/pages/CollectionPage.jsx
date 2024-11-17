@@ -145,10 +145,9 @@ function CollectionPage() {
   const handleSearch = () => {
     setShowResults(true)
   }
-
   return (
     <div className={styles.collectionPage}>
-      <h1>My Collection</h1>
+      <h1 className={styles.collectionTitle}>My Collection</h1>
       
       <div className={styles.displayControls}>
         <div className={styles.viewControls}>
@@ -242,7 +241,7 @@ function CollectionPage() {
       </div>
 
       {showResults && (
-        <>
+        <div className={styles.results}>
           <h2>Search Results</h2>
           <h3>Total Value: ${filteredCollection.reduce((total, card) => 
             total + ((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)), 0).toFixed(2)}
@@ -333,7 +332,7 @@ function CollectionPage() {
               </table>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   )

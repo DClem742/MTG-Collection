@@ -283,17 +283,24 @@
   margin-bottom: 2rem;
 }
 .filters select {
-  padding: 0.8rem;
-  border-radius: 6px;
-  background: #2d2d2d;
-  color: white;
-  border: 2px solid #3a3a3a;
+  background: #1a1a1a;
+  border: 2px solid #e91e63; /* Red mana color */
+  color: #fff;
   transition: all 0.3s ease;
 }
 
-.filters select:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
+.filters select:hover {
+  box-shadow: 0 0 15px rgba(233, 30, 99, 0.6);
+}
+
+.viewControls button {
+  background: #1a1a1a;
+  border: 2px solid #9c27b0; /* Black mana color */
+  color: #fff;
+}
+
+.viewControls button.active {
+  box-shadow: 0 0 20px rgba(156, 39, 176, 0.6);
 }
 /* Single color card hover effects */
 .whiteCard:hover {
@@ -444,3 +451,19 @@
 .not_legal { color: #f44336; }
 .restricted { color: #FF9800; }
 .banned { color: #9C27B0; }
+.results {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.collectionTitle {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.7);
+}

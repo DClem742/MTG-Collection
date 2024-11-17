@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.brand}>Net Decked</div>
+      <div className={styles.brand}>Mythic Mana</div>
       <div className={styles.manaSymbols}>
         <span className={styles.manaSymbol}>{'{W}'}</span>
         <span className={styles.manaSymbol}>{'{U}'}</span>

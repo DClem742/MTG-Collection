@@ -1,10 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #000000;
+  background: #000000;
+  padding: 1rem;
+  border-bottom: 4px solid transparent;
+  background-image: linear-gradient(#000000, #000000), 
+    linear-gradient(to right, 
+      rgba(255, 255, 255, 1),     /* White mana */
+      rgba(0, 170, 255, 1),       /* Blue mana */
+      rgba(180, 40, 210, 1),      /* Purple/Black mana */
+      rgba(255, 30, 70, 1),       /* Red mana */
+      rgba(0, 215, 80, 1)         /* Green mana */
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 
+    -80px 4px 20px -5px rgba(255, 255, 255, 0.8),    /* White glow */
+    -40px 4px 20px -5px rgba(0, 170, 255, 0.8),      /* Blue glow */
+    0px 4px 20px -5px rgba(180, 40, 210, 0.8),       /* Purple/Black glow */
+    40px 4px 20px -5px rgba(255, 30, 70, 0.8),       /* Red glow */
+    80px 4px 20px -5px rgba(0, 215, 80, 0.8);        /* Green glow */
 }
+
 .brand {
   flex: 1;
   font-weight: 800;
@@ -76,14 +96,20 @@
     font-family: 'Plantin MT Pro';
     src: url('/fonts/PlantinMTPro.ttf') format('truetype');
   }
+.brand {
+  flex: 1;
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: 2.2rem;
+  letter-spacing: 2px;
+  background: linear-gradient(45deg, #D37F00, #FFB000, #C0C0C0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 
-  .brand {
-    flex: 1;
-    font-family: 'Plantin MT Pro', serif;
-    font-weight: 800;
-    font-size: 2.2rem;
-    letter-spacing: 0.5px;
-  }.manaSymbol {
+.manaSymbol {
   font-family: 'Mana', sans-serif;
   font-size: 38px;
   transition: all 0.3s ease;
@@ -168,4 +194,17 @@
   .navbar {
     padding: 20px 40px;
   }
+}
+
+
+.navbar {
+  /* existing styles */
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.navLink {
+  font-size: 1.2rem;
+  text-transform: uppercase;
 }

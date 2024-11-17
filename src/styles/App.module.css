@@ -1,6 +1,12 @@
 /* Base styles (mobile first) */
+body {
+  background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 50%, #000000 100%);
+  color: #ffffff;       /* Clean white text */
+}
+
+
 .appContainer {
-  background-image: url('/images/mtg-background.jpg');
+  background-image: url('/images/MtgManaSymbols.jpeg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -36,4 +42,18 @@
 .light {
   background-color: #ffffff;
   color: #121212;
+}
+
+h1 {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 3.8rem;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #D37F00, #FFB000, #C0C0C0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }

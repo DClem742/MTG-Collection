@@ -54,6 +54,7 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   text-align: center;
 }
+
 .cardFan {
   position: relative;
   height: 400px;
@@ -76,10 +77,68 @@
   transform-origin: bottom center;
   transform: rotate(0) translateY(0);
 }
+
 .fanned {
   transform: rotate(calc((var(--index) - 3.5) * 10deg)) translateX(calc((var(--index) - 3.5) * 30px));
 }
+
 .card:hover {
   z-index: 10;
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.homeContainer {
+  padding: 2rem;
+  text-align: center;
+}
+
+.welcomeTitle {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 3.8rem;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #D37F00, #FFB000, #C0C0C0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.featureGrid {
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+}
+.featureCard {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 1.5rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+}
+.featureCard:hover {
+  transform: translateY(-5px);
+}
+
+
+
+
+
+.featureCard h2 {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.featureCard p {
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1.1rem;
+  line-height: 1.5;
 }
