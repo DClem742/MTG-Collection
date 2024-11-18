@@ -1,3 +1,4 @@
+import mtgBackground from '../images/mtg-background.jpg'
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from '../styles/Header.module.css'
@@ -13,6 +14,7 @@ function Header() {
 
   return (
     <header className={styles.header}>
+      <img src="/mtg-background.jpg" alt="MTG Background" style={{width: '100%', height: '200px', objectFit: 'cover'}} />
       <div className={styles.logo}>
         MTG Collection Tracker
       </div>
@@ -22,8 +24,6 @@ function Header() {
             <Link to="/" className={styles.navLink}>Home</Link>
             <Link to="/search" className={styles.navLink}>Search</Link>
             <Link to="/collection" className={styles.navLink}>Collection</Link>
-            <Link to="/trade" className={styles.navLink}>Trade</Link>
-            <Link to="/trade-requests" className={styles.navLink}>Trade Requests</Link>
             <span className={styles.userEmail}>{user.email}</span>
             <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
           </>
@@ -36,6 +36,4 @@ function Header() {
       </nav>
     </header>
   )
-}
-
-export default Header
+}export default Header

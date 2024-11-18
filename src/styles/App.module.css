@@ -1,11 +1,10 @@
 /* Base styles (mobile first) */
 body {
-  background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 50%, #000000 100%);
-  color: #ffffff;
-}
+  background: black;
 
+}
 .appContainer {
-  background-image: url('/images/mtg-background.jpg');
+  /*background-image: url('/images/mtg-background.jpg');*/
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -111,3 +110,35 @@ section {
 }
 
 
+.heroImage {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.heroImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroImage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(to top, transparent, #000000);
+}
+
+.heroImage::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, #000000);
+}

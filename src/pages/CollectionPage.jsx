@@ -147,7 +147,7 @@ function CollectionPage() {
   }
   return (
     <div className={styles.collectionPage}>
-      <h1 className={styles.collectionHeader}></h1>
+      
       
       <div className={styles.displayControls}>
         <div className={styles.viewControls}>

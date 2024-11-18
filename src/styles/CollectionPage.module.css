@@ -319,23 +319,38 @@
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 2rem;
-}.cardGrid {
+}
+.cardGrid {
   margin-top: var(--spacing-lg);
   gap: var(--spacing-md);
 }
 
-.filters select {
+.conditionSelect {
+  padding: 8px;
+  border-radius: 4px;
+  border: 2px solid rgba(248, 129, 52, 0.3);
+  background-color: #1a1a1a;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.conditionSelect:hover, .conditionSelect:focus {
+  border-color: #F88134;
+  box-shadow: 0 0 15px rgba(248, 129, 52, 0.3);
+  outline: none;
+}
+
+.filterControls select {
   background: #1a1a1a;
-  border: 2px solid #e91e63; /* Red mana color */
+  border: 2px solid rgba(248, 129, 52, 0.3);
   color: #fff;
   transition: all 0.3s ease;
 }
 
-.filters select:hover {
-  box-shadow: 0 0 15px rgba(233, 30, 99, 0.6);
-}
-
-.viewControls button {
+.filterControls select:hover {
+  box-shadow: 0 0 15px rgba(248, 129, 52, 0.4);
+  border-color: #F88134;
+}.viewControls button {
   background: #1a1a1a;
   border: 2px solid #9c27b0; /* Black mana color */
   color: #fff;

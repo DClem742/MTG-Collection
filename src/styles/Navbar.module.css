@@ -15,15 +15,14 @@
   text-decoration: underline;
   text-decoration-color: #F88134;
   text-underline-offset: 8px;
-  filter: drop-shadow(0 0 8px rgba(248, 129, 52, 0.8));
+  background-color: #000000;
+  padding: 8px 16px;
+  border-radius: 4px;
 }
 
 .brand:hover {
   text-decoration-color: #F88134;
-  text-shadow: 
-    0 0 10px rgba(255, 255, 255, 0.4),
-    0 0 20px rgba(248, 129, 52, 0.3);
-  box-shadow: 0 4px 15px rgba(248, 129, 52, 0.4);
+  
 }
 
 .manaSymbols {
@@ -31,48 +30,89 @@
   gap: 8px;
   align-items: center;
   margin: 0 2rem;
-}
-
-.links a {
-  font-family: 'Cinzel', serif;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
-  font-weight: 500;
-  color: white;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000000;
+  padding: 1rem;
 }
 .links {
-  flex: 1;
   display: flex;
-  justify-content: flex-end;
-  gap: 2rem;
+  gap: 10px;
+  align-items: center;
 }
-.links a {
+
+.links a, .logoutButton {
+  font-family: 'Cinzel', serif;
+  padding: 12px;
   color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.4rem;
   transition: all 0.3s ease;
+  background-color: #000000;
 }
 
-.links a:hover {
+.links a:hover, .logoutButton:hover {
   color: #F88134;
-  text-shadow: 0 0 10px #F88134;
-  @import url('https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap');
+}
+.nav-links a {
+  color: white;
+  font-size: 1.4rem;
+  font-family: 'Cinzel', serif;
+  text-decoration: none;
+  padding: 12px;
+  transition: color 0.3s ease;
+}
 
-  .brand {
-    flex: 1;
-    font-family: 'Caesar Dressing', cursive;
-    font-weight: 400;
-    font-size: 2.4rem;
-    letter-spacing: 2px;
-    color: #F88134;
-    text-shadow: 
-      4px 4px 6px rgba(0, 0, 0, 0.9),
-      6px 6px 12px rgba(0, 0, 0, 0.8),
-      0 0 10px rgba(248, 129, 52, 0.4),
-      0 0 20px rgba(248, 129, 52, 0.3);
-  }  transition: all 0.3s ease;
+.nav-links a:hover {
+  color: #F88134;
+}
 
+.logoutButton {
+  color: white;
+  font-size: 1.4rem;
+  font-family: 'Cinzel', serif;
+  background: none;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.logoutButton:hover {
+  color: #F88134;
+}
+.brand {
+  flex: 1;
+  font-family: 'Caesar Dressing', cursive;
+  font-weight: 400;
+  font-size: 2.4rem;
+  letter-spacing: 2px;
+  color: #F88134;
+  text-shadow: 
+    4px 4px 6px rgba(0, 0, 0, 0.9),
+    6px 6px 12px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(248, 129, 52, 0.4),
+    0 0 20px rgba(248, 129, 52, 0.3);
+}
+._brand_1i336_10 {
+  background-color: #000000;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+.logoutButton {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 8px 16px;
+  border-radius: 4px;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap');
 
 .navLinks {
   list-style: none;
@@ -84,24 +124,18 @@
   margin: 0;
   padding: 0;
 }
-
-.navLinks a {
-  color: #ffffff;
+.navLink {
+  color: white;
+  font-size: 1.4rem;
+  font-family: 'Cinzel', serif;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-  font-size: 2.0rem;
-  font-weight: 600;
-}
-.navLinks a:hover {
-  color: #D27B1E;
-  text-shadow: 
-    0 0 10px #D27B1E,
-    0 0 20px #D27B1E,
-    0 0 40px #D27B1E,
-    0 0 80px #D27B1E;
+  padding: 12px;
+  transition: color 0.3s ease;
 }
 
+.navLink:hover {
+  color: #F88134;
+}
 .navbar {
   display: flex;
   align-items: center;
@@ -136,8 +170,8 @@
     gap: 2rem;
   }
 }
+
 .navbar {
-  /* existing styles */
   font-family: 'Cinzel', serif;
   font-weight: 700;
   letter-spacing: 1px;
@@ -147,4 +181,17 @@
   font-size: 1.2rem;
   text-transform: uppercase;
 }
+}
+
+.mainNavLink {
+  color: white !important;
+  font-size: 1.4rem !important;
+  font-family: 'Cinzel', serif;
+  text-decoration: none;
+  padding: 12px;
+  transition: color 0.3s ease;
+}
+
+.mainNavLink:hover {
+  color: #F88134 !important;
 }

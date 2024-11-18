@@ -18,12 +18,15 @@ import ErrorBoundary from './components/ErrorBoundary'
 function App() {
   return (
     <ErrorBoundary>
-      <div className={styles.appContainer}>
+      <div className={styles.app}>
         <BrowserRouter>
           <AuthProvider>
             <CollectionProvider>
               <DeckProvider>
                 <Navbar />
+                <div className={styles.heroImage}>
+                  <img src="/mtg-background.jpg" alt="MTG Background" />
+                </div>
                 <Toaster position="top-center" />
                 <Routes>
                   <Route path="/" element={<Home />} />
@@ -39,6 +42,5 @@ function App() {
         </BrowserRouter>
       </div>
     </ErrorBoundary>
-  )
-}
+  )}
 export default App
