@@ -23,7 +23,6 @@ function SearchPage() {
 
   return (
     <div className={styles.searchPage}>
-      <h1>Magic: The Gathering Card Search</h1>
       <SearchForm setSearchResults={setSearchResults} />
       {searchResults.length > 0 && (
         <div className={styles.results}>

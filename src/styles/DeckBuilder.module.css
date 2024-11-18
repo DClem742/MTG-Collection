@@ -467,3 +467,14 @@
   margin-bottom: 1rem;
   border-radius: 4px;
 }
+.deckBuilder {
+  box-shadow: 0 0 10px #F88134;
+  border: 1px solid #F88134;
+  border-radius: 4px;
+  padding: 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+.deckBuilder:hover {
+  box-shadow: 0 0 20px #F88134;
+}

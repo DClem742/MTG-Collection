@@ -3,11 +3,18 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 10px;
   max-width: 800px;
   margin: 2rem auto;
+  box-shadow: 0 0 10px #F88134;
+  border: 1px solid #F88134;
+  border-radius: 4px;
+  padding: 20px;
+  transition: box-shadow 0.3s ease;
 }
 
+.searchContainer:hover {
+  box-shadow: 0 0 20px #F88134;
+}
 .singleSearch, .bulkSearch {
   display: flex;
   flex-direction: column;
@@ -339,41 +346,8 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
 .cardInfo h3 {
   font-size: 1.2rem;
   margin: 0 0 0.5rem;
-}
-
-.whiteCard .cardInfo h3 {
-  color: #f8e7b9;
-  text-shadow: 0 0 10px rgba(248, 231, 185, 0.8);
-}
-
-.blueCard .cardInfo h3 {
-  color: #0e68ab;
-  text-shadow: 0 0 10px rgba(14, 104, 171, 0.8);
-}
-
-.blackCard .cardInfo h3 {
-  color: #800080;
-  text-shadow: 0 0 10px rgba(128, 0, 128, 0.8);
-}
-
-.redCard .cardInfo h3 {
-  color: #d3202a;
-  text-shadow: 0 0 10px rgba(211, 32, 42, 0.8);
-}
-
-.greenCard .cardInfo h3 {
-  color: #00733e;
-  text-shadow: 0 0 10px rgba(0, 115, 62, 0.8);
-}
-
-.multiCard .cardInfo h3 {
-  color: #cfb53b;
-  text-shadow: 0 0 10px rgba(207, 181, 59, 0.8);
-}
-
-.colorlessCard .cardInfo h3 {
-  color: #c0c0c0;
-  text-shadow: 0 0 10px rgba(192, 192, 192, 0.8);
+  color: #ffffff;  /* This will override the color-specific styles */
+  text-shadow: none;  /* Remove any existing text shadows */
 }
 .cardInfo p {
   margin: 0.25rem 0;
@@ -405,19 +379,18 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
 
 /* Enhance button styles */
 .addButton {
-  width: 100%;
-  padding: 0.8rem;
-  margin-top: 1rem;
+  width: calc(100% - 32px); /* Subtracting padding from both sides */
+  margin: 16px;
+  padding: 8px 16px;
   border: none;
   color: white;
   text-transform: uppercase;
   letter-spacing: 1px;
-  border-radius: 6px;
+  border-radius: 4px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 /* Override the default gradient for each color */
 .whiteCard .addButton {
   background: #f8e7b9 !important;

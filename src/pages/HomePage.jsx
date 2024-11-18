@@ -3,7 +3,6 @@ import styles from '../styles/HomePage.module.css'
 function HomePage() {
   return (
     <div className={styles.homeContainer}>
-      <h1 className={styles.welcomeTitle}>Welcome to Mythic Mana</h1>
       
       <div className={styles.featureGrid}>
         <div className={styles.featureCard}>
