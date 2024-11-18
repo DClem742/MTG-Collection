@@ -334,11 +334,22 @@
   margin: 0 auto;
   max-width: 1200px;
   background: #000000;
-  border: 1px solid #333;
+  border: 1px solid #F88134;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 2rem;
+  box-shadow: 0 0 5px #F88134;
+  transition: box-shadow 0.3s ease;
 }
+
+.filters:hover {
+  box-shadow: 
+    0 0 10px #F88134,
+    0 0 20px #F88134,
+    0 0 40px rgba(248, 129, 52, 0.8);
+  border-color: #F88134;
+}
+
 .cardGrid {
   margin-top: var(--spacing-lg);
   gap: var(--spacing-md);
@@ -616,4 +627,23 @@ select, input {
   border-radius: 12px;
   color: white;
 }
+}
+
+.searchButton {
+  background: #000000;
+  color: white;
+  padding: 10px 20px;
+  border: 2px solid #F88134;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.searchButton:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 5px #F88134,
+    0 0 15px #F88134,
+    0 0 30px #F88134,
+    0 0 60px rgba(248, 129, 52, 0.8);
 }

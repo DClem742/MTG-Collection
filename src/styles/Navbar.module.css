@@ -4,27 +4,38 @@
   justify-content: space-between;
   align-items: center;
   background: #000000;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 }
-
 .brand {
+  position: relative;
   font-family: 'Cinzel', serif;
-  font-size: 3.0rem;
+  font-size: 2.5rem;
   letter-spacing: 2px;
   color: #ffffff;
-  text-decoration: underline;
-  text-decoration-color: #F88134;
-  text-underline-offset: 8px;
+  text-decoration: none;
   background-color: #000000;
-  padding: 8px 16px;
+  padding: 4px 16px;
   border-radius: 4px;
 }
 
-.brand:hover {
-  text-decoration-color: #F88134;
-  
+.brand::after {
+  content: '';
+  position: absolute;
+  bottom: 15px;  /* Moved closer to text */
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #F88134;
+  box-shadow: 
+    0 0 7px #F88134,
+    0 0 14px #F88134,
+    0 0 28px rgba(248, 129, 52, 0.8);
 }
 
+.links a, .logoutButton {
+  padding: 8px 12px;
+  font-size: 14px;
+}
 .manaSymbols {
   display: flex;
   gap: 8px;
@@ -71,19 +82,22 @@
   color: #F88134;
 }
 
-.logoutButton {
-  color: white;
-  font-size: 1.4rem;
+.navbar .links .logoutButton {
   font-family: 'Cinzel', serif;
-  background: none;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  background-color: transparent;
   border: none;
+  outline: none;
   padding: 12px;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.logoutButton:hover {
+.navbar .links .logoutButton:hover {
   color: #F88134;
+  background-color: transparent;
 }
 .brand {
   flex: 1;
@@ -103,15 +117,23 @@
   padding: 8px 16px;
   border-radius: 4px;
 }
-.logoutButton {
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 8px 16px;
-  border-radius: 4px;
+.navbar .links button.logoutButton {
+  background-color: #F88134;
   color: white;
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  padding: 12px;
+  margin: 0;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
+.navbar .links button.logoutButton:hover {
+  background-color: #D27B1E;
+}
 @import url('https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap');
 
 .navLinks {

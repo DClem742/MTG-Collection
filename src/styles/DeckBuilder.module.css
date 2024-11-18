@@ -2,23 +2,31 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #121212;
+  background-color: #000000;
   min-height: 100vh;
   color: white;
 }
 
 .deckControls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 2rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .deckControls form {
   display: flex;
   gap: 1rem;
+  width: 100%;
   margin-bottom: 1rem;
 }
 
 .deckControls input,
 .deckControls select {
+  flex: 1;
   padding: 0.8rem;
   font-size: 1rem;
   border: 2px solid #2d2d2d;
@@ -29,12 +37,15 @@
 
 .deckControls button {
   padding: 0.8rem 1.5rem;
-  background-color: #2ecc71;
+  height: 50px;  /* Match the exact height of your inputs */
+  background-color: #F88134;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  transition: all 0.3s ease;
+  margin-top: -5px;
 }
 .deckBuilderGrid {
   display: grid;
@@ -407,6 +418,31 @@
   font-family: monospace;
   border: 1px solid #ccc;
   resize: vertical;
+}
+.deckControls form {
+  display: flex;
+  align-items: center; /* This ensures vertical alignment */
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.deckControls button {
+  height: 42px; /* Match the height of your inputs */
+  padding: 0 1.5rem;
+  background-color: #F88134;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.deckControls button:hover {
+  background-color: #D27B1E;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(248, 129, 52, 0.2);
 }
 
 .deckActions {

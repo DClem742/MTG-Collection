@@ -499,9 +499,4 @@ const resetDeckBuilder = () => {
   setBulkSearchTerm('')
   setSearchResults([])
 }
-<button 
-  className={styles.backButton} 
-  onClick={resetDeckBuilder}
->
-  Back to Deck Selection
-</button>
+

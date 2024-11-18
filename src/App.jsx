@@ -25,7 +25,7 @@ function App() {
               <DeckProvider>
                 <Navbar />
                 <div className={styles.heroImage}>
-                  <img src="/mtg-background.jpg" alt="MTG Background" />
+                  <img src="/mtg-background.jpg" alt="MTG Background" style ={{ objectPosition: 'top'}} />
                 </div>
                 <Toaster position="top-center" />
                 <Routes>
@@ -36,11 +36,15 @@ function App() {
                   <Route path="/collection" element={<CollectionPage />} />
                   <Route path="/decks" element={<DeckBuilder />} />
                 </Routes>
+                <div className={styles.footerImage}>
+                  <img src="/mtg-background.jpg" alt="MTG Background" style = {{ objectPosition: 'bottom'}}></img>
+                </div>
               </DeckProvider>
             </CollectionProvider>
           </AuthProvider>
         </BrowserRouter>
       </div>
     </ErrorBoundary>
-  )}
+  )
+}
 export default App

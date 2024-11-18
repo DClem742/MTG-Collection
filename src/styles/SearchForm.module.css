@@ -460,7 +460,7 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
 }
 
 /* Enhance button styles */
-.bulkSearchButton, .addAllButton {
+.bulkSearchButton {
   background: #000000;
   color: white;
   padding: 10px 20px;
@@ -468,6 +468,10 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.bulkSearchButton:hover {
+  transform: translateY(-2px);
   box-shadow:
     0 0 5px #F88134,
     0 0 15px #F88134,
@@ -475,11 +479,24 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
     0 0 60px rgba(248, 129, 52, 0.8);
 }
 
-.bulkSearchButton:hover,
-.addAllButton:hover {
-  transform: translateY(-2px);
+.addAllButton {
+  background: #000000;
+  color: white;
+  padding: 10px 20px;
+  border: 2px solid #F88134;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.addAllButton:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 5px #F88134,
+    0 0 15px #F88134,
+    0 0 30px #F88134,
+    0 0 60px rgba(248, 129, 52, 0.8);
+}
 .searchIcon {
   color: #3498db;
 }
@@ -699,5 +716,6 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
     10px 0 15px rgba(211, 32, 42, 0.8);
   transform: translateY(-2px);
 }
+
 
 /* Add the rest of the dual-color combinations with the same pattern */
