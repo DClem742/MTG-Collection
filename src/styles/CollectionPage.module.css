@@ -228,8 +228,8 @@
 .cardGridItem {
   perspective: 1000px;
   cursor: pointer;
-  height: 400px; /* Add fixed height */
-  width: 240px;
+  height: 340px; /* Reduced from 400px to match card height */
+  width: 246px; /* Match exact card width */
 }
 
 .cardInner {
@@ -240,6 +240,12 @@
   transform-style: preserve-3d;
 }
 
+.cardImage {
+  width: 223px;
+  height: 310px;
+  object-fit: cover; /* Changed from contain to cover */
+  border-radius: 4.75% / 3.5%;
+}
 .flipped .cardInner {
   transform: rotateY(180deg);
 }
@@ -709,3 +715,14 @@ select, input {
     0 0 60px rgba(248, 129, 52, 0.8);
 }
 
+
+.cardName {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(30, 30, 30, 0.9);
+  color: white;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  text-align: center;
+}
