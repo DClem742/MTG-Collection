@@ -165,7 +165,7 @@ function CollectionPage() {
           </button>
         </div>
 
-        <div className={styles.sizeControls}>
+        {/* <div className={styles.sizeControls}>
           <button 
             className={`${styles.sizeButton} ${cardSize === 'small' ? styles.active : ''}`}
             onClick={() => setCardSize('small')}
@@ -184,9 +184,9 @@ function CollectionPage() {
           >
             Large
           </button>
-        </div>
+        </div> */}
 
-       <div className={styles.compactControl}>
+       {/* <div className={styles.compactControl}>
           <label>
             <input
               type="checkbox"
@@ -195,7 +195,7 @@ function CollectionPage() {
             />
             Compact Mode
           </label>
-        </div>
+        </div> */}
       </div>
       
       <div className={styles.filters}>

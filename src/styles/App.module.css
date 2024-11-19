@@ -4,7 +4,7 @@ body {
 
 }
 .appContainer {
-  /*background-image: url('/images/mtg-background.jpg');*/
+  background-image: url('/images/mtg-background5.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -113,7 +113,7 @@ section {
   height: 300px;
   overflow: hidden;
   position: relative;
-  background-image: url('/mtg-background.jpg');
+  /* background-image: url('/mtg-background.jpg'); */
   background-position: bottom center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -141,16 +141,16 @@ section {
 
 .heroImage {
   width: 100%;
-  height: 300px;
+  height: 400px;
   overflow: hidden;
   position: relative;
 }
-
 .heroImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top;
+  filter: brightness(1.2) contrast(1.2) saturate(1.2);
 }
 
 .footerImage {
@@ -160,12 +160,23 @@ section {
   position: relative;
 }
 
+.heroImage::before,
+.heroImage::after,
+.footerImage::before,
+.footerImage::after {
+  z-index: 1;
+}
+
+.heroImage img,
 .footerImage img {
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: bottom;
+  filter: brightness(1.2) contrast(1.2) saturate(1.2);
 }
+
 .footerImage::before {
   content: '';
   position: absolute;
@@ -182,6 +193,6 @@ section {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 100%;
   /* background: linear-gradient(to bottom, transparent, #000000); */
 }

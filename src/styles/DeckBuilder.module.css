@@ -1,9 +1,9 @@
 .deckBuilder {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 4rem 2rem;  /* Increased top/bottom padding from 2rem */
+  max-width: 1800px;
+  margin: 2rem auto;  /* Added vertical margin to create space */
   background-color: #000000;
-  min-height: 100vh;
+  min-height: 80vh;
   color: white;
 }
 
@@ -513,4 +513,9 @@
 
 .deckBuilder:hover {
   box-shadow: 0 0 20px #F88134;
+}
+
+.deckBuilder h3 {
+  text-align: center;
+  margin: 2rem 0;
 }
