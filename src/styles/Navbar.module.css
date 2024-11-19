@@ -3,8 +3,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #000000;
-  padding: 0.5rem 1rem;
+  background: linear-gradient(to bottom, black 85%, transparent 100%);
+  padding: 0.9rem 1rem; /* Reduced from 0.5rem to 0.25rem */
 }
 .brand {
   position: relative;
@@ -215,4 +215,10 @@
 }
 .mainNavLink:hover {
   color: #F88134 !important;
+}
+
+._brand_ln9j3_9 {
+  margin-top: -5px;  /* Adjust this value to fine-tune the positioning */
+  position: relative;
+  z-index: 2;
 }

@@ -18,15 +18,15 @@ import ErrorBoundary from './components/ErrorBoundary'
 function App() {
   return (
     <ErrorBoundary>
-      <div className={styles.app}>
+       <div className={`${styles.app} ${styles.appContainer}`}>
         <BrowserRouter>
           <AuthProvider>
             <CollectionProvider>
               <DeckProvider>
                 <Navbar />
-                <div className={styles.heroImage}>
+                {/* <div className={styles.heroImage}>
                   <img src="/mtg-background.jpg" alt="MTG Background" style ={{ objectPosition: 'top'}} />
-                </div>
+                </div> */}
                 <Toaster position="top-center" />
                 <Routes>
                   <Route path="/" element={<Home />} />
@@ -36,14 +36,20 @@ function App() {
                   <Route path="/collection" element={<CollectionPage />} />
                   <Route path="/decks" element={<DeckBuilder />} />
                 </Routes>
-                <div className={styles.footerImage}>
+                {/* <div className={styles.footerImage}>
                   <img src="/mtg-background.jpg" alt="MTG Background" style = {{ objectPosition: 'bottom'}}></img>
-                </div>
+                </div> */}
+                
               </DeckProvider>
             </CollectionProvider>
           </AuthProvider>
         </BrowserRouter>
       </div>
+      {/* <div className={styles.footerWrapper}>
+           <div className={styles.footerGradient}></div>
+           <div className={styles.footer}> © 2024 Mythic Mana <br />
+            created by DC Isenberg </div>
+      </div> */}
     </ErrorBoundary>
   )
 }

@@ -1,10 +1,14 @@
 .deckBuilder {
-  padding: 4rem 2rem;  /* Increased top/bottom padding from 2rem */
-  max-width: 1800px;
-  margin: 2rem auto;  /* Added vertical margin to create space */
+  width: 80vw;
+  max-width: 1200px;
+  margin: 5rem auto;  /* Added top margin */
+  padding: 4rem 2rem;
   background-color: #000000;
   min-height: 80vh;
   color: white;
+  box-shadow: 0 0 10px #F88134;
+  border: 1px solid #F88134;
+  border-radius: 4px;
 }
 
 .deckControls {
