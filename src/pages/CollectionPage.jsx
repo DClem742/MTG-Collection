@@ -18,10 +18,17 @@ function CollectionPage() {
   const [viewMode, setViewMode] = useState('grid')
   const [cardSize, setCardSize] = useState('medium')
   const [isCompactMode, setIsCompactMode] = useState(false)
+  const [flippedCards, setFlippedCards] = useState({})
+
+  const handleCardFlip = (cardId) => {
+    setFlippedCards(prev => ({
+      ...prev,
+      [cardId]: !prev[cardId]
+    }))
+  }
 
   const getColorClass = (card) => {
-    if (!card.colors || card.colors.length === 0) return 'colorlessCard'
-    
+    if (!card.colors || card.colors.length === 0) return 'colorlessCard'    
     if (card.colors.length === 2) {
       const colorPair = card.colors.sort().join('')
       const colorPairMap = {
@@ -251,31 +258,41 @@ function CollectionPage() {
             {viewMode === 'grid' ? (
               <div className={styles.cardGrid}>
                 {filteredCollection.map((card) => (
-                  <div key={card.id} className={`${styles.cardGridItem} ${styles[getColorClass(card)]}`}>
-                    {card.card_faces && card.card_faces[0].image_uris ? (
-                      <>
-                        <img 
-                          src={card.card_faces[0].image_uris.normal} 
-                          alt={`${card.name} front face`}
-                          className={styles.cardImage}
-                        />
-                      </>
-                    ) : (
-                      <img 
-                        src={card.image_uris?.normal} 
-                        alt={card.name} 
-                        className={styles.cardImage}
-                      />
-                    )}
-                    <div className={styles.cardInfo}>
-                      <h3>{card.name}</h3>
-                      <p>Quantity: {card.quantity}</p>
+                  <div 
+                    key={card.id} 
+                    className={`${styles.cardGridItem} ${styles[getColorClass(card)]} ${flippedCards[card.id] ? styles.flipped : ''}`}
+                    onClick={() => handleCardFlip(card.id)}
+                  >
+                    <div className={styles.cardInner}>
+                      <div className={styles.cardFront}>
+                        {card.card_faces && card.card_faces[0].image_uris ? (
+                          <img 
+                            src={card.card_faces[0].image_uris.normal} 
+                            alt={`${card.name} front face`}
+                            className={styles.cardImage}
+                          />
+                        ) : (
+                          <img 
+                            src={card.image_uris?.normal} 
+                            alt={card.name} 
+                            className={styles.cardImage}
+                          />
+                        )}
+                      </div>
+                      <div className={styles.cardBack}>
+                        <h3>{card.name}</h3>
+                        <p>Set: {card.set_name}</p>
+                        <p>Type: {card.type_line}</p>
+                        <p>Rarity: {card.rarity}</p>
+                        <p>Oracle Text: {card.oracle_text}</p>
+                        <p>Price: ${cardPrices[card.id]?.usd || '0.00'}</p>
+                        <p>Quantity: {card.quantity}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-            ) : (
-              <table className={styles.collectionTable}>
+            ) : (              <table className={styles.collectionTable}>
                 <thead>
                   <tr>
                     <th>Card Image</th>
@@ -339,3 +356,10 @@ function CollectionPage() {
 }
 
 export default CollectionPage
+
+const handleCardFlip = (cardId) => {
+  setFlippedCards(prev => ({
+    ...prev,
+    [cardId]: !prev[cardId]
+  }))
+}
