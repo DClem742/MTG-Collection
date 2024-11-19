@@ -521,21 +521,26 @@
   transition: transform 0.2s ease-in-out;
 }
 /* Two-color combinations hover effects */
+/* Example for one two-color combination - repeat for others */
 .greenBlackCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
-    30px 0 30px -10px #3c00ace6;
+    -5px -5px 30px rgba(0, 115, 62, 0.9),
+    -5px -5px 50px rgba(0, 115, 62, 0.5),
+    10px 10px 30px #3c00ace6,
+    10px 10px 50px rgba(60, 0, 172, 0.5);
   border-top: 2px solid #00733e;
   border-left: 2px solid #00733e;
-  border-bottom: 2px solid #3c00ace6;
-  border-right: 2px solid #3c00ace6;
+  border-bottom: 2px solid #3c00ac;
+  border-right: 2px solid #3c00ac;
   transform: scale(1.03);
   transition: transform 0.2s ease-in-out;
 }
 .redWhiteCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(211, 32, 42, 0.9),
-    30px 0 30px -10px rgba(248, 231, 185, 0.9);
+    -5px -5px 30px rgba(211, 32, 42, 0.9),
+    -5px -5px 50px rgba(211, 32, 42, 0.5),
+    10px 10px 30px rgba(248, 231, 185, 0.9),
+    10px 10px 50px rgba(248, 231, 185, 0.5);
   border-top: 2px solid #d3202a;
   border-left: 2px solid #d3202a;
   border-bottom: 2px solid #f8e7b9;
@@ -546,8 +551,10 @@
 
 .blueRedCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(14, 104, 171, 0.9),
-    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+    -5px -5px 30px rgba(14, 104, 171, 0.9),
+    -5px -5px 50px rgba(14, 104, 171, 0.5),
+    10px 10px 30px rgba(211, 32, 42, 0.9),
+    10px 10px 50px rgba(211, 32, 42, 0.5);
   border-top: 2px solid #0e68ab;
   border-left: 2px solid #0e68ab;
   border-bottom: 2px solid #d3202a;
@@ -558,8 +565,10 @@
 
 .whiteBlueCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(248, 231, 185, 0.9),
-    30px 0 30px -10px rgba(14, 104, 171, 0.9);
+    -5px -5px 30px rgba(248, 231, 185, 0.9),
+    -5px -5px 50px rgba(248, 231, 185, 0.5),
+    10px 10px 30px rgba(14, 104, 171, 0.9),
+    10px 10px 50px rgba(14, 104, 171, 0.5);
   border-top: 2px solid #f8e7b9;
   border-left: 2px solid #f8e7b9;
   border-bottom: 2px solid #0e68ab;
@@ -570,9 +579,11 @@
 
 .blackRedCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(60, 0, 172, 0.9),
-    30px 0 30px -10px rgba(211, 32, 42, 0.9);
-  border-top: 2px solid #3c00ac ;
+    -5px -5px 30px rgba(60, 0, 172, 0.9),
+    -5px -5px 50px rgba(60, 0, 172, 0.5),
+    10px 10px 30px rgba(211, 32, 42, 0.9),
+    10px 10px 50px rgba(211, 32, 42, 0.5);
+  border-top: 2px solid #3c00ac;
   border-left: 2px solid #3c00ac;
   border-bottom: 2px solid #d3202a;
   border-right: 2px solid #d3202a;
@@ -581,8 +592,10 @@
 }
 .whiteBlackCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(248, 231, 185, 0.9),
-    30px 0 30px -10px rgba(60, 0, 172, 0.9);
+    -5px -5px 30px rgba(248, 231, 185, 0.9),
+    -5px -5px 50px rgba(248, 231, 185, 0.5),
+    10px 10px 30px rgba(60, 0, 172, 0.9),
+    10px 10px 50px rgba(60, 0, 172, 0.5);
   border-top: 2px solid #f8e7b9;
   border-left: 2px solid #f8e7b9;
   border-bottom: 2px solid #3c00ac;
@@ -593,8 +606,10 @@
 
 .greenRedCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
-    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+    -5px -5px 30px rgba(0, 115, 62, 0.9),
+    -5px -5px 50px rgba(0, 115, 62, 0.5),
+    10px 10px 30px rgba(211, 32, 42, 0.9),
+    10px 10px 50px rgba(211, 32, 42, 0.5);
   border-top: 2px solid #00733e;
   border-left: 2px solid #00733e;
   border-bottom: 2px solid #d3202a;
@@ -605,8 +620,10 @@
 
 .greenBlueCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
-    30px 0 30px -10px rgba(14, 104, 171, 0.9);
+    -5px -5px 30px rgba(0, 115, 62, 0.9),
+    -5px -5px 50px rgba(0, 115, 62, 0.5),
+    10px 10px 30px rgba(14, 104, 171, 0.9),
+    10px 10px 50px rgba(14, 104, 171, 0.5);
   border-top: 2px solid #00733e;
   border-left: 2px solid #00733e;
   border-bottom: 2px solid #0e68ab;
@@ -617,8 +634,10 @@
 
 .greenWhiteCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
-    30px 0 30px -10px rgba(248, 231, 185, 0.9);
+    -5px -5px 30px rgba(0, 115, 62, 0.9),
+    -5px -5px 50px rgba(0, 115, 62, 0.5),
+    10px 10px 30px rgba(248, 231, 185, 0.9),
+    10px 10px 50px rgba(248, 231, 185, 0.5);
   border-top: 2px solid #00733e;
   border-left: 2px solid #00733e;
   border-bottom: 2px solid #f8e7b9;
@@ -629,14 +648,18 @@
 
 .blueBlackCard:hover {
   box-shadow: 
-    -30px 0 30px -10px rgba(14, 104, 171, 0.9),
-    30px 0 30px -10px rgba(60, 0, 172, 0.9);
+    -5px -5px 30px rgba(14, 104, 171, 0.9),
+    -5px -5px 50px rgba(14, 104, 171, 0.5),
+    10px 10px 30px rgba(60, 0, 172, 0.9),
+    10px 10px 50px rgba(60, 0, 172, 0.5);
   border-top: 2px solid #0e68ab;
   border-left: 2px solid #0e68ab;
   border-bottom: 2px solid #3c00ac;
   border-right: 2px solid #3c00ac;
   transform: scale(1.03);
   transition: transform 0.2s ease-in-out;
+}
+
 }.cardLegalities {
   width: 100%;
   height: 100%;
@@ -694,7 +717,7 @@ select, input {
   border-radius: 12px;
   color: white;
 }
-}
+
 
 .searchButton {
   background: #000000;
