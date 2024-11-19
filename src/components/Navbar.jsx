@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import styles from '../styles/Navbar.module.css'
 import { useAuth } from '../context/AuthContext'
 
+
 function Navbar() {
   const { signOut, user } = useAuth()
   const navigate = useNavigate()
