@@ -179,7 +179,7 @@
 .cardGrid {
   display: grid;
   grid-template-columns: repeat(6, 223px);
-  gap: 8rem;
+  gap: 2rem;
   padding: 2rem;
   justify-content: center;
 }
@@ -197,7 +197,7 @@
   .cardGrid {
   display: grid;
   grid-template-columns: repeat(6, 223px);
-  gap: 2rem;
+  gap: 4rem;
   padding: 3rem;
   justify-content: center;
 }
@@ -417,10 +417,10 @@
   border-color: #F88134;
 }
 
-.cardGrid {
+/* .cardGrid {
   margin-top: var(--spacing-lg);
   gap: var(--spacing-md);
-}
+} */
 
 .conditionSelect {
   padding: 8px;
