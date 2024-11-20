@@ -19,6 +19,9 @@ function Navbar() {
 
   return (
     <nav className={styles.navbar}>
+      <div className={styles.brand}>
+        <h1>Mythic Mana</h1>
+      </div>
       <div className={styles.mobileNav}>
         <button 
           className={styles.menuButton}
@@ -40,7 +43,6 @@ function Navbar() {
         )}
       </div>
     </nav>
-  )
-}
+  )}
 
 export default Navbar

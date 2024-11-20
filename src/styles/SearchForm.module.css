@@ -1,10 +1,8 @@
 /* Base styles (mobile first) */
-
 .searchForm {
   width: 80vw;
   max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 150px auto 20px auto;  /* Increased top margin */
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -18,7 +16,6 @@
   transform: translateX(-50%);
   background: #000000;
 }
-
 .searchForm:hover {
   box-shadow: 0 0 20px #F88134;
 }

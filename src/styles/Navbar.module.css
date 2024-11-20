@@ -1,13 +1,45 @@
 .navbar {
   width: 100vw;
-  background: #000000;
-  padding: 1rem;
-  border-bottom: 2px solid #F88134;
-  position: fixed;
-  top: 0;
-  left: 0;
+
+  background: linear-gradient(to bottom, #000000 90%, transparent);
+  padding: 0.25rem;
+
   z-index: 1000;
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.brand {
+  margin-right: auto;
+}
+
+.brand h1 {
+
+  font-size: 2.8rem;
+  margin: 0;
+  line-height: 1;
+
+
+  color: #ffffff;
+  font-family: 'Cinzel', cursive;
+  position: relative;
+}
+
+.brand h1::after {
+  content: '';
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #F88134;
+  box-shadow: 
+    0 0 5px #F88134,
+    0 0 15px #F88134,
+    0 0 30px #F88134;
 }
 
 .mobileNav {
@@ -27,6 +59,7 @@
 .navLinks {
   display: none;
   width: 100%;
+  margin-left: auto;
 }
 
 .navLinks.active {
@@ -45,10 +78,10 @@
 
 .navLinks a, 
 .navLinks button {
-  color: #F88134;
+  color: #ffffff;
   text-decoration: none;
-  font-size: 1.1rem;
-  padding: 0.5rem 1rem;
+  font-size: 1.3rem;
+  padding: 0.2rem 0.8rem;
   transition: all 0.3s ease;
   width: 100%;
   text-align: left;
@@ -57,9 +90,7 @@
 
 .navLinks a:hover, 
 .navLinks button:hover {
-  color: #ffffff;
-  background: rgba(248, 129, 52, 0.2);
-  border-radius: 4px;
+  color: #F88134;
 }
 
 .navLinks button {
@@ -72,9 +103,7 @@
 
 @media (min-width: 768px) {
   .navbar {
-    display: flex;
-    justify-content: flex-end;
-    padding: 1rem 2rem;
+    padding: 0.25rem 2rem;
   }
 
   .mobileNav {
@@ -106,6 +135,6 @@
 
 @media (min-width: 1024px) {
   .navbar {
-    padding: 1rem 4rem;
+    padding: 0.25rem 4rem;
   }
 }
