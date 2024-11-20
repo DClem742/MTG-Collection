@@ -523,3 +523,27 @@
   text-align: center;
   margin: 2rem 0;
 }
+
+/* Add these styles */
+@media (max-width: 767px) {
+  .deckBuilder {
+    width: 95vw;
+    padding: 2rem 1rem;
+    margin: 2rem auto;
+  }
+
+  .deckControls form {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .deckControls button {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .deckControls input,
+  .deckControls select {
+    width: 100%;
+  }
+}

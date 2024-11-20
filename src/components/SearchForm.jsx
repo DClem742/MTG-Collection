@@ -11,15 +11,15 @@ function SearchForm() {
   const getColorClass = (card) => {
     const colorPairMap = {
       'GR': 'greenRedCard',
-      'GB': 'greenBlackCard',
-      'GU': 'greenBlueCard',
+      'BG': 'blackGreenCard',  // Changed from 'GB'
+      'GU': 'greenBlueCard', 
       'GW': 'greenWhiteCard',
-      'RB': 'blackRedCard',
+      'BR': 'blackRedCard',    
+      'BU': 'blackBlueCard',   
+      'BW': 'blackWhiteCard',  
       'RU': 'blueRedCard',
       'RW': 'redWhiteCard',
-      'UB': 'blueBlackCard',
-      'UW': 'whiteBlueCard',
-      'WB': 'whiteBlackCard'
+      'UW': 'whiteBlueCard'
     }
 
     const colorMap = {
