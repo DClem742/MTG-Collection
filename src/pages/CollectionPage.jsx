@@ -176,6 +176,7 @@ function CollectionPage() {
   const handleSearch = () => {
     setShowResults(true)
   }
+  return (
     <div className={styles.collectionPage}>
       {/* Display Controls Section
           - Grid/List view toggle
@@ -360,7 +361,8 @@ function CollectionPage() {
         </div>
       )}
     </div>
-  
+  )
 }
+
 
 export default CollectionPage
