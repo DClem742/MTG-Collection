@@ -45,11 +45,11 @@ function App() {
           </AuthProvider>
         </BrowserRouter>
       </div>
-      {/* <div className={styles.footerWrapper}>
+      <div className={styles.footerWrapper}>
            <div className={styles.footerGradient}></div>
            <div className={styles.footer}> © 2024 Mythic Mana <br />
             created by DC Isenberg </div>
-      </div> */}
+      </div>
     </ErrorBoundary>
   )
 }

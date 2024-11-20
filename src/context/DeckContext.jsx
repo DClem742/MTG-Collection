@@ -3,12 +3,24 @@ import { supabase } from '../config/supabase'
 import { useAuth } from './AuthContext'
 import toast from 'react-hot-toast'
 
+// Create deck management context
 const DeckContext = createContext()
 
+/**
+ * DeckProvider Component
+ * Manages MTG deck operations with Supabase persistence
+ * Features:
+ * - Create, read, update, delete decks
+ * - Manage deck cards and quantities
+ * - Set deck commanders
+ * - Real-time deck updates
+ */
 export function DeckProvider({ children }) {
+  // Track user's decks
   const [decks, setDecks] = useState([])
   const { user } = useAuth()
 
+  // Fetch all decks for current user
   const fetchDecks = async () => {
     console.log('Fetching decks for user:', user.id)
     
@@ -29,6 +41,7 @@ export function DeckProvider({ children }) {
     if (data) setDecks(data)
   }
 
+  // Create new deck in database
   const createDeck = async (name, format) => {
     const { data, error } = await supabase
       .from('decks')
@@ -44,6 +57,8 @@ export function DeckProvider({ children }) {
       return data[0]
     }
   }  
+
+  // Get all cards in a specific deck
   const getDeckCards = async (deckId) => {
     const { data } = await supabase
       .from('deck_cards')
@@ -52,8 +67,10 @@ export function DeckProvider({ children }) {
     
     return data || []
   }
+
+  // Add card to deck or update quantity if exists
   const addCardToDeck = async (deckId, card, quantity = 1) => {
-    // First check if card already exists in deck using containedBy
+    // Check if card already exists in deck
     const { data: existingCards } = await supabase
       .from('deck_cards')
       .select('*')
@@ -89,6 +106,8 @@ export function DeckProvider({ children }) {
       }
     }
   }
+
+  // Remove card from deck
   const removeCardFromDeck = async (deckId, cardId) => {
     const { error } = await supabase
       .from('deck_cards')
@@ -101,6 +120,7 @@ export function DeckProvider({ children }) {
     }
   }
 
+  // Delete entire deck
   const deleteDeck = async (deckId) => {
     console.log('Starting deletion process for deck:', deckId)
     
@@ -117,6 +137,7 @@ export function DeckProvider({ children }) {
     }
   }
 
+  // Set commander for a deck
   const setCommander = async (deckId, card) => {
     const { data, error } = await supabase
       .from('decks')
@@ -133,12 +154,14 @@ export function DeckProvider({ children }) {
     return { data, error }
   }
 
+  // Load decks when user changes
   useEffect(() => {
     if (user) {
       fetchDecks()
     }
   }, [user])
 
+  // Provide deck context to child components
   return (
     <DeckContext.Provider value={{ 
       decks, 
@@ -153,5 +176,6 @@ export function DeckProvider({ children }) {
     </DeckContext.Provider>
   )
 }
-export const useDeck = () => useContext(DeckContext)
 
+// Custom hook for accessing deck context
+export const useDeck = () => useContext(DeckContext)

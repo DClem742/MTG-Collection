@@ -1,14 +1,31 @@
 import { useState } from 'react'
 import styles from '../styles/DeckTester.module.css'
 
+/**
+ * DeckTester Component
+ * Simulates gameplay scenarios by allowing users to:
+ * - Shuffle deck
+ * - Draw opening hands
+ * - Track life totals
+ * - Manage mana pool
+ * - Draw cards
+ * - Play cards to battlefield
+ * 
+ * @param {Object} props
+ * @param {Array} props.deck - Array of card objects to test
+ */
 function DeckTester({ deck }) {
-  const [library, setLibrary] = useState([])
-  const [hand, setHand] = useState([])
-  const [battlefield, setBattlefield] = useState([])
-  const [lifeTotal, setLifeTotal] = useState(20)
-  const [turnCount, setTurnCount] = useState(1)
+  // Game state management
+  const [library, setLibrary] = useState([])        // Remaining cards in deck
+  const [hand, setHand] = useState([])             // Cards in hand
+  const [battlefield, setBattlefield] = useState([]) // Cards in play
+  const [lifeTotal, setLifeTotal] = useState(20)    // Player life total
+  const [turnCount, setTurnCount] = useState(1)     // Current turn number
+  
+  // Mana pool tracking for all colors + colorless
   const [manaPool, setManaPool] = useState({ W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 })
 
+  // Shuffle deck and reset game state
   const shuffleDeck = () => {
     const shuffled = [...deck].sort(() => Math.random() - 0.5)
     setLibrary(shuffled)
@@ -19,6 +36,7 @@ function DeckTester({ deck }) {
     setManaPool({ W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 })
   }
 
+  // Draw opening hand or specific number of cards
   const drawHand = (cardCount = 7) => {
     const newHand = library.slice(0, cardCount)
     const newLibrary = library.slice(cardCount)
@@ -26,6 +44,7 @@ function DeckTester({ deck }) {
     setLibrary(newLibrary)
   }
 
+  // Perform mulligan (Paris mulligan rules)
   const mulligan = () => {
     const cardsToReturn = [...hand]
     setLibrary([...library, ...cardsToReturn])
@@ -34,6 +53,7 @@ function DeckTester({ deck }) {
     drawHand(Math.max(hand.length - 1, 0))
   }
 
+  // Add mana of specified color to mana pool
   const addMana = (color) => {
     setManaPool(prev => ({
       ...prev,
@@ -41,12 +61,14 @@ function DeckTester({ deck }) {
     }))
   }
 
+  // Advance to next turn, reset mana pool, draw a card
   const nextTurn = () => {
     setTurnCount(prev => prev + 1)
     setManaPool({ W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 })
     drawCard()
   }
 
+  // Draw a single card from library
   const drawCard = () => {
     if (library.length === 0) return
     const [drawnCard, ...remainingLibrary] = library
@@ -54,6 +76,7 @@ function DeckTester({ deck }) {
     setLibrary(remainingLibrary)
   }
 
+  // Move card from hand to battlefield
   const playCard = (cardIndex) => {
     const cardToPlay = hand[cardIndex]
     const newHand = hand.filter((_, index) => index !== cardIndex)
@@ -61,6 +84,7 @@ function DeckTester({ deck }) {
     setHand(newHand)
   }
 
+  // Component render with game interface
   return (
     <div className={styles.deckTester}>
       <div className={styles.gameInfo}>

@@ -375,21 +375,14 @@
   line-height: 1.4;
 }
 .results {
-
-
-
-
-
   width: 80vw;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   background: #000000;
   border: 1px solid #F88134;
-
   border-radius: 12px;
   padding: 20px;
-
   margin-top: 20px;
   box-shadow: 0 0 10px #F88134;
 }

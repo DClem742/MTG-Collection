@@ -1,3 +1,8 @@
+/**
+ * DeckBuilder Component
+ * Main interface for creating and managing Magic: The Gathering decks
+ * Handles deck creation, card search, commander selection, and deck statistics
+ */
 import { useState, useEffect } from 'react'
 import { useDeck } from '../context/DeckContext'
 import { useCollection } from '../context/CollectionContext'
@@ -6,7 +11,9 @@ import DeckStats from './DeckStats'
 import popupStyles from '../styles/CardPopup.module.css'
 import DeckTester from './DeckTester'
 import { useAuth } from '../context/AuthContext'
+
 function DeckBuilder() {
+  // Context hooks
   const { user } = useAuth()
   const { 
     createDeck, 
@@ -19,18 +26,25 @@ function DeckBuilder() {
   } = useDeck()
   const { collection, addToCollection } = useCollection()
   
+  // State management for deck building interface
   const [isTestingMode, setIsTestingMode] = useState(false)
   const [deckName, setDeckName] = useState('')
   const [format, setFormat] = useState('commander')
   const [selectedDeck, setSelectedDeck] = useState(null)
   const [deckCards, setDeckCards] = useState([])
+  
+  // Search functionality state
   const [searchTerm, setSearchTerm] = useState('')
   const [bulkSearchTerm, setBulkSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
+  
+  // Card management state
   const [cardQuantities, setCardQuantities] = useState({})
   const [commander, setCommanderState] = useState(null)
   const [flippedCards, setFlippedCards] = useState({})
   const [hoverCard, setHoverCard] = useState(null)
+  
+  // Card prints and UI state
   const [cardPrints, setCardPrints] = useState({})
   const [selectedPrint, setSelectedPrint] = useState(() => {
     const saved = localStorage.getItem('selectedPrints')
@@ -38,7 +52,7 @@ function DeckBuilder() {
   })
   const [showingPrintsForCard, setShowingPrintsForCard] = useState(null)
   const [showDeckSelection, setShowDeckSelection] = useState(true)
-
+  // Resets all deck builder state to initial values
   const resetDeckBuilder = () => {
     setSelectedDeck(null)
     setDeckCards([])
@@ -49,14 +63,17 @@ function DeckBuilder() {
     setSearchResults([])
   }
 
+  // Persist selected prints to localStorage when they change
   useEffect(() => {
     localStorage.setItem('selectedPrints', JSON.stringify(selectedPrint))
   }, [selectedPrint])
 
+  // Trigger search when search term changes
   useEffect(() => {
     handleSearch(searchTerm)
   }, [searchTerm])
 
+  // Load deck data when selected deck changes
   useEffect(() => {
     if (selectedDeck) {
       const loadDeckData = async () => {
@@ -69,6 +86,7 @@ function DeckBuilder() {
     }
   }, [selectedDeck, decks])
 
+  // Filter collection based on search term
   const handleSearch = (term) => {
     if (!term.trim()) {
       setSearchResults([])
@@ -80,6 +98,7 @@ function DeckBuilder() {
     setSearchResults(results)
   }
 
+  // Handle bulk card search using Scryfall API
   const handleBulkSearch = async () => {
     const cardNames = bulkSearchTerm.split('\n').filter(name => name.trim())
     let results = []
@@ -97,7 +116,7 @@ function DeckBuilder() {
     }
     setSearchResults(results)
   }
-
+  // Add all search results to the current deck
   const handleAddAllToDeck = async () => {
     if (!selectedDeck) return
     
@@ -114,6 +133,7 @@ function DeckBuilder() {
     setShowDeckSelection(false)
   }
 
+  // Update quantity for a specific card
   const setCardQuantity = (cardId, quantity) => {
     setCardQuantities(prev => ({
       ...prev,
@@ -121,6 +141,7 @@ function DeckBuilder() {
     }))
   }
 
+  // Handle card click to show different prints
   const handleCardClick = async (card) => {
     if (!card) return
     
@@ -139,22 +160,26 @@ function DeckBuilder() {
     }))
   }
 
+  // Select a deck and hide deck selection view
   const handleDeckSelect = (deck) => {
     setSelectedDeck(deck)
     setShowDeckSelection(false)
   }
+
+  // Remove a card from the current deck
   const handleRemoveCard = async (deckId, cardId) => {
     await removeCardFromDeck(deckId, cardId)
     setDeckCards(prevCards => prevCards.filter(card => card.id !== cardId))
   }
 
+  // Toggle card flip state for double-faced cards
   const handleCardFlip = (cardId) => {
     setFlippedCards(prev => ({
       ...prev,
       [cardId]: !prev[cardId]
     }))
   }
-
+  // Create a new deck with given name and format
   const handleCreateDeck = async (e) => {
     e.preventDefault()
     const newDeck = await createDeck(deckName, format)
@@ -165,6 +190,7 @@ function DeckBuilder() {
     }
   }
 
+  // Delete deck with confirmation
   const handleDeleteDeck = async (deckId) => {
     if (window.confirm('Are you sure you want to delete this deck?')) {
       await deleteDeck(deckId)
@@ -172,6 +198,7 @@ function DeckBuilder() {
     }
   }
 
+  // Add a single card to the current deck
   const handleAddCard = async (card) => {
     if (selectedDeck) {
       const quantity = cardQuantities[card.id] || 1
@@ -182,6 +209,8 @@ function DeckBuilder() {
       setCardQuantities(prev => ({ ...prev, [card.id]: 1 }))
     }
   }
+
+  // Set a card as the deck's commander
   const handleSetCommander = async (card) => {
     if (selectedDeck) {
       const response = await fetch(`https://api.scryfall.com/cards/${card.id}`)
@@ -202,14 +231,17 @@ function DeckBuilder() {
       await setCommander(selectedDeck.id, commanderData)
     }
   }
+
+  // Check if a card can be a commander
   const isValidCommander = (card) => {
     return card.type_line?.includes('Legendary') && card.type_line?.includes('Creature')
   }
-
+  // Calculate total number of cards in deck
   const getTotalCardCount = (cards) => {
     return cards.reduce((total, card) => total + (card.quantity || 1), 0)
   }
 
+  // Organize deck cards by their card types
   const groupCardsByType = (cards) => {
     const groups = {
       Creatures: [],
@@ -241,16 +273,24 @@ function DeckBuilder() {
     return groups
   }
 
+  // Calculate total deck value in USD
   const calculateDeckPrice = (cards) => {
     return cards.reduce((total, card) => {
       const price = card.card_data.prices?.usd || 0
       return total + (price * card.quantity)
     }, 0)
   }
+
   return (
     <div className={styles.deckBuilder}>
+      {/* Deck Selection View - Shows either deck creation or deck building interface */}
       {showDeckSelection ? (
         <>
+          {/* Deck Creation Controls Section
+              Contains form for creating new decks with:
+              - Name input field
+              - Format selector (currently Commander only)
+              - Submit button */}
           <div className={styles.deckControls}>
             <h2>Create a deck here:</h2>
             <form onSubmit={handleCreateDeck}>
@@ -267,11 +307,23 @@ function DeckBuilder() {
               <button type="submit">Create Deck</button>
             </form>
           </div>
+
+          {/* Existing Decks Grid Section
+              Displays all user's decks in a grid layout
+              Each deck shows:
+              - Commander image (if set)
+              - Deck name
+              - Clickable area to select deck */}
           <h3>Or select one of your current decks below:</h3>
           <div className={styles.deckSelection}>
             <div className={styles.deckGrid}>
               {decks.map(deck => (
                 <div key={deck.id}>
+                  {/* Deck Card Component
+                      - Shows commander image or placeholder
+                      - Handles commander artwork selection on click
+                      - Shows deck name
+                      - Clickable to select deck */}
                   <div className={styles.deckCard}>
                     {deck.commander ? (
                       <img
@@ -297,7 +349,13 @@ function DeckBuilder() {
           </div>
         </>
       ) : (
+        /* Deck Building Interface
+           Main workspace for editing and managing selected deck */
         <div className={styles.deckBuilderContainer}>
+          {/* Navigation and Control Buttons
+              - Back to deck selection
+              - Toggle deck testing mode
+              - Delete current deck */}
           <div className={styles.deckBuilderContainer}>
             <div className={styles.navigationButtons}>
               <button 
@@ -322,7 +380,12 @@ function DeckBuilder() {
               </button>
             </div>
           </div>
+
+          {/* Main Deck Building Grid
+              Split into search section and deck view */}
           <div className={styles.deckBuilderGrid}>
+            {/* Card Search Section
+                Includes single card search and bulk import functionality */}
             <div className={styles.searchSection}>
               <input
                 type="text"
@@ -330,8 +393,9 @@ function DeckBuilder() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search for cards..."
                 className={styles.searchInput}
-              />
-              
+              />              
+              {/* Bulk Card Import Interface
+                  Allows pasting multiple card names for batch import */}
               <div className={styles.bulkSearch}>
                 <textarea
                   value={bulkSearchTerm}
@@ -342,7 +406,10 @@ function DeckBuilder() {
                 <button onClick={handleBulkSearch}>Search Multiple Cards</button>
               </div>
 
+              {/* Search Results Display
+                  Shows found cards with their details and controls */}
               <div className={styles.searchResults}>
+                {/* "Add All" button appears when results exist */}
                 {searchResults.length > 0 && (
                   <button 
                     className={styles.addAllButton}
@@ -351,6 +418,13 @@ function DeckBuilder() {
                     Add All to Deck
                   </button>
                 )}
+                {/* Individual Card Results
+                    Each result shows:
+                    - Card image (with flip functionality for transform cards)
+                    - Card details
+                    - Quantity controls
+                    - Add to deck button
+                    - Set as commander button (if eligible) */}
                 {searchResults.map(card => (
                   <div key={card.id} className={styles.cardResult}>
                     {card.layout === 'transform' ? (
@@ -364,17 +438,20 @@ function DeckBuilder() {
                     ) : (
                       <img src={card.image_uris?.normal} alt={card.name} />
                     )}
+                    {/* Card Information Display */}
                     <div className={styles.cardInfo}>
                       <h3>{card.name}</h3>
                       <p>Set: {card.set_name}</p>
                       <p>Type: {card.type_line}</p>
                       <p>Mana Cost: {card.mana_cost}</p>
+                      {/* Quantity Control Interface */}
                       <div className={styles.quantityControls}>
                         <button onClick={() => setCardQuantity(card.id, (cardQuantities[card.id] || 1) - 1)}>-</button>
                         <span>{cardQuantities[card.id] || 1}</span>
                         <button onClick={() => setCardQuantity(card.id, (cardQuantities[card.id] || 1) + 1)}>+</button>
                       </div>
                     </div>
+                    {/* Card Action Buttons */}
                     <button onClick={() => handleAddCard(card)}>Add to Deck</button>
                     {isValidCommander(card) && (
                       <button 
@@ -388,11 +465,15 @@ function DeckBuilder() {
                 ))}
               </div>
             </div>
+
+            {/* Deck View Section */}
             <div className={styles.deckView}>
+              {/* Deck View - Toggles between Testing Mode and Regular View */}
               {isTestingMode ? (
                 <DeckTester deck={prepareDeckForTesting(deckCards)} />
               ) : (
                 <>
+                  {/* Deck Header - Shows name and statistics */}
                   <div className={styles.deckHeader}>
                     <h3>{selectedDeck?.name ?? 'New Deck'}</h3>
                     <h4 className={styles.totalCount}>
@@ -401,11 +482,16 @@ function DeckBuilder() {
                     </h4>
                   </div>
                   
+                  {/* Deck Statistics Component */}
                   <DeckStats cards={deckCards} />
+
+                  {/* Grouped Card Display
+                      Shows cards organized by type with counts */}
                   {Object.entries(groupCardsByType(deckCards)).map(([type, cards]) => (
                     cards.length > 0 && (
                       <div key={type} className={styles.cardTypeGroup}>
                         <h4>{type} ({cards.length})</h4>
+                        {/* Individual Card Entries */}
                         {cards.map(card => (
                           <div 
                             key={card.id} 
@@ -420,6 +506,7 @@ function DeckBuilder() {
                             }}
                             onMouseLeave={() => setHoverCard(null)}
                           >
+                            {/* Card Entry Display */}
                             <span>{card.quantity}x</span>
                             <span>{card.card_data.name}</span>
                             <button onClick={(e) => {
@@ -437,7 +524,7 @@ function DeckBuilder() {
           </div>
         </div>
       )}
-
+      {/* Card Hover Preview Popup */}
       {hoverCard && (
         <div 
           className={popupStyles.cardPopup} 
@@ -450,7 +537,7 @@ function DeckBuilder() {
           />
         </div>
       )}
-
+      {/* Alternative Card Prints Selector */}
       {showingPrintsForCard && cardPrints[showingPrintsForCard] && (
         <div className={styles.printsSelector}>
           <h3>Select Artwork</h3>
@@ -474,13 +561,11 @@ function DeckBuilder() {
         </div>
       )}
     </div>
-
   )
-}
-  export default DeckBuilder
+} // Add this closing bracket for the DeckBuilder component
 
+// Prepare deck for testing mode by creating correct number of card copies
 const prepareDeckForTesting = (deckCards) => {
-  // Create an array with the correct number of copies for each card
   const testDeck = deckCards.flatMap(card => {
     const copies = Array(card.quantity).fill(card.card_data)
     return copies
@@ -489,14 +574,4 @@ const prepareDeckForTesting = (deckCards) => {
   return testDeck
 }
 
-// Inside the DeckBuilder component, with other state variables
-const resetDeckBuilder = () => {
-  setSelectedDeck(null)
-  setDeckCards([])
-  setDeckName('')
-  setShowDeckSelection(true)
-  setSearchTerm('')
-  setBulkSearchTerm('')
-  setSearchResults([])
-}
-
+export default DeckBuilder

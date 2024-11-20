@@ -1,22 +1,38 @@
+// Import necessary dependencies for search functionality and UI
 import { useState } from 'react'
 import { useCollection } from '../context/CollectionContext'
 import styles from '../styles/SearchForm.module.css'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 
+/**
+ * SearchForm Component
+ * Provides card search functionality with both single and bulk search options
+ * Features:
+ * - Real-time single card search
+ * - Bulk card import
+ * - Color-coded card displays
+ * - Mana symbol rendering
+ * - Lazy loaded card images
+ */
 function SearchForm() {
+  // Access collection management from context
   const { addToCollection } = useCollection()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [bulkSearchTerm, setBulkSearchTerm] = useState('')
-  const [searchResults, setSearchResults] = useState([])
-  const [flippedCards, setFlippedCards] = useState({})
 
+  // State management for search functionality
+  const [searchTerm, setSearchTerm] = useState('')           // Single card search
+  const [bulkSearchTerm, setBulkSearchTerm] = useState('')   // Multiple card search
+  const [searchResults, setSearchResults] = useState([])     // Search results
+  const [flippedCards, setFlippedCards] = useState({})      // Track flipped card states
+
+  // Render mana symbols from mana cost string
   const renderManaSymbols = (manaCost) => {
     return manaCost?.replace(/[{}]/g, '').split('').map((symbol, index) => (
       <i key={index} className={`ms ms-${symbol.toLowerCase()} ms-cost`}></i>
     ))
   }
 
+  // Handle single card search using Scryfall API
   const handleSearch = async (value) => {
     setSearchTerm(value)
     if (!value.trim()) {
@@ -36,6 +52,7 @@ function SearchForm() {
     }
   }
 
+  // Handle bulk card search using exact name matches
   const handleBulkSearch = async () => {
     const cardNames = bulkSearchTerm.split('\n').filter(name => name.trim())
     let results = []
@@ -56,6 +73,7 @@ function SearchForm() {
     setSearchResults(results)
   }
 
+  // Toggle flip state for double-faced cards
   const handleCardFlip = (cardId) => {
     setFlippedCards(prev => ({
       ...prev,
@@ -63,6 +81,7 @@ function SearchForm() {
     }))
   }
 
+  // Add card to collection with color-coded button
   const handleAddCard = (card) => {
     addToCollection(card)
     return (
@@ -86,11 +105,11 @@ function SearchForm() {
     )
   }
 
+  // Determine CSS class based on card colors
   const getColorClass = (card) => {
     if (!card.colors || card.colors.length === 0) return 'colorlessCard'
   
     if (card.colors.length === 2) {
-      // Sort the colors to ensure consistent ordering
       const colorPair = card.colors.sort().join('')
       const colorPairMap = {
         'BG': 'greenBlackCard',    // Golgari
@@ -120,13 +139,16 @@ function SearchForm() {
     return colorMap[card.colors[0]]
   }  
 
-  // Add this handler function near your other handlers
+  // Add all search results to collection
   const handleAddAllToCollection = () => {
     searchResults.forEach(card => addToCollection(card))
   }
 
+  // [Rest of the component code continues...]
+
   return (
     <div className={styles.searchContainer}>
+      {/* Single card search input */}
       <div className={styles.searchWrapper}>
         <input
           type="text"
@@ -138,6 +160,7 @@ function SearchForm() {
         <span className={styles.searchIcon}>🔍</span>
       </div>
 
+      {/* Bulk search textarea and controls */}
       <div className={styles.bulkSearch}>
         <textarea
           value={bulkSearchTerm}
@@ -151,6 +174,7 @@ function SearchForm() {
         >
           Search Multiple Cards
         </button>
+        {/* Add all to collection button - visible when results exist */}
         {searchResults.length > 0 && (
           <button 
             className={styles.addAllButton}
@@ -161,9 +185,11 @@ function SearchForm() {
         )}
       </div>
       
+      {/* Search results display */}
       <div className={styles.searchResults}>
         {searchResults.map(card => (
           <div key={card.id} className={`${styles.cardResult} ${styles[getColorClass(card)]}`}>
+            {/* Handle double-faced cards with flip functionality */}
             {(card.layout === 'transform' || card.layout === 'modal_dfc') ? (
               <div className={styles.cardImage} onClick={() => handleCardFlip(card.id)}>
                 <LazyLoadImage 
@@ -183,6 +209,7 @@ function SearchForm() {
                 threshold={100}
               />
             )}
+            {/* Card information display */}
             <div className={styles.cardInfo}>
               <h3>{card.name}</h3>
               <p>Set: {card.set_name}</p>
@@ -201,8 +228,10 @@ function SearchForm() {
     </div>
   )
 }
+
 export default SearchForm
 
+// Utility function for rendering mana symbols
 const renderManaSymbols = (manaCost) => {
   return manaCost?.replace(/[{}/]/g, '').split('').map((symbol, index) => (
     <span key={index} className={styles.manaSymbol}>

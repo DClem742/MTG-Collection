@@ -1,8 +1,19 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from 'recharts'
 import styles from '../styles/DeckStats.module.css'
 
+/**
+ * DeckStats Component
+ * Displays statistical analysis of a deck including:
+ * - Mana curve
+ * - Color distribution
+ * - Average mana value
+ * - Land/spell ratio
+ * @param {Object} props
+ * @param {Array} props.cards - Array of cards in the deck
+ */
 function DeckStats({ cards }) {
-  // Mana Curve Data
+  // Calculate mana curve distribution
+  // Creates array of 8 slots (0-7+ mana value)
   const manaCurve = Array(8).fill(0)
   cards.forEach(card => {
     const cmc = card.card_data.cmc || 0
@@ -10,21 +21,24 @@ function DeckStats({ cards }) {
     manaCurve[index] += card.quantity || 1
   })
   
+  // Format mana curve data for chart display
   const curveData = manaCurve.map((count, cmc) => ({
     cmc: cmc === 7 ? '7+' : cmc.toString(),
     count
   }))
 
-  // Color Distribution
+  // Initialize and calculate color distribution
+  // Tracks WUBRG (White, Blue, Black, Red, Green) color symbols
   const colors = { W: 0, U: 0, B: 0, R: 0, G: 0 }
   const COLORS = {
-    W: '#F8F6D8',
-    U: '#C1D7E9',
-    B: '#B3ADA3',
-    R: '#E49977',
-    G: '#A3C095'
+    W: '#F8F6D8', // White
+    U: '#C1D7E9', // Blue
+    B: '#B3ADA3', // Black
+    R: '#E49977', // Red
+    G: '#A3C095'  // Green
   }
 
+  // Count color symbols in mana costs
   cards.forEach(card => {
     const manaCost = card.card_data.mana_cost || ''
     Object.keys(colors).forEach(color => {
@@ -36,6 +50,7 @@ function DeckStats({ cards }) {
     })
   })
 
+  // Format color data for pie chart
   const colorData = Object.entries(colors)
     .filter(([_, value]) => value > 0)
     .map(([color, value]) => ({
@@ -43,19 +58,20 @@ function DeckStats({ cards }) {
       value
     }))
 
-  // Average CMC
+  // Calculate average mana value (excluding lands)
   const nonLands = cards.filter(card => !card.card_data.type_line.includes('Land'))
   const avgCmc = nonLands.reduce((acc, card) => {
     return acc + (card.card_data.cmc || 0) * (card.quantity || 1)
   }, 0) / nonLands.reduce((acc, card) => acc + (card.quantity || 1), 0)
 
-  // Land/Spell Ratio
+  // Calculate land/spell ratio
   const lands = cards.filter(card => card.card_data.type_line.includes('Land'))
     .reduce((acc, card) => acc + (card.quantity || 1), 0)
   const spells = cards.filter(card => !card.card_data.type_line.includes('Land'))
     .reduce((acc, card) => acc + (card.quantity || 1), 0)
   const totalCards = lands + spells
 
+  // Render statistical visualizations
   return (
     <div className={styles.deckStats}>
       <div className={styles.statSection}>
