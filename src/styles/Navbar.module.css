@@ -1,224 +1,111 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(to bottom, black 85%, transparent 100%);
-  padding: 0.9rem 1rem; /* Reduced from 0.5rem to 0.25rem */
-}
-.brand {
-  position: relative;
-  font-family: 'Cinzel', serif;
-  font-size: 2.5rem;
-  letter-spacing: 2px;
-  color: #ffffff;
-  text-decoration: none;
-  background-color: #000000;
-  padding: 4px 16px;
-  border-radius: 4px;
-}
-
-.brand::after {
-  content: '';
-  position: absolute;
-  bottom: 15px;  /* Moved closer to text */
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: #F88134;
-  box-shadow: 
-    0 0 7px #F88134,
-    0 0 14px #F88134,
-    0 0 28px rgba(248, 129, 52, 0.8);
-}
-
-.links a, .logoutButton {
-  padding: 8px 12px;
-  font-size: 14px;
-}
-.manaSymbols {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin: 0 2rem;
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #000000;
+  width: 100vw;
+  background: #000000;
   padding: 1rem;
+  border-bottom: 2px solid #F88134;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-sizing: border-box;
 }
-.links {
+
+.mobileNav {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  justify-content: flex-end;
 }
 
-.links a, .logoutButton {
-  font-family: 'Cinzel', serif;
-  padding: 12px;
-  color: white;
+.menuButton {
+  display: block;
+  background: none;
   border: none;
+  color: #F88134;
+  font-size: 1.5rem;
   cursor: pointer;
-  font-size: 16px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  background-color: #000000;
 }
-
-.links a:hover, .logoutButton:hover {
-  color: #F88134;
-}
-.nav-links a {
-  color: white;
-  font-size: 1.4rem;
-  font-family: 'Cinzel', serif;
-  text-decoration: none;
-  padding: 12px;
-  transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-  color: #F88134;
-}
-
-.navbar .links .logoutButton {
-  font-family: 'Cinzel', serif;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: white;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  padding: 12px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.navbar .links .logoutButton:hover {
-  color: #F88134;
-  background-color: transparent;
-}
-.brand {
-  flex: 1;
-  font-family: 'Caesar Dressing', cursive;
-  font-weight: 400;
-  font-size: 2.4rem;
-  letter-spacing: 2px;
-  color: #F88134;
-  text-shadow: 
-    4px 4px 6px rgba(0, 0, 0, 0.9),
-    6px 6px 12px rgba(0, 0, 0, 0.8),
-    0 0 10px rgba(248, 129, 52, 0.4),
-    0 0 20px rgba(248, 129, 52, 0.3);
-}
-._brand_1i336_10 {
-  background-color: #000000;
-  padding: 8px 16px;
-  border-radius: 4px;
-}
-.navbar .links button.logoutButton {
-  background-color: #F88134;
-  color: white;
-  font-family: 'Cinzel', serif;
-  font-size: 1.6rem;
-  font-weight: 700;
-  padding: 12px;
-  margin: 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.navbar .links button.logoutButton:hover {
-  background-color: #D27B1E;
-}
-@import url('https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap');
 
 .navLinks {
-  list-style: none;
+  display: none;
+  width: 100%;
+}
+
+.navLinks.active {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  position: relative;
-  z-index: 2;
-  margin: 0;
-  padding: 0;
-}
-.navLink {
-  color: white;
-  font-size: 1.4rem;
-  font-family: 'Cinzel', serif;
-  text-decoration: none;
-  padding: 12px;
-  transition: color 0.3s ease;
+  padding: 1rem;
+  background: #000000;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100vw;
+  border-bottom: 2px solid #F88134;
+  box-sizing: border-box;
 }
 
-.navLink:hover {
+.navLinks a, 
+.navLinks button {
   color: #F88134;
-}
-.navbar {
-  display: flex;
-  align-items: center;
-  padding: var(--spacing-md);
-  
-  @media (min-width: 768px) {
-    padding: var(--spacing-lg);
-  }
-  
-  @media (min-width: 1024px) {
-    padding: var(--spacing-xl) var(--spacing-lg);
-  }
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
 }
 
-.links {
-  gap: var(--spacing-md);
-  
-  @media (min-width: 768px) {
-    gap: var(--spacing-lg);
-  }
+.navLinks a:hover, 
+.navLinks button:hover {
+  color: #ffffff;
+  background: rgba(248, 129, 52, 0.2);
+  border-radius: 4px;
+}
+
+.navLinks button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
 }
 
 @media (min-width: 768px) {
   .navbar {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 2rem;
+  }
+
+  .mobileNav {
+    display: none;
   }
 
   .navLinks {
+    display: flex;
     flex-direction: row;
     gap: 2rem;
+    align-items: center;
+    width: auto;
+    position: static;
+    border: none;
+  }
+
+  .navLinks.active {
+    flex-direction: row;
+    padding: 0;
+    position: static;
+    border: none;
+  }
+
+  .navLinks a,
+  .navLinks button {
+    width: auto;
   }
 }
 
-.navbar {
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-.navLink {
-  font-size: 1.2rem;
-  text-transform: uppercase;
-}
-}
-.mainNavLink {
-  color: white !important;
-  font-size: 1.6rem !important;
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-  text-decoration: none;
-  padding: 12px;
-  transition: color 0.3s ease;
-}
-.mainNavLink:hover {
-  color: #F88134 !important;
-}
-
-._brand_ln9j3_9 {
-  margin-top: -5px;  /* Adjust this value to fine-tune the positioning */
-  position: relative;
-  z-index: 2;
+@media (min-width: 1024px) {
+  .navbar {
+    padding: 1rem 4rem;
+  }
 }

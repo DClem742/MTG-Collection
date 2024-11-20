@@ -1,15 +1,17 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import styles from '../styles/Navbar.module.css'
 import { useAuth } from '../context/AuthContext'
+import styles from '../styles/Navbar.module.css'
 
-const Navbar = () => {
+function Navbar() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleLogout = async () => {
     try {
       await signOut()
-      navigate('/login', { replace: true })
+      navigate('/login')
     } catch (error) {
       console.log('Logout error:', error)
     }
@@ -17,25 +19,24 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <Link to="/" className={styles.brand}>
-        Mythic Mana
-      </Link>
-      <div className={styles.links}>
+      <div className={styles.mobileNav}>
+        <button 
+          className={styles.menuButton}
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          ☰
+        </button>
+      </div>
+      
+      <div className={`${styles.navLinks} ${isMobileMenuOpen ? styles.active : ''}`}>
+        <Link to="/">Home</Link>
+        <Link to="/search">Search</Link>
+        <Link to="/collection">Collection</Link>
+        <Link to="/decks">Decks</Link>
         {user ? (
-          <>
-            <Link to="/" className={styles.mainNavLink}>Home</Link>
-            <Link to="/search" className={styles.mainNavLink}>Search</Link>
-            <Link to="/collection" className={styles.mainNavLink}>Collection</Link>
-            <Link to="/decks" className={styles.mainNavLink}>Decks</Link>
-            <button 
-              className={styles.logoutButton} 
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </>
+          <button onClick={handleLogout}>Logout</button>
         ) : (
-          <button onClick={() => navigate('/login')} className={styles.mainNavLink}>Login</button>
+          <Link to="/login">Login</Link>
         )}
       </div>
     </nav>
