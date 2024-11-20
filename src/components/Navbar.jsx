@@ -2,15 +2,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import styles from '../styles/Navbar.module.css'
 import { useAuth } from '../context/AuthContext'
 
-
-function Navbar() {
-  const { signOut, user } = useAuth()
+const Navbar = () => {
+  const { user, signOut } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
-    const { error } = await signOut()
-    if (!error) {
-      navigate('/login')
+    try {
+      await signOut()
+      navigate('/login', { replace: true })
+    } catch (error) {
+      console.log('Logout error:', error)
     }
   }
 
@@ -34,7 +35,7 @@ function Navbar() {
             </button>
           </>
         ) : (
-          <Link to="/login" className={styles.mainNavLink}>Login</Link>
+          <button onClick={() => navigate('/login')} className={styles.mainNavLink}>Login</button>
         )}
       </div>
     </nav>

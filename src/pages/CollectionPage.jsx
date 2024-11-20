@@ -4,21 +4,9 @@ import styles from '../styles/CollectionPage.module.css'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 
-/**
- * CollectionPage Component
- * Main interface for viewing and managing MTG card collection
- * Features:
- * - Collection filtering by set, type, and color
- * - Grid and list view options
- * - Price tracking
- * - Card quantity management
- * - Double-faced card support
- */
 function CollectionPage() {
-  // Access collection management functions
   const { collection, updateQuantity, removeAllCards } = useCollection()
 
-  // UI state management
   const [isLoading, setIsLoading] = useState(false)
   const [cardPrices, setCardPrices] = useState({})
   const [filters, setFilters] = useState({
@@ -33,7 +21,6 @@ function CollectionPage() {
   const [isCompactMode, setIsCompactMode] = useState(false)
   const [flippedCards, setFlippedCards] = useState({})
 
-  // Handle card flip for double-faced cards
   const handleCardFlip = (cardId) => {
     setFlippedCards(prev => ({
       ...prev,
@@ -41,40 +28,40 @@ function CollectionPage() {
     }))
   }
 
-  // Determine color class for card styling
   const getColorClass = (card) => {
-    if (!card.colors || card.colors.length === 0) return 'colorlessCard'    
-    if (card.colors.length === 2) {
-      const colorPair = card.colors.sort().join('')
-      const colorPairMap = {
-        'BG': 'greenBlackCard',
-        'RW': 'redWhiteCard', 
-        'RU': 'blueRedCard',
-        'UW': 'whiteBlueCard',
-        'BR': 'blackRedCard',
-        'BW': 'whiteBlackCard',
-        'GW': 'greenWhiteCard',
-        'GU': 'greenBlueCard',
-        'BU': 'blueBlackCard',
-        'GR': 'greenRedCard'
-      }
+    const colorPairMap = {
+      'GR': 'greenRedCard',
+      'GB': 'greenBlackCard',
+      'GU': 'greenBlueCard',
+      'GW': 'greenWhiteCard',
+      'RB': 'blackRedCard',
+      'RU': 'blueRedCard',
+      'RW': 'redWhiteCard',
+      'UB': 'blueBlackCard',
+      'UW': 'whiteBlueCard',
+      'WB': 'whiteBlackCard'
+    }
+
+    const colorMap = {
+      'W': 'whiteCard',
+      'U': 'blueCard',
+      'B': 'blackCard',
+      'R': 'redCard',
+      'G': 'greenCard'
+    }
+
+    if (!card.color_identity || card.color_identity.length === 0) return 'colorlessCard'    
+    
+    if (card.color_identity.length === 2) {
+      const colorPair = card.color_identity.sort().join('')
       return colorPairMap[colorPair]
     }
 
-    if (card.colors.length > 2) return 'multiCard'
+    if (card.color_identity.length > 2) return 'multiCard'
 
-    const colorMap = {
-      W: 'whiteCard',
-      U: 'blueCard',
-      B: 'blackCard',
-      R: 'redCard',
-      G: 'greenCard'
-    }
-
-    return colorMap[card.colors[0]]
+    return colorMap[card.color_identity[0]]
   }
 
-  // Handle collection clear with confirmation
   const handleRemoveAll = () => {
     if (window.confirm('Are you sure you want to remove all cards from your collection?')) {
       removeAllCards()
@@ -82,10 +69,10 @@ function CollectionPage() {
     }
   }
 
-  // Collection filtering options
   const sets = [...new Set(collection.map(card => card.set_name))].sort((a, b) => 
     a.localeCompare(b)
   )
+  
   const cardTypes = [
     'Creature',
     'Instant',
@@ -95,9 +82,9 @@ function CollectionPage() {
     'Planeswalker',
     'Land'
   ]
+  
   const colors = ['White', 'Blue', 'Black', 'Red', 'Green', 'Colorless', 'Multicolor']
 
-  // Category definitions for filtering
   const categories = {
     all: 'All Cards',
     creatures: 'Creatures',
@@ -109,7 +96,6 @@ function CollectionPage() {
     lands: 'Lands'
   }
 
-  // Filter cards by category
   const getCategoryCards = (cards, category) => {
     if (category === 'all') return cards
     return cards.filter(card => 
@@ -117,13 +103,11 @@ function CollectionPage() {
     )
   }
 
-  // Fetch and update card prices from Scryfall API
   useEffect(() => {
     const fetchPrices = async () => {
       setIsLoading(true)
       const prices = {}
       
-      // Increase delay between batches
       const batchSize = 5
       for (let i = 0; i < collection.length; i += batchSize) {
         const batch = collection.slice(i, i + batchSize)
@@ -132,22 +116,28 @@ function CollectionPage() {
           await Promise.all(
             batch.map(async (card) => {
               const response = await fetch(`https://api.scryfall.com/cards/${card.id}`, {
+                method: 'GET',
                 headers: {
-                  'Content-Type': 'application/json'
-                }
+                  'Accept': 'application/json'
+                },
+                mode: 'cors'
               })
-              if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-              const data = await response.json()
-              prices[card.id] = data.prices
+              
+              if (response.status === 429) {
+                await new Promise(resolve => setTimeout(resolve, 500))
+                return
+              }
+
+              if (response.ok) {
+                const data = await response.json()
+                prices[card.id] = data.prices
+              }
             })
           )
           
-          // Increased delay to 200ms between batches
-          if (i + batchSize < collection.length) {
-            await new Promise(resolve => setTimeout(resolve, 200))
-          }
+          await new Promise(resolve => setTimeout(resolve, 200))
         } catch (error) {
-          console.log('Fetch error:', error)
+          console.log('Batch processing error:', error)
         }
       }
       
@@ -160,7 +150,6 @@ function CollectionPage() {
     }
   }, [collection])
 
-  // Apply all active filters to collection
   const filteredCollection = collection.filter(card => {
     const matchesSet = !filters.set || card.set_name === filters.set
     const matchesType = !filters.type || card.type_line?.includes(filters.type)
@@ -171,16 +160,12 @@ function CollectionPage() {
     return matchesSet && matchesType && matchesColor && matchesCategory
   })
 
-  // Trigger search results display
   const handleSearch = () => {
     setShowResults(true)
   }
+
   return (
     <div className={styles.collectionPage}>
-      {/* Display Controls Section
-          - Grid/List view toggle
-          - Card size controls (commented out)
-          - Compact mode toggle (commented out) */}
       <div className={styles.displayControls}>
         <div className={styles.viewControls}>
           <button 
@@ -198,11 +183,6 @@ function CollectionPage() {
         </div>
       </div>
       
-      {/* Collection Filters Section
-          - Set filter
-          - Card type filter
-          - Color filter
-          - Search and Remove All buttons */}
       <div className={styles.filters}>
         <select 
           value={filters.set}
@@ -245,7 +225,6 @@ function CollectionPage() {
         </button>
       </div>
 
-      {/* Search Results Display */}
       {showResults && (
         <div className={styles.results}>
           <h2>Search Results</h2>
@@ -253,10 +232,8 @@ function CollectionPage() {
             total + ((parseFloat(cardPrices[card.id]?.usd) || 0) * (card.quantity || 1)), 0).toFixed(2)}
           </h3>
           
-          {/* Collection Display - Grid or List View */}
           <div className={`${styles.collectionDisplay} ${styles[viewMode]} ${styles[cardSize]} ${isCompactMode ? styles.compact : ''}`}>
             {viewMode === 'grid' ? (
-              // Grid View Display
               <div className={styles.cardGrid}>
                 {filteredCollection.map((card) => (
                   <div 
@@ -264,9 +241,7 @@ function CollectionPage() {
                     className={`${styles.cardGridItem} ${styles[getColorClass(card)]} ${flippedCards[card.id] ? styles.flipped : ''}`}
                     onClick={() => handleCardFlip(card.id)}
                   >
-                    {/* Card Display with Front/Back Support */}
                     <div className={styles.cardInner}>
-                      {/* Card Front */}
                       <div className={styles.cardFront}>
                         {card.card_faces && card.card_faces[0].image_uris ? (
                           <img 
@@ -282,7 +257,6 @@ function CollectionPage() {
                           />
                         )}
                       </div>
-                      {/* Card Back - Details View */}
                       <div className={styles.cardBack}>
                         <h3>{card.name}</h3>
                         <p>Set: {card.set_name}</p>
@@ -297,7 +271,6 @@ function CollectionPage() {
                 ))}
               </div>
             ) : (
-              // List View Display
               <table className={styles.collectionTable}>
                 <thead>
                   <tr>
@@ -314,7 +287,6 @@ function CollectionPage() {
                 <tbody>
                   {filteredCollection.map((card) => (
                     <tr key={card.id}>
-                      {/* Card Image Cell with Double-Faced Support */}
                       <td>
                         {card.card_faces && card.card_faces[0].image_uris ? (
                           <div className={styles.doubleFaced}>
@@ -341,7 +313,6 @@ function CollectionPage() {
                       <td>{card.set_name}</td>
                       <td>{card.collector_number}</td>
                       <td>${cardPrices[card.id]?.usd || '0.00'}</td>
-                      {/* Quantity Controls */}
                       <td className={styles.quantityControls}>
                         <button onClick={() => updateQuantity(card.id, (card.quantity || 1) - 1)}>-</button>
                         <span className={styles.currentQuantity}>{card.quantity || 1}</span>
@@ -362,6 +333,5 @@ function CollectionPage() {
     </div>
   )
 }
-
 
 export default CollectionPage

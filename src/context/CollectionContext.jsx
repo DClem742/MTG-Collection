@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react'
 import { useAuth } from './AuthContext'
-
+import { supabase } from '../config/supabase'
 const CollectionContext = createContext()
 
 /**
@@ -18,50 +18,50 @@ export function CollectionProvider({ children }) {
   // Track user's card collection
   const [collection, setCollection] = useState([])
 
-  // Load saved collection from localStorage when user is authenticated
   useEffect(() => {
     if (user?.id) {
-      const collectionKey = `mtgCollection_${user.id}`
-      const savedCollection = localStorage.getItem(collectionKey)
-      console.log('Loading collection for user:', user.id)
-      console.log('Saved collection:', savedCollection)
-      
-      if (savedCollection) {
-        setCollection(JSON.parse(savedCollection))
+      const fetchCollection = async () => {
+        const { data } = await supabase
+          .from('collections')
+          .select('*')
+          .eq('user_id', user.id)
+        
+        if (data) {
+          setCollection(data.map(item => ({
+            ...item.card_data,
+            quantity: item.quantity
+          })))
+        }
       }
+      
+      fetchCollection()
     }
-  }, [user?.id])
+  }, [user])
 
   // Add new card to collection or update quantity if exists
-  const addToCollection = (card) => {
+  const addToCollection = async (card) => {
     if (!user?.id) return
-    console.log('Adding card to collection:', card.name)
-    // Extract essential card data for storage
-    const essentialCardData = {
-      id: card.id,
-      name: card.name,
-      set_name: card.set_name,
-      collector_number: card.collector_number,
-      image_uris: card.image_uris,
-      card_faces: card.card_faces,
-      type_line: card.type_line,
-      colors: card.colors,
-      prices: card.prices,
-      legalities: card.legalities
-    }
+    console.log('Adding card to Supabase:', card.name)
+
+    const { data, error } = await supabase
+      .from('collections')
+      .insert({
+        user_id: user.id,
+        card_id: card.id,
+        card_data: card,
+        quantity: 1
+      })
+      .select()
+
+    console.log('Supabase response:', { data, error })
 
     setCollection(prev => {
       const existingCard = prev.find(c => c.id === card.id)
-      const updatedCollection = existingCard
+      return existingCard
         ? prev.map(c => c.id === card.id ? { ...c, quantity: (c.quantity || 1) + 1 } : c)
-        : [...prev, { ...essentialCardData, quantity: 1 }]
-
-      // Persist updated collection to localStorage
-      localStorage.setItem(`mtgCollection_${user.id}`, JSON.stringify(updatedCollection))
-      return updatedCollection
+        : [...prev, { ...card, quantity: 1 }]
     })
   }
-
   // Update quantity of existing card
   const updateQuantity = (cardId, newQuantity) => {
     if (!user?.id) return

@@ -1,8 +1,124 @@
 /* Base styles (mobile first) */
 
-.searchContainer:hover {
+.searchForm {
+  width: 80vw;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 0 10px #F88134;
+  border: 1px solid #F88134;
+  border-radius: 4px;
+  transition: box-shadow 0.3s ease;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000000;
+}
+
+.searchForm:hover {
   box-shadow: 0 0 20px #F88134;
 }
+
+.batchSearchInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+  background: rgba(45, 45, 45, 0.9);
+  border: 2px solid #F88134;
+  color: #ffffff;
+  font-family: 'Plantin MT Pro', serif;
+  font-size: 1.2rem;
+  min-height: 150px;
+}
+
+.batchSearchInput:focus {
+  outline: none;
+  border-color: #F88134;
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+}
+
+.searchButton {
+  background: #000000;
+  color: white;
+  padding: 10px 20px;
+  border: 2px solid #F88134;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.searchButton:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 5px #F88134,
+    0 0 15px #F88134,
+    0 0 30px #F88134,
+    0 0 60px rgba(248, 129, 52, 0.8);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.cardResult {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.cardImage {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+  border-radius: 4.75% / 3.5%;
+}
+
+.addButton {
+  width: calc(100% - 32px);
+  margin: 16px;
+  padding: 8px 16px;
+  background: #000000;
+  color: white;
+  border: 2px solid #F88134;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.addButton:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 5px #F88134,
+    0 0 15px #F88134,
+    0 0 30px #F88134,
+    0 0 60px rgba(248, 129, 52, 0.8);
+}
+
+.batchResults {
+  margin-top: 2rem;
+}
+
+.batchResults h3 {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
 .singleSearch, .bulkSearch {
   display: flex;
   flex-direction: column;
@@ -354,143 +470,9 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
 
 .bulkSearchInput:focus {
   border-color: #F88134;
-  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.2);
 }
-
-/* Enhance button styles */
-.addButton {
-  width: calc(100% - 32px); /* Subtracting padding from both sides */
-  margin: 16px;
-  padding: 8px 16px;
-  border: none;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-/* Override the default gradient for each color */
-.whiteCard .addButton {
-  background: #f8e7b9 !important;
-  color: #000000;
-}
-
-.blueCard .addButton {
-  background: #0e68ab !important;
-}
-
-.blackCard .addButton {
-  background: #800080 !important;
-}
-
-.redCard .addButton {
-  background: #d3202a !important;
-}
-
-.greenCard .addButton {
-  background: #00733e !important;
-}
-
-.colorlessCard .addButton {
-  background: #c0c0c0 !important;
-  color: #000000;
-}
-
-.multiCard .addButton {
-  background: #cfb53b !important;
-  color: #000000;
-}
-
-.addButton:hover {
-  background-color: #27ae60;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
-}
-
-.addButton:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(46, 204, 113, 0.2);
-}
-/* Add gradient backgrounds */
-/* Add this at the end of the file */
-.searchContainer {
-  background: #000000 !important;
-}
-.bulkSearchInput::-webkit-scrollbar {
-  width: 8px;
-}
-
-.bulkSearchInput::-webkit-scrollbar-track {
-  background: #1e1e1e;
-}
-
-.bulkSearchInput::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-}
-
-/* Add subtle transitions */
-.searchInput,
-.bulkSearchInput,
-.cardResult {
-  transition: all 0.3s ease;
-}
-
-/* Enhance button styles */
-.bulkSearchButton {
-  background: #000000;
-  color: white;
-  padding: 10px 20px;
-  border: 2px solid #F88134;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.bulkSearchButton:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 5px #F88134,
-    0 0 15px #F88134,
-    0 0 30px #F88134,
-    0 0 60px rgba(248, 129, 52, 0.8);
-}
-
-.addAllButton {
-  background: #000000;
-  color: white;
-  padding: 10px 20px;
-  border: 2px solid #F88134;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.addAllButton:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 5px #F88134,
-    0 0 15px #F88134,
-    0 0 30px #F88134,
-    0 0 60px rgba(248, 129, 52, 0.8);
-}
-.searchIcon {
-  color: #3498db;
-}
-
-@font-face {
-  font-family: 'Mana';
-  src: url('/fonts/mana.ttf') format('truetype');
-}
-
-.manaSymbol {
-  font-family: 'Mana', sans-serif;
-  font-size: 1.2rem;
-  margin: 0 2px;
-}
-
-/* Two-color combinations */
+/* Two-color combinations hover effects */
 .greenBlackCard:hover {
   box-shadow: 
     -30px 0 30px -10px rgba(0, 115, 62, 0.9),
@@ -504,12 +486,14 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
     30px 0 30px -10px rgba(248, 231, 185, 0.9);
   border: 2px solid #d3202a;
 }
+
 .blueRedCard:hover {
   box-shadow: 
     -30px 0 30px -10px rgba(14, 104, 171, 0.9),
     30px 0 30px -10px rgba(211, 32, 42, 0.9);
   border: 2px solid #0e68ab;
 }
+
 .whiteBlueCard:hover {
   box-shadow: 
     -30px 0 30px -10px rgba(248, 231, 185, 0.9),
@@ -557,159 +541,4 @@ div[class*="bulkSearch"] textarea[class*="bulkSearchInput"]:focus {
     -30px 0 30px -10px rgba(0, 115, 62, 0.9),
     30px 0 30px -10px rgba(211, 32, 42, 0.9);
   border: 2px solid #00733e;
-/* Base button reset */
-.addButton {
-  background-color: transparent; /* Reset default background */
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
-
-/* Then make our color styles more specific */
-.cardResult[class*="Card"] .addButton {
-  background-color: inherit;
-}
-
-/* Now target each color specifically */
-.cardResult.whiteCard .addButton {
-  background-color: #f8e7b9;
-  color: #000000;
-}
-
-.cardResult.blueCard .addButton {
-  background-color: #0e68ab;
-  color: #ffffff;
-}
-
-.cardResult.blackCard .addButton {
-  background-color: #800080;
-  color: #ffffff;
-}
-
-.cardResult.redCard .addButton {
-  background-color: #d3202a;
-  color: #ffffff;
-}
-
-.cardResult.greenCard .addButton {
-  background-color: #00733e;
-  color: #ffffff;
-}
-
-.cardResult.colorlessCard .addButton {
-  background-color: #c0c0c0;
-  color: #000000;
-}
-
-.cardResult.multiCard .addButton {
-  background: linear-gradient(to right, #cfb53b, #e6c654);
-  color: #000000;
-}}/* Dual color gradient buttons */
-.whiteBlueCard .addButton {
-  background: linear-gradient(to right, #f8e7b9, #0e68ab);
-}
-
-.blackRedCard .addButton {
-  background: linear-gradient(to right, #800080, #d3202a);
-}
-
-.whiteBlackCard .addButton {
-  background: linear-gradient(to right, #f8e7b9, #800080);
-}
-
-.greenWhiteCard .addButton {
-  background: linear-gradient(to right, #00733e, #f8e7b9);
-}
-
-.greenBlueCard .addButton {
-  background: linear-gradient(to right, #00733e, #0e68ab);
-}
-
-.blueBlackCard .addButton {
-  background: linear-gradient(to right, #0e68ab, #800080);
-}
-
-.greenRedCard .addButton {
-  background: linear-gradient(to right, #00733e, #d3202a);
-}
-
-.redWhiteCard .addButton {
-  background: linear-gradient(to right, #d3202a, #f8e7b9);
-}
-
-.blueRedCard .addButton {
-  background: linear-gradient(to right, #0e68ab, #d3202a);
-}
-
-.greenBlackCard .addButton {
-  background: linear-gradient(to right, #00733e, #800080);
-}
-
-/* Single color button hovers */
-.whiteCard .addButton:hover {
-  background-color: #f8e7b9;
-  box-shadow: 0 0 15px rgba(248, 231, 185, 0.8);
-  transform: translateY(-2px);
-}
-
-.blueCard .addButton:hover {
-  background-color: #0e68ab;
-  box-shadow: 0 0 15px rgba(14, 104, 171, 0.8);
-  transform: translateY(-2px);
-}
-
-.blackCard .addButton:hover {
-  background-color: #800080;
-  box-shadow: 0 0 15px rgba(128, 0, 128, 0.8);
-  transform: translateY(-2px);
-}
-
-.redCard .addButton:hover {
-  background-color: #d3202a;
-  box-shadow: 0 0 15px rgba(211, 32, 42, 0.8);
-  transform: translateY(-2px);
-}
-
-.greenCard .addButton:hover {
-  background-color: #00733e;
-  box-shadow: 0 0 15px rgba(0, 115, 62, 0.8);
-  transform: translateY(-2px);
-}
-
-/* Dual color button hovers with split glow */
-.whiteBlueCard .addButton:hover {
-  background: linear-gradient(to right, #f8e7b9, #0e68ab);
-  box-shadow: 
-    -10px 0 15px rgba(248, 231, 185, 0.8),
-    10px 0 15px rgba(14, 104, 171, 0.8);
-  transform: translateY(-2px);
-}
-
-.blackRedCard .addButton:hover {
-  background: linear-gradient(to right, #800080, #d3202a);
-  box-shadow: 
-    -10px 0 15px rgba(128, 0, 128, 0.8),
-    10px 0 15px rgba(211, 32, 42, 0.8);
-  transform: translateY(-2px);
-}
-.searchContainer {
-  background: #000000;
-  width: 80vw !important; /* Changed from 90vw */
-  max-width: 1200px; /* Reduced from 2400px */
-  margin-left: auto;
-  margin-right: auto;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  box-shadow: 0 0 10px #F88134;
-  border: 1px solid #F88134;
-  border-radius: 4px;
-  transition: box-shadow 0.3s ease;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-}
-/* Add the rest of the dual-color combinations with the same pattern */

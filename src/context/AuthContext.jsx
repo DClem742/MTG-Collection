@@ -1,6 +1,7 @@
 // Import necessary dependencies for context and authentication
 import { createContext, useState, useContext, useEffect } from 'react'
 import { supabase } from '../config/supabase'
+import { useNavigate } from 'react-router-dom'
 
 // Create authentication context
 const AuthContext = createContext()
@@ -19,6 +20,7 @@ export function AuthProvider({ children }) {
   // Track authenticated user and loading state
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   // Initialize authentication and set up listeners
   useEffect(() => {
@@ -58,9 +60,14 @@ export function AuthProvider({ children }) {
     },
     // Sign out current user
     signOut: async () => {
-      const { error } = await supabase.auth.signOut()
-      console.log('Sign out attempt:', error)
-      return { error }
+      try {
+        await supabase.auth.signOut()
+        setUser(null)
+        localStorage.clear()
+        navigate('/login')
+      } catch (error) {
+        console.log('Sign out attempt:', error)
+      }
     },
     user
   }
