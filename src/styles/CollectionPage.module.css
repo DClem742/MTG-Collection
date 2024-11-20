@@ -1,6 +1,9 @@
 /* Base styles (mobile first) */
 .collectionPage {
   padding: 10px;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .filterControls {
@@ -9,29 +12,6 @@
   gap: 10px;
 }
 
-/* Tablet (768px and up) */
-@media (min-width: 768px) {
-  .collectionPage {
-    padding: 20px;
-  }
-  
-  .filterControls {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-}
-
-/* Desktop (1024px and up) */
-@media (min-width: 1024px) {
-  .collectionPage {
-    padding: 30px;
-  }
-  
-  .filterControls {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
 .conditionSelect {
   padding: 8px;
   border-radius: 4px;
@@ -56,18 +36,6 @@
   border-radius: 4px;
 }
 
-/* Mobile first */
-@media (min-width: 768px) {
-  .filterControls {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-  }
-
-  .searchInput {
-    width: 300px;
-  }
-}
 .sortableHeader {
   cursor: pointer;
   user-select: none;
@@ -78,6 +46,7 @@
   align-items: center;
   text-align: center;
 }
+
 .sortableHeader:hover {
   background-color: #f5f5f5;
 }
@@ -126,6 +95,7 @@
 .categoryButton.active {
   background-color: #e74c3c;
 }
+
 .displayControls {
   display: flex;
   justify-content: center;
@@ -138,53 +108,6 @@
   display: flex;
   justify-content: center;
   gap: 10px;
-}
-/* Update the base mobile styles */
-.collectionPage {
-  padding: 10px;
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-.cardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(223px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-  justify-content: center;
-  width: 100%;
-}
-
-.cardGridItem {
-  width: 100%;
-  max-width: 223px;
-  margin: 0 auto;
-}
-
-/* Adjust filters for mobile */
-@media (max-width: 767px) {
-  .filters {
-    flex-direction: column;
-    width: 90%;
-    gap: 1rem;
-    padding: 1rem;
-  }
-
-  .filterControls {
-    grid-template-columns: 1fr;
-    width: 100%;
-  }
-
-  .results {
-    width: 90%;
-    padding: 1rem;
-  }
-
-  .collectionHeader {
-    font-size: 2rem;
-    padding: 1rem;
-  }
 }
 
 .viewButton, .sizeButton {
@@ -199,80 +122,17 @@
   background: #2c3e50;
   color: white;
 }
-
-/* Card size variations */
-.small .cardImage {
-  width: 150px;
-}
-
-.medium .cardImage {
-  width: 250px;
-}
-
-.large .cardImage {
-  width: 350px;
-}
-
-/* Compact mode */
-.compact .cardGridItem {
-  gap: 5px;
-  padding: 5px;
-}
-
-.compact .cardInfo {
-  font-size: 0.9em;
-}
-
-/* Tablet (768px and up) */
-@media (min-width: 768px) {
-  .cardGrid {
-    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-    gap: 8.5rem;
-  }
-}
-
-/* Desktop (1024px and up) */
-@media (min-width: 1024px) {
-  .cardGrid {
-    display: grid;
-    grid-template-columns: repeat(4, 223px);
-    gap: 4rem;
-    padding: 3rem;
-    justify-content: center;
-  }
-}
 .cardGridItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(30, 30, 30, 0.9);
-  border-radius: 12px;
-  overflow: hidden;
-  width: 240px
-}
-
-.cardImage {
-  width: 223px;
-  height: 310px;
-  object-fit: contain;
-  border-radius: 4.75% / 3.5%;
-}
-
-.cardInfo {
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  background: rgba(30, 30, 30, 0.9);
-}
-.cardGridItem {
+  position: relative;
   perspective: 1000px;
   cursor: pointer;
-  height: 340px; /* Reduced from 400px to match card height */
-  width: 246px; /* Match exact card width */
+  height: 310px;
+  width: 223px;
+  transform-style: preserve-3d;
 }
 
 .cardInner {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
   transition: transform 0.6s;
@@ -282,40 +142,65 @@
 .cardImage {
   width: 223px;
   height: 310px;
-  object-fit: cover; /* Changed from contain to cover */
+  object-fit: contain;
   border-radius: 4.75% / 3.5%;
-}
-.flipped .cardInner {
-  transform: rotateY(180deg);
 }
 
 .cardFront,
 .cardBack {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  background: rgba(30, 30, 30, 0.9);
+  background: rgba(30, 30, 30, 0.95);
   border-radius: 12px;
 }
 
-.cardImage {
-  width: 223px;
-  height: 310px;
-  object-fit: contain;
-  border-radius: 4.75% / 3.5%;
-}
-
 .cardBack {
-  max-height: 450px; /* Match container height */
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #333333 rgba(30, 30, 30, 0.9);
-  padding: 1rem;
   transform: rotateY(180deg);
+  overflow: hidden;
 }
 
-/* Style the scrollbar for webkit browsers */
+.cardBackContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 213px; /* Reduced from 100% to account for padding */
+  height: 100%;
+  padding: 5px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.cardBackContent h3 {
+  font-size: 0.8rem;
+  color: #F88134;
+  margin-bottom: 0.1rem;
+  border-bottom: 1px solid rgba(248, 129, 52, 0.3);
+  padding-bottom: 0.2rem;
+  width: 100%;
+}
+
+.cardBackContent p {
+  font-size: 0.65rem;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .cardGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 223px);
+    gap: 2rem;
+    padding: 2rem;
+    justify-content: center;
+  }
+}
 .cardBack::-webkit-scrollbar {
   width: 6px;
 }
@@ -327,112 +212,15 @@
 .cardBack::-webkit-scrollbar-thumb {
   background-color: #333333;
   border-radius: 3px;
-}.cardBackContent {
+}
+
+.cardBackContent {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
   padding: 0.5rem;
 }
 
-.cardBack {
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  background: rgba(30, 30, 30, 0.95);
-  border-radius: 12px;
-  width: 223px; /* Match card width exactly */
-}
-
-.cardBackContent {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding: 0.2rem;
-}
-
-.cardBackContent h3 {
-  font-size: 0.8rem;
-  color: #F88134;
-  margin-bottom: 0.1rem;
-  border-bottom: 1px solid rgba(248, 129, 52, 0.3);
-  padding-bottom: 0.2rem;
-}
-
-.cardBackContent p {
-  font-size: 0.65rem;
-  line-height: 1;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-.cardImage {
-  width: 90%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 4.75% / 3.5%;
-}
-.cardInfo {
-  width: 92%;
-  height: 25%;
-  text-align: center;
-  padding: 10px;
-  background: rgba(30, 30, 30, 0.9);
-  color: white;
-  border-radius: 0 0 12px 12px;
-}
-/* List view specific styles */
-.list {
-  background: rgba(45, 45, 45, 0.9);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-top: 1rem;
-}
-
-.list .collectionTable {
-  width: 100%;
-  color: white;
-}
-.collectionHeader {
-  text-align: center;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.cardInfo h3 {
-  font-family: 'Cinzel', serif;
-  font-size: 1.4rem;
-  letter-spacing: 1px;
-  margin: 0.8rem 0;
-}
-
-.cardInfo p {
-  font-family: 'Plantin MT Pro', serif;
-  font-size: 1rem;
-  line-height: 1.4;
-}
-.results {
-  width: 80vw;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  background: #000000;
-  border: 1px solid #F88134;
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 20px;
-  box-shadow: 0 0 10px #F88134;
-}
-
-.results:hover {
-  box-shadow: 
-    0 0 10px #F88134,
-    0 0 20px #F88134,
-    0 0 40px #F88134,
-    0 0 80px rgba(248, 129, 52, 0.8);
-}
 .filters {
   display: flex;
   justify-content: center;
@@ -457,54 +245,106 @@
   border-color: #F88134;
 }
 
-/* .cardGrid {
-  margin-top: var(--spacing-lg);
-  gap: var(--spacing-md);
-} */
-
-.conditionSelect {
-  padding: 8px;
-  border-radius: 4px;
-  border: 2px solid rgba(248, 129, 52, 0.3);
-  background-color: #1a1a1a;
-  color: white;
-  transition: all 0.3s ease;
+.results {
+  width: 80vw;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #000000;
+  border: 1px solid #F88134;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 0 10px #F88134;
 }
 
-.conditionSelect:hover, .conditionSelect:focus {
-  border-color: #F88134;
-  box-shadow: 0 0 15px rgba(248, 129, 52, 0.3);
-  outline: none;
+.results:hover {
+  box-shadow: 
+    0 0 10px #F88134,
+    0 0 20px #F88134,
+    0 0 40px #F88134,
+    0 0 80px rgba(248, 129, 52, 0.8);
 }
 
-.filterControls select {
-  background: #1a1a1a;
-  border: 2px solid rgba(248, 129, 52, 0.3);
-  color: #fff;
-  transition: all 0.3s ease;
+/* Mobile styles */
+@media (max-width: 767px) {
+  .filters {
+    flex-direction: column;
+    width: 90%;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .filterControls {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .results {
+    width: 90%;
+    padding: 1rem;
+  }
+
+  .collectionHeader {
+    font-size: 2rem;
+    padding: 1rem;
+  }
 }
 
-.filterControls select:hover {
-  box-shadow: 0 0 15px rgba(248, 129, 52, 0.4);
-  border-color: #F88134;
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .collectionPage {
+    padding: 20px;
+  }
   
-}.viewControls button {
-  background: #1a1a1a; /* Black mana color */
-  color: #fff;
+  .filterControls {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .searchInput {
+    width: 300px;
+  }
 }
 
-.viewControls button.active {
-  border: 2px solid #F88134;
-  box-shadow: 0 0 20px #F88134;
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .collectionPage {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  
+  .filterControls {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .cardGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 260px);
+    gap: 2rem;
+    padding: 2rem;
+    justify-content: center;
+  }
 }
-/* Single color card hover effects */
+
+/* Add the flip functionality */
+.flipped .cardInner {
+  transform: rotateY(180deg);
+}
+
+.cardBack {
+  transform: rotateY(180deg);
+  padding: 1rem;
+}
+
+/* Color-specific hover effects */
 .whiteCard:hover {
   box-shadow: 
     0 0 30px rgba(248, 231, 185, 0.9),
     0 0 50px rgba(248, 231, 185, 0.5);
   border: 2px solid #f8e7b9;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
 }
 
 .blueCard:hover {
@@ -512,17 +352,13 @@
     0 0 30px rgba(14, 104, 171, 0.9),
     0 0 50px rgba(14, 104, 171, 0.5);
   border: 2px solid #0e68ab;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
 }
 
 .blackCard:hover {
   box-shadow: 
-    0 0 30px #3c00ace6,
+    0 0 30px rgba(60, 0, 172, 0.9),
     0 0 50px rgba(60, 0, 172, 0.9);
   border: 2px solid #2e0166;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
 }
 
 .redCard:hover {
@@ -530,8 +366,6 @@
     0 0 30px rgba(211, 32, 42, 0.9),
     0 0 50px rgba(211, 32, 42, 0.5);
   border: 2px solid #d3202a;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
 }
 
 .greenCard:hover {
@@ -539,8 +373,6 @@
     0 0 30px rgba(0, 115, 62, 0.9),
     0 0 50px rgba(0, 115, 62, 0.5);
   border: 2px solid #00733e;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
 }
 
 .multiCard:hover {
@@ -548,8 +380,6 @@
     0 0 30px rgba(207, 181, 59, 0.9),
     0 0 50px rgba(207, 181, 59, 0.5);
   border: 2px solid #cfb53b;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
 }
 
 .colorlessCard:hover {
@@ -557,235 +387,106 @@
     0 0 30px rgba(192, 192, 192, 0.9),
     0 0 50px rgba(192, 192, 192, 0.5);
   border: 2px solid #c0c0c0;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
 }
+
 /* Two-color combinations hover effects */
-/* Example for one two-color combination - repeat for others */
 .greenBlackCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(0, 115, 62, 0.9),
-    -5px -5px 50px rgba(0, 115, 62, 0.5),
-    10px 10px 30px #3c00ace6,
-    10px 10px 50px rgba(60, 0, 172, 0.5);
-  border-top: 2px solid #00733e;
-  border-left: 2px solid #00733e;
-  border-bottom: 2px solid #3c00ac;
-  border-right: 2px solid #3c00ac;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(128, 0, 128, 0.9);
+  border: 2px solid #00733e;
 }
+
 .redWhiteCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(211, 32, 42, 0.9),
-    -5px -5px 50px rgba(211, 32, 42, 0.5),
-    10px 10px 30px rgba(248, 231, 185, 0.9),
-    10px 10px 50px rgba(248, 231, 185, 0.5);
-  border-top: 2px solid #d3202a;
-  border-left: 2px solid #d3202a;
-  border-bottom: 2px solid #f8e7b9;
-  border-right: 2px solid #f8e7b9;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(211, 32, 42, 0.9),
+    30px 0 30px -10px rgba(248, 231, 185, 0.9);
+  border: 2px solid #d3202a;
 }
 
 .blueRedCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(14, 104, 171, 0.9),
-    -5px -5px 50px rgba(14, 104, 171, 0.5),
-    10px 10px 30px rgba(211, 32, 42, 0.9),
-    10px 10px 50px rgba(211, 32, 42, 0.5);
-  border-top: 2px solid #0e68ab;
-  border-left: 2px solid #0e68ab;
-  border-bottom: 2px solid #d3202a;
-  border-right: 2px solid #d3202a;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(14, 104, 171, 0.9),
+    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+  border: 2px solid #0e68ab;
 }
 
 .whiteBlueCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(248, 231, 185, 0.9),
-    -5px -5px 50px rgba(248, 231, 185, 0.5),
-    10px 10px 30px rgba(14, 104, 171, 0.9),
-    10px 10px 50px rgba(14, 104, 171, 0.5);
-  border-top: 2px solid #f8e7b9;
-  border-left: 2px solid #f8e7b9;
-  border-bottom: 2px solid #0e68ab;
-  border-right: 2px solid #0e68ab;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(248, 231, 185, 0.9),
+    30px 0 30px -10px rgba(14, 104, 171, 0.9);
+  border: 2px solid #0e68ab;
+}
+.blueBlackCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(14, 104, 171, 0.9),
+    30px 0 30px -10px rgba(60, 0, 172, 0.9);
+  border: 2px solid #0e68ab;
 }
 
-.blackRedCard:hover {
+.redBlackCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(60, 0, 172, 0.9),
-    -5px -5px 50px rgba(60, 0, 172, 0.5),
-    10px 10px 30px rgba(211, 32, 42, 0.9),
-    10px 10px 50px rgba(211, 32, 42, 0.5);
-  border-top: 2px solid #3c00ac;
-  border-left: 2px solid #3c00ac;
-  border-bottom: 2px solid #d3202a;
-  border-right: 2px solid #d3202a;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(211, 32, 42, 0.9),
+    30px 0 30px -10px rgba(60, 0, 172, 0.9);
+  border: 2px solid #d3202a;
 }
+
+.greenBlackCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(60, 0, 172, 0.9);
+  border: 2px solid #00733e;
+}
+
 .whiteBlackCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(248, 231, 185, 0.9),
-    -5px -5px 50px rgba(248, 231, 185, 0.5),
-    10px 10px 30px rgba(60, 0, 172, 0.9),
-    10px 10px 50px rgba(60, 0, 172, 0.5);
-  border-top: 2px solid #f8e7b9;
-  border-left: 2px solid #f8e7b9;
-  border-bottom: 2px solid #3c00ac;
-  border-right: 2px solid #3c00ac;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(248, 231, 185, 0.9),
+    30px 0 30px -10px rgba(60, 0, 172, 0.9);
+  border: 2px solid #f8e7b9;
 }
-
-.greenRedCard:hover {
-  box-shadow: 
-    -5px -5px 30px rgba(0, 115, 62, 0.9),
-    -5px -5px 50px rgba(0, 115, 62, 0.5),
-    10px 10px 30px rgba(211, 32, 42, 0.9),
-    10px 10px 50px rgba(211, 32, 42, 0.5);
-  border-top: 2px solid #00733e;
-  border-left: 2px solid #00733e;
-  border-bottom: 2px solid #d3202a;
-  border-right: 2px solid #d3202a;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+.greenWhiteCard:hover {  box-shadow: 
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(248, 231, 185, 0.9);
+  border: 2px solid #00733e;
 }
 
 .greenBlueCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(0, 115, 62, 0.9),
-    -5px -5px 50px rgba(0, 115, 62, 0.5),
-    10px 10px 30px rgba(14, 104, 171, 0.9),
-    10px 10px 50px rgba(14, 104, 171, 0.5);
-  border-top: 2px solid #00733e;
-  border-left: 2px solid #00733e;
-  border-bottom: 2px solid #0e68ab;
-  border-right: 2px solid #0e68ab;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(14, 104, 171, 0.9);
+  border: 2px solid #00733e;
 }
 
-.greenWhiteCard:hover {
+.greenRedCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(0, 115, 62, 0.9),
-    -5px -5px 50px rgba(0, 115, 62, 0.5),
-    10px 10px 30px rgba(248, 231, 185, 0.9),
-    10px 10px 50px rgba(248, 231, 185, 0.5);
-  border-top: 2px solid #00733e;
-  border-left: 2px solid #00733e;
-  border-bottom: 2px solid #f8e7b9;
-  border-right: 2px solid #f8e7b9;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(0, 115, 62, 0.9),
+    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+  border: 2px solid #00733e;
 }
-
-.blueBlackCard:hover {
+.blackBlueCard:hover {
   box-shadow: 
-    -5px -5px 30px rgba(14, 104, 171, 0.9),
-    -5px -5px 50px rgba(14, 104, 171, 0.5),
-    10px 10px 30px rgba(60, 0, 172, 0.9),
-    10px 10px 50px rgba(60, 0, 172, 0.5);
-  border-top: 2px solid #0e68ab;
-  border-left: 2px solid #0e68ab;
-  border-bottom: 2px solid #3c00ac;
-  border-right: 2px solid #3c00ac;
-  transform: scale(1.03);
-  transition: transform 0.2s ease-in-out;
+    -30px 0 30px -10px rgba(14, 104, 171, 0.9),
+    30px 0 30px -10px rgba(128, 0, 128, 0.9);
+  border: 2px solid #0e68ab;
 }
 
-.cardLegalities {
-  width: 100%;
-  height: 100%;
-  padding: 1rem;
-  background: rgba(30, 30, 30, 0.95);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.blackRedCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(128, 0, 128, 0.9),
+    30px 0 30px -10px rgba(211, 32, 42, 0.9);
+  border: 2px solid #d3202a;
 }
 
-.legal { color: #4CAF50; }
-.not_legal { color: #f44336; }
-.restricted { color: #FF9800; }
-.banned { color: #9C27B0; }
-.results {
-  background: #000000;
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 20px;
+.blackGreenCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(60, 0, 172, 0.9),
+    30px 0 30px -10px rgba(0, 115, 62, 0.9);
+  border: 2px solid #2e0166;
 }
 
-.collectionTitle {
-  width: fit-content;
-  margin: 0 auto;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.7);
-}
-
-button, .searchButton {
-  font-family: 'Cinzel', serif;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-select, input {
-  font-family: 'Plantin MT Pro', serif;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-}
-.collectionHeader {
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-  font-size: 3.8rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-align: center;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  background: #000000;
-  border-radius: 12px;
-  color: white;
-}
-
-
-.searchButton {
-  background: #000000;
-  color: white;
-  padding: 10px 20px;
-  border: 2px solid #F88134;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.searchButton:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 5px #F88134,
-    0 0 15px #F88134,
-    0 0 30px #F88134,
-    0 0 60px rgba(248, 129, 52, 0.8);
-}
-
-
-.cardName {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: rgba(30, 30, 30, 0.9);
-  color: white;
-  padding: 0.5rem;
-  font-size: 0.8rem;
-  text-align: center;
+.whiteBlackCard:hover {
+  box-shadow: 
+    -30px 0 30px -10px rgba(248, 231, 185, 0.9),
+    30px 0 30px -10px rgba(128, 0, 128, 0.9);
+  border: 2px solid #800080;
 }

@@ -30,16 +30,16 @@ function CollectionPage() {
 
   const getColorClass = (card) => {
     const colorPairMap = {
+      'BG': 'greenBlackCard',
+      'BR': 'blackRedCard',
+      'BU': 'blackBlueCard',
+      'BW': 'whiteBlackCard',
       'GR': 'greenRedCard',
-      'GB': 'greenBlackCard',
       'GU': 'greenBlueCard',
       'GW': 'greenWhiteCard',
-      'RB': 'blackRedCard',
       'RU': 'blueRedCard',
       'RW': 'redWhiteCard',
-      'UB': 'blueBlackCard',
-      'UW': 'whiteBlueCard',
-      'WB': 'whiteBlackCard'
+      'UW': 'whiteBlueCard'
     }
 
     const colorMap = {
@@ -54,6 +54,7 @@ function CollectionPage() {
     
     if (card.color_identity.length === 2) {
       const colorPair = card.color_identity.sort().join('')
+      console.log('Two-colored card:', card.name, 'Color pair:', colorPair, 'Applied class:', colorPairMap[colorPair])
       return colorPairMap[colorPair]
     }
 
@@ -61,7 +62,6 @@ function CollectionPage() {
 
     return colorMap[card.color_identity[0]]
   }
-
   const handleRemoveAll = () => {
     if (window.confirm('Are you sure you want to remove all cards from your collection?')) {
       removeAllCards()
