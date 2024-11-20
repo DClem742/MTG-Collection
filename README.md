@@ -3,6 +3,8 @@
 
 A full-featured Magic: The Gathering deck building and collection management application that allows users to create, test, and manage their MTG decks with an intuitive interface.
 
+# URL: https://mythicmana.netlify.app/
+
 ## Features
 
 - **Deck Building**
