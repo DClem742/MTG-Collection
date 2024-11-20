@@ -23,6 +23,8 @@ export function CollectionProvider({ children }) {
     if (user?.id) {
       const collectionKey = `mtgCollection_${user.id}`
       const savedCollection = localStorage.getItem(collectionKey)
+      console.log('Loading collection for user:', user.id)
+      console.log('Saved collection:', savedCollection)
       
       if (savedCollection) {
         setCollection(JSON.parse(savedCollection))
@@ -33,6 +35,7 @@ export function CollectionProvider({ children }) {
   // Add new card to collection or update quantity if exists
   const addToCollection = (card) => {
     if (!user?.id) return
+    console.log('Adding card to collection:', card.name)
     // Extract essential card data for storage
     const essentialCardData = {
       id: card.id,

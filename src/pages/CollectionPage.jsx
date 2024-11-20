@@ -123,32 +123,31 @@ function CollectionPage() {
       setIsLoading(true)
       const prices = {}
       
-      // Process cards in batches to avoid rate limiting
-      const batchSize = 10
+      // Increase delay between batches
+      const batchSize = 5
       for (let i = 0; i < collection.length; i += batchSize) {
         const batch = collection.slice(i, i + batchSize)
         
         try {
           await Promise.all(
             batch.map(async (card) => {
-              try {
-                const response = await fetch(`https://api.scryfall.com/cards/${card.id}`)
-                if (!response.ok) throw new Error('Network response was not ok')
-                const data = await response.json()
-                prices[card.id] = data.prices
-              } catch (cardError) {
-                console.log(`Price fetch failed for card ${card.name}`)
-                prices[card.id] = { usd: '0.00' }
-              }
+              const response = await fetch(`https://api.scryfall.com/cards/${card.id}`, {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+              if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+              const data = await response.json()
+              prices[card.id] = data.prices
             })
           )
           
-          // Add delay between batches to respect API rate limits
+          // Increased delay to 200ms between batches
           if (i + batchSize < collection.length) {
-            await new Promise(resolve => setTimeout(resolve, 100))
+            await new Promise(resolve => setTimeout(resolve, 200))
           }
-        } catch (batchError) {
-          console.log('Batch processing error:', batchError)
+        } catch (error) {
+          console.log('Fetch error:', error)
         }
       }
       
